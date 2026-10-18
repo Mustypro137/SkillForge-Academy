@@ -1,5 +1,5 @@
 // Chooses which page to show, based on the URL hash (the part after "#").
-// Example: "#/typing" -> the "typing" route.
+// Example: "#/grammar" -> the "grammar" route.
 
 import { routes } from './routes.js';
 

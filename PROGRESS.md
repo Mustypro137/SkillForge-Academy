@@ -3,7 +3,7 @@
 ## Milestones
 
 - [ ] M1 Foundation and app shell (code written; waiting for manual checks and your approval)
-- [ ] M2 Typing practice (code written; waiting for manual checks and your approval)
+- [x] M2 Typing practice - REMOVED at owner's request (code kept in git commit 65305ca)
 - [ ] M3 Storage, settings, backup
 - [ ] M4 Question engine and grammar
 - [ ] M5 Mistake notebook
@@ -23,19 +23,6 @@ Run `python -m http.server 8000` and open http://localhost:8000.
 - [ ] Dark mode looks fine (change your system theme)
 - [ ] No red errors in the browser console (F12)
 - [ ] Works in Chrome, Edge and Firefox
-
-## M2 manual checklist (you do these)
-
-- [ ] Typing page: choose Timed 30 seconds + Sentences, press Start, the timer starts only after your first key
-- [ ] Correct letters turn green, wrong letters are red with a wavy underline, the current letter is highlighted
-- [ ] Backspace fixes a mistake; the WPM and accuracy numbers change as you type
-- [ ] Time runs out: the result screen appears (heading says your WPM and accuracy)
-- [ ] Untimed mode: finishing the text shows results
-- [ ] Paste (Ctrl+V) does nothing in the typing box; Enter does nothing
-- [ ] Compare with a stopwatch: type a known text slowly and check the WPM is about right
-- [ ] Try again keeps the same text; New text gives a different one; Cancel returns to setup
-- [ ] Keyboard only: Tab to every control, Enter on Start, finish a test, use the result buttons
-- [ ] 360px width and dark mode look fine; no console errors
 
 ## Automated tests
 

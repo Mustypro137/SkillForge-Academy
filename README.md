@@ -1,9 +1,9 @@
 # SkillForge Academy
 
-A private website to practise English, typing and professional communication.
+A private website to practise English and professional communication.
 All data stays in your browser. No account, no server, no cost.
 
-Status: Milestone 2 (typing practice). See `project-plan.md` for the full plan and `PROGRESS.md` for progress.
+Status: typing practice was removed (not needed). Working on Milestone 3. See `project-plan.md` for the full plan and `PROGRESS.md` for progress.
 
 ## Run the website
 

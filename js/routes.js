@@ -10,7 +10,6 @@
 export const routes = [
   { id: 'dashboard', path: '',         label: 'Dashboard',          group: '',             ready: true,  note: 'Milestone 6' },
 
-  { id: 'typing',    path: 'typing',   label: 'Typing',             group: 'Practice',     ready: true,  note: 'Milestone 2' },
   { id: 'grammar',   path: 'grammar',  label: 'Grammar',            group: 'Practice',     ready: true,  note: 'Milestone 4' },
   { id: 'writing',   path: 'writing',  label: 'Writing',            group: 'Practice',     ready: false, note: 'Milestone 8' },
   { id: 'reading',   path: 'reading',  label: 'Reading',            group: 'Practice',     ready: false, note: 'Milestone 13' },

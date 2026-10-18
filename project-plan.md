@@ -8,6 +8,8 @@
 
 This document is written in simple English. Words in `code style` are file names, function names, or commands.
 
+> **Change (after Milestone 2):** The typing module was removed at the owner's request (a typing project already exists elsewhere). Typing practice, WPM/accuracy (section 6.5) and typing results are no longer part of the plan. The roadmap continues with Milestone 3 (storage, settings, backup) without typing data. The removed code is in git commit `65305ca`.
+
 ---
 
 ## 1. Project Audit

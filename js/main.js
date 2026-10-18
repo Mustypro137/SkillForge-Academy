@@ -4,7 +4,6 @@ import { routes } from './routes.js';
 import { startRouter } from './router.js';
 import { el } from './ui/dom.js';
 import { render as renderDashboard } from './pages/dashboard.js';
-import { render as renderTyping } from './pages/typing.js';
 import { render as renderGrammar } from './pages/grammar.js';
 import { render as renderMistakes } from './pages/mistakes.js';
 import { render as renderSettings } from './pages/settings.js';
@@ -13,7 +12,6 @@ import { renderComingSoon, renderNotFound } from './pages/coming-soon.js';
 // Pages that have their own file. Other routes use the "coming soon" page.
 const pageRenderers = {
   dashboard: renderDashboard,
-  typing: renderTyping,
   grammar: renderGrammar,
   mistakes: renderMistakes,
   settings: renderSettings,

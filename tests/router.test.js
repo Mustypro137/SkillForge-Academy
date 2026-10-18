@@ -10,18 +10,18 @@ test('empty hash and "#/" open the dashboard', () => {
 });
 
 test('a known path finds its page', () => {
-  assert.equal(findRoute('#/typing').id, 'typing');
+  assert.equal(findRoute('#/grammar').id, 'grammar');
   assert.equal(findRoute('#/mistakes').id, 'mistakes');
 });
 
 test('capital letters and a trailing slash are accepted', () => {
-  assert.equal(findRoute('#/TYPING').id, 'typing');
-  assert.equal(findRoute('#/typing/').id, 'typing');
+  assert.equal(findRoute('#/GRAMMAR').id, 'grammar');
+  assert.equal(findRoute('#/grammar/').id, 'grammar');
 });
 
 test('an unknown path returns null (page not found)', () => {
   assert.equal(findRoute('#/unknown'), null);
-  assert.equal(findRoute('#/typing/extra'), null);
+  assert.equal(findRoute('#/grammar/extra'), null);
 });
 
 test('missing input does not crash', () => {
