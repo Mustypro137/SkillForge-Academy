@@ -3,6 +3,8 @@
 import { routes } from './routes.js';
 import { startRouter } from './router.js';
 import { el } from './ui/dom.js';
+import { applyAppearance } from './ui/theme.js';
+import { initState, getData, getWarning, subscribe } from './state.js';
 import { render as renderDashboard } from './pages/dashboard.js';
 import { render as renderGrammar } from './pages/grammar.js';
 import { render as renderMistakes } from './pages/mistakes.js';
@@ -20,6 +22,8 @@ const pageRenderers = {
 const main = document.getElementById('main');
 const nav = document.getElementById('site-nav');
 const menuButton = document.getElementById('menu-button');
+const banner = document.getElementById('banner');
+let currentRoute = null;
 
 function linkFor(route) {
   const href = route.path ? `#/${route.path}` : '#/';
@@ -29,9 +33,12 @@ function linkFor(route) {
 }
 
 function buildMenu() {
+  nav.replaceChildren();
+  const showSoon = getData().settings.showComingSoon;
   let list = null;
   let lastGroup = null;
   for (const route of routes) {
+    if (!route.ready && !showSoon) continue;
     if (route.group !== lastGroup || list === null) {
       if (route.group) nav.append(el('p', { class: 'nav-group' }, route.group));
       list = el('ul', { class: 'nav-list' });
@@ -54,7 +61,20 @@ function setMenuOpen(open) {
   menuButton.setAttribute('aria-expanded', String(open));
 }
 
+const warningText = {
+  corrupt: 'Your saved data could not be read, so the app started fresh. The old data was kept in this browser and is not deleted.',
+  newer: 'Your saved data was made by a newer version of this app, so it was not loaded. It was kept and not deleted.',
+  unavailable: 'This browser does not allow saving (private mode?). Your progress will not be kept after you close this page.',
+};
+
+function showWarning() {
+  const text = warningText[getWarning()];
+  banner.hidden = !text;
+  banner.textContent = text ?? '';
+}
+
 function showPage(route) {
+  currentRoute = route;
   if (route === null) renderNotFound(main);
   else if (route.ready && pageRenderers[route.id]) pageRenderers[route.id](main);
   else renderComingSoon(main, route);
@@ -65,6 +85,19 @@ function showPage(route) {
   window.scrollTo(0, 0);
   main.querySelector('h1')?.focus(); // so screen readers announce the new page
 }
+
+function safeLocalStorage() {
+  try { return window.localStorage; } catch { return null; } // blocked in some browsers
+}
+
+initState(safeLocalStorage() ?? { getItem() { throw new Error('no storage'); }, setItem() { throw new Error('no storage'); } });
+applyAppearance(getData().settings);
+showWarning();
+subscribe((data) => {
+  applyAppearance(data.settings);
+  buildMenu();
+  markCurrentLink(currentRoute);
+});
 
 buildMenu();
 menuButton.addEventListener('click', () => setMenuOpen(!nav.classList.contains('is-open')));

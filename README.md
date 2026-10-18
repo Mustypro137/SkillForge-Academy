@@ -3,7 +3,7 @@
 A private website to practise English and professional communication.
 All data stays in your browser. No account, no server, no cost.
 
-Status: typing practice was removed (not needed). Working on Milestone 3. See `project-plan.md` for the full plan and `PROGRESS.md` for progress.
+Status: typing practice was removed (not needed). Milestone 3 (storage, settings, backup) is built. See `project-plan.md` for the full plan and `PROGRESS.md` for progress.
 
 ## Run the website
 
@@ -27,6 +27,6 @@ No `npm install` is needed. There are no dependencies.
 
 - `index.html` - the one page of the app
 - `css/` - styles (colors, layout, components)
-- `js/` - code: `main.js` starts the app, `router.js` picks the page, `routes.js` lists the pages
+- `js/` - code: `main.js` starts the app, `router.js` picks the page, `routes.js` lists the pages, `storage.js` saves and loads your data, `state.js` keeps it in memory
 - `js/pages/` - one file per page
 - `tests/` - automated tests

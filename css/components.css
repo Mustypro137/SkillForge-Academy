@@ -100,3 +100,44 @@
 }
 
 .field select:disabled { opacity: 0.6; }
+
+/* ---------- Settings ---------- */
+
+.field input[type="text"] {
+  width: 100%;
+  max-width: 28rem;
+  min-height: 44px;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.field input[type="file"] { max-width: 100%; font: inherit; color: var(--text); }
+
+.field-check {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+  margin-bottom: 1rem;
+}
+.field-check input { width: 1.4rem; height: 1.4rem; }
+
+.panel {
+  max-width: 40rem;
+  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.panel[hidden] { display: none; }
+.panel h3 { margin: 0 0 0.5rem; }
+
+.status { min-height: 1.6em; font-weight: 600; color: var(--success); }
+.status-error { color: var(--error); }
+
+.button-danger { background: var(--error); border-color: var(--error); color: #fff; }
+.button:disabled { opacity: 0.5; cursor: not-allowed; }

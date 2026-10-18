@@ -71,3 +71,12 @@
 
   .app-main { padding: 2rem 2rem 3rem; }
 }
+
+.banner {
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--error-bg);
+  border-bottom: 2px solid var(--error);
+}
+.banner[hidden] { display: none; }
