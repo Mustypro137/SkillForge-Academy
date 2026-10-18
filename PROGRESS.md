@@ -7,7 +7,7 @@
 - [ ] M3 Storage, settings, backup (code written; waiting for manual checks and your approval)
 - [ ] M4 Question engine and grammar (code written; waiting for manual checks and your approval)
 - [ ] M5 Mistake notebook (code written; waiting for manual checks and your approval)
-- [ ] M6 Dashboard
+- [ ] M6 Dashboard (code written; waiting for manual checks and your approval)
 - [ ] M7 MVP polish and full check
 
 ## M1 manual checklist (you do these)
@@ -65,9 +65,21 @@ Run `python -m http.server 8000` and open http://localhost:8000.
 - [ ] Phone: cards and buttons are easy to read and tap
 - [ ] Tell me if the review timing (1, 2, 4, 8, 16 days) feels right
 
+## M6 manual checklist (you do these)
+
+- [ ] New user (Settings > Reset first, after exporting a backup): the dashboard says "Start your first lesson" and every card shows zeros without errors
+- [ ] The next-step button opens the right place: first lesson, the notebook, or the lesson you were doing
+- [ ] After a few lessons, the cards show real numbers (lessons done, mistakes due, answers in the last 7 days)
+- [ ] Weak areas: after you answer at least 5 questions on a skill, a skill under 80% appears with its percentage
+- [ ] The backup card shows "No backup yet", then "Last backup today" after you export
+- [ ] The "Last 7 days" numbers look right to you
+- [ ] Phone: no sideways scrolling, text is readable, buttons are easy to tap
+- [ ] Dark mode and the largest text size (22 px) look fine
+
 ## Automated tests
 
-- Last run by Claude: 106 tests, all passed (router, storage, state, answer checking, progress, review schedule, lesson content). Run `npm test` yourself to check.
+- Last run by Claude: 122 tests, all passed (router, storage, state, answer checking, progress, review schedule, dashboard, lesson content). Run `npm test` yourself to check.
+- A headless Edge smoke test of the Dashboard ran once (empty state, each next-step rule, weak areas, backup card, damaged data, no sideways scroll at 360px).
 - A headless Edge smoke test of the Mistake notebook ran once (saving mistakes, notes, delete, review, moving boxes, mastering, damaged data).
 - A headless Edge smoke test played through a whole grammar lesson once (wrong answers, hints, solutions, all 4 types, results, saving, reload, extra practice).
 - A headless Edge smoke test of the Settings page ran once (theme and size saved across reload, hide coming-soon pages, export, bad and good import, reset, corrupt-data banner).

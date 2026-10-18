@@ -113,3 +113,10 @@ test('findExercise finds an exercise and its lesson, or returns null', async () 
   assert.equal(findExercise('grammar-present-simple', 'nope'), null);
   assert.equal(findExercise('nope', 'ps-03'), null);
 });
+
+test('every skill tag used in the lessons has a readable name', async () => {
+  const { skillTagLabels, skillTagLabel } = await import('../content/skill-tags.js');
+  const used = new Set(allExercises.flatMap(({ exercise }) => exercise.skillTags));
+  for (const tag of used) assert.ok(skillTagLabels[tag], `no name for the skill tag "${tag}"`);
+  assert.equal(skillTagLabel('some-new-tag'), 'some new tag');
+});

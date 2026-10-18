@@ -78,7 +78,7 @@ function mistakeCard(container, { key, mistake }) {
 
   const meta = [`Wrong ${times} ${times === 1 ? 'time' : 'times'}`];
   if (mistake.status === 'mastered') meta.push('Mastered');
-  else meta.push(`Box ${box} of ${MAX_BOX}`, `Next review: ${describeDue(mistake.dueDate)}`);
+  else meta.push(`Box ${box} of ${MAX_BOX}`, `Review ${describeDue(mistake.dueDate)}`);
 
   const parts = [];
   if (found) {

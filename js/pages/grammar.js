@@ -8,6 +8,7 @@ import { renderExercise } from './exercise-view.js';
 import { lessonSummary, unansweredIds } from '../logic/progress.js';
 import { solutionText } from '../logic/answer-check.js';
 import { getData, recordExerciseResult, startLessonRun } from '../state.js';
+import { takeIntent } from '../intent.js';
 
 const STATUS_LABELS = {
   'not-started': 'Not started',
@@ -17,7 +18,11 @@ const STATUS_LABELS = {
 };
 
 export function render(container) {
-  showList(container);
+  // The dashboard can ask for a specific lesson.
+  const intent = takeIntent();
+  const lesson = intent?.lessonId ? grammarLessons.find((l) => l.id === intent.lessonId) : null;
+  if (lesson) showLesson(container, lesson);
+  else showList(container);
 }
 
 const exerciseIds = (lesson) => lesson.exercises.map((e) => e.id);
