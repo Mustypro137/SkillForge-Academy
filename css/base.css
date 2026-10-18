@@ -10,6 +10,10 @@
   --accent: #2b5fd9;
   --accent-text: #ffffff;
   --focus: #b35c00;
+  --success: #1a7f37;
+  --error: #b42318;
+  --error-bg: #fde8e6;
+  --highlight: #dbe7ff;
 
   --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   --font-size: 18px;
@@ -26,6 +30,10 @@
     --accent: #7aa2ff;
     --accent-text: #0d1117;
     --focus: #ffb454;
+    --success: #56d364;
+    --error: #ff7b72;
+    --error-bg: #4a1f1c;
+    --highlight: #263a66;
   }
 }
 

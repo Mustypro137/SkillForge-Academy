@@ -3,7 +3,7 @@
 A private website to practise English, typing and professional communication.
 All data stays in your browser. No account, no server, no cost.
 
-Status: Milestone 1 (app shell). See `project-plan.md` for the full plan and `PROGRESS.md` for progress.
+Status: Milestone 2 (typing practice). See `project-plan.md` for the full plan and `PROGRESS.md` for progress.
 
 ## Run the website
 
