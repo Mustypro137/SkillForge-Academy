@@ -121,3 +121,69 @@ test('startLessonRun clears answers and keeps the best score', () => {
   assert.deepEqual(getData().progress.l1.answered, {});
   assert.equal(getData().progress.l1.bestScore, 1);
 });
+
+// ----- mistake notebook -----
+
+import { setMistakeNote, deleteMistake } from '../js/state.js';
+
+test('a wrong answer in a lesson goes to the notebook (box 1, due tomorrow)', () => {
+  initState(fakeStorage());
+  recordExerciseResult(info({ outcome: 'incorrect', answer: 'want', tries: 2 }), new Date(2026, 9, 19, 12));
+  const m = getData().mistakes['l1/e1'];
+  assert.equal(m.box, 1);
+  assert.equal(m.dueDate, '2026-10-20');
+  assert.equal(m.lastWrongAnswer, 'want');
+  assert.equal(m.timesWrong, 1);
+});
+
+test('right answers and right-with-help do not go to the notebook', () => {
+  initState(fakeStorage());
+  recordExerciseResult(info({ outcome: 'correct' }));
+  recordExerciseResult(info({ exerciseId: 'e2', outcome: 'correct-with-help' }));
+  assert.deepEqual(getData().mistakes, {});
+});
+
+test('a wrong answer in extra practice also goes to the notebook', () => {
+  initState(fakeStorage());
+  recordExerciseResult(info({ outcome: 'incorrect', practice: true }));
+  assert.ok(getData().mistakes['l1/e1']);
+  assert.deepEqual(getData().progress, {});
+});
+
+test('the same exercise wrong twice is one mistake that counts twice', () => {
+  initState(fakeStorage());
+  recordExerciseResult(info({ outcome: 'incorrect' }));
+  recordExerciseResult(info({ outcome: 'incorrect' }));
+  assert.equal(Object.keys(getData().mistakes).length, 1);
+  assert.equal(getData().mistakes['l1/e1'].timesWrong, 2);
+});
+
+test('a review updates the mistake, adds an attempt and does not change lesson progress', () => {
+  initState(fakeStorage());
+  recordExerciseResult(info({ outcome: 'incorrect' }), new Date(2026, 9, 1, 12));
+  const progressBefore = JSON.stringify(getData().progress);
+  recordExerciseResult(info({ outcome: 'correct', review: true }), new Date(2026, 9, 2, 12));
+  const m = getData().mistakes['l1/e1'];
+  assert.equal(m.box, 2);
+  assert.equal(m.dueDate, '2026-10-04');
+  const last = getData().attempts.at(-1);
+  assert.equal(last.review, true);
+  assert.equal(last.practice, true);
+  assert.equal(JSON.stringify(getData().progress), progressBefore);
+});
+
+test('reviewing a mistake that was deleted does nothing', () => {
+  initState(fakeStorage());
+  recordExerciseResult(info({ outcome: 'correct', review: true }));
+  assert.deepEqual(getData().mistakes, {});
+});
+
+test('notes are saved (500 characters at most) and mistakes can be deleted', () => {
+  initState(fakeStorage());
+  recordExerciseResult(info({ outcome: 'incorrect' }));
+  setMistakeNote('l1/e1', 'x'.repeat(600));
+  assert.equal(getData().mistakes['l1/e1'].note.length, 500);
+  setMistakeNote('missing', 'hello'); // no crash
+  deleteMistake('l1/e1');
+  assert.deepEqual(getData().mistakes, {});
+});

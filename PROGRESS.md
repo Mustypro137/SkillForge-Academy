@@ -6,7 +6,7 @@
 - [x] M2 Typing practice - REMOVED at owner's request (code kept in git commit 65305ca)
 - [ ] M3 Storage, settings, backup (code written; waiting for manual checks and your approval)
 - [ ] M4 Question engine and grammar (code written; waiting for manual checks and your approval)
-- [ ] M5 Mistake notebook
+- [ ] M5 Mistake notebook (code written; waiting for manual checks and your approval)
 - [ ] M6 Dashboard
 - [ ] M7 MVP polish and full check
 
@@ -52,13 +52,27 @@ Run `python -m http.server 8000` and open http://localhost:8000.
 - [ ] On your phone: buttons are easy to tap and the keyboard does not hide the answer box
 - [ ] Please tell me any exercise where a correct answer was rejected, or the English sounds wrong
 
+## M5 manual checklist (you do these)
+
+- [ ] Give 2 wrong answers on one grammar exercise: after the solution is shown, it appears in the Mistake notebook (All mistakes)
+- [ ] An answer that was wrong first but right on the second try (with a hint or retry) does NOT appear in the notebook
+- [ ] "Show answer and explanation" is hidden until you open it
+- [ ] Write a note and press Save note; refresh the page: the note is still there
+- [ ] Delete asks "Delete this mistake?" first; Cancel keeps it
+- [ ] To test a review today: open DevTools (F12) > Application > Local Storage > `skillforge-data`, change a mistake's `dueDate` to `2020-01-01`, refresh. It appears under "Due today". Start review, answer it right: it moves to box 2
+- [ ] Wrong in a review: it goes back to box 1. Right in box 5: it becomes Mastered and moves to the Mastered tab
+- [ ] Keyboard only: tabs, Start review, answering, Next, Delete confirmation
+- [ ] Phone: cards and buttons are easy to read and tap
+- [ ] Tell me if the review timing (1, 2, 4, 8, 16 days) feels right
+
 ## Automated tests
 
-- Last run by Claude: 81 tests, all passed (router, storage, state, answer checking, progress, lesson content). Run `npm test` yourself to check.
+- Last run by Claude: 106 tests, all passed (router, storage, state, answer checking, progress, review schedule, lesson content). Run `npm test` yourself to check.
+- A headless Edge smoke test of the Mistake notebook ran once (saving mistakes, notes, delete, review, moving boxes, mastering, damaged data).
 - A headless Edge smoke test played through a whole grammar lesson once (wrong answers, hints, solutions, all 4 types, results, saving, reload, extra practice).
 - A headless Edge smoke test of the Settings page ran once (theme and size saved across reload, hide coming-soon pages, export, bad and good import, reset, corrupt-data banner).
 
 ## Known bugs
 
-- Mistakes are not saved to the Mistake notebook yet. Wrong answers are recorded in the attempt history, and Milestone 5 will use it.
+- Wrong answers given before Milestone 5 are not in the Mistake notebook (they are only in the attempt history). New wrong answers are saved automatically.
 - Free-form answers: only listed wording is accepted. If a correct answer is rejected, tell Claude and the exercise will get a new accepted answer.

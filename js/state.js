@@ -4,6 +4,7 @@
 
 import { loadData, saveData, createDefaultData, MAX_ATTEMPTS } from './storage.js';
 import { applyOutcome, startRun } from './logic/progress.js';
+import { mistakeKey, recordMistake, applyReview } from './logic/review-schedule.js';
 
 let storage = null;
 let data = null;
@@ -45,9 +46,13 @@ export function resetData(now = new Date()) {
 
 // Saves the result of one finished exercise.
 //   - always adds an attempt (the history, newest last, capped)
-//   - updates the lesson progress too, unless this was extra practice
+//   - lesson: updates the lesson progress; a wrong answer ('incorrect') goes to the mistake notebook
+//   - practice: extra practice, the lesson progress is not changed (wrong answers still go to the notebook)
+//   - review: a mistake from the notebook is reviewed; its box and date are updated
 export function recordExerciseResult(info, now = new Date()) {
-  const { lessonId, exerciseId, exerciseIds, outcome, answer, tries, hintsUsed, practice = false } = info;
+  const { lessonId, exerciseId, exerciseIds, outcome, answer, tries, hintsUsed, review = false } = info;
+  const practice = info.practice === true || review;
+  const key = mistakeKey(lessonId, exerciseId);
   updateData((d) => {
     d.attempts.push({
       id: `a_${now.getTime().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
@@ -59,11 +64,27 @@ export function recordExerciseResult(info, now = new Date()) {
       tries,
       hintsUsed,
       practice,
+      review,
       at: now.toISOString(),
     });
     if (d.attempts.length > MAX_ATTEMPTS) d.attempts = d.attempts.slice(-MAX_ATTEMPTS);
+
+    if (review) {
+      if (d.mistakes[key]) d.mistakes[key] = applyReview(d.mistakes[key], outcome, answer, now);
+      return;
+    }
     if (!practice) d.progress[lessonId] = applyOutcome(d.progress[lessonId], exerciseId, outcome, exerciseIds, now);
+    if (outcome === 'incorrect') d.mistakes[key] = recordMistake(d.mistakes[key], { lessonId, exerciseId, answer }, now);
   });
+}
+
+// Saves your own note on a mistake (at most 500 characters).
+export function setMistakeNote(key, note) {
+  updateData((d) => { if (d.mistakes[key]) d.mistakes[key].note = String(note).slice(0, 500); });
+}
+
+export function deleteMistake(key) {
+  updateData((d) => { delete d.mistakes[key]; });
 }
 
 // Begins a fresh run of a lesson (keeps the best score).

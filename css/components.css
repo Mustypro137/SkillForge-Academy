@@ -249,3 +249,27 @@ fieldset.choices legend { padding: 0; }
 
 .after { max-width: 70ch; }
 .solution, .explanation { margin-top: 1rem; }
+
+/* ---------- Mistake notebook ---------- */
+
+.tabs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; }
+
+.tab-button {
+  min-height: 44px;
+  padding: 0 1rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.tab-button[aria-pressed="true"] { border-color: var(--accent); background: var(--highlight); font-weight: 700; }
+
+.mistake-list { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: 1rem; max-width: 50rem; }
+.mistake-list .card h2 { font-size: 1.05rem; color: var(--text-muted); }
+.mistake-list .prompt { font-weight: 600; }
+.mistake-list details { margin: 0.5rem 0 1rem; }
+.mistake-list summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
+.mistake-list .field textarea { max-width: none; }
+.mistake-list .button-row { align-items: center; margin-top: 0.5rem; }

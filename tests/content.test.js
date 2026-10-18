@@ -104,3 +104,12 @@ test('plain text only: no curly quotes or double spaces in prompts and answers',
     for (const text of texts) assert.ok(!bad.test(text), `${exercise.id}: "${text}"`);
   }
 });
+
+test('findExercise finds an exercise and its lesson, or returns null', async () => {
+  const { findExercise } = await import('../content/index.js');
+  const found = findExercise('grammar-present-simple', 'ps-03');
+  assert.equal(found.lesson.id, 'grammar-present-simple');
+  assert.equal(found.exercise.id, 'ps-03');
+  assert.equal(findExercise('grammar-present-simple', 'nope'), null);
+  assert.equal(findExercise('nope', 'ps-03'), null);
+});

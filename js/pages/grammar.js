@@ -2,6 +2,7 @@
 // The rules (scoring, status) are in js/logic/progress.js. Content is in content/grammar/.
 
 import { el } from '../ui/dom.js';
+import { button, setPage } from '../ui/page.js';
 import { grammarLessons } from '../../content/grammar/index.js';
 import { renderExercise } from './exercise-view.js';
 import { lessonSummary, unansweredIds } from '../logic/progress.js';
@@ -21,19 +22,6 @@ export function render(container) {
 
 const exerciseIds = (lesson) => lesson.exercises.map((e) => e.id);
 const percent = (fraction) => `${Math.round(fraction * 100)}%`;
-
-function button(text, onClick, secondary = false) {
-  const b = el('button', { class: secondary ? 'button button-secondary' : 'button', type: 'button' }, text);
-  b.addEventListener('click', onClick);
-  return b;
-}
-
-// Replaces the page content and moves the focus to the heading.
-function setPage(container, heading, ...nodes) {
-  container.replaceChildren(heading, ...nodes);
-  window.scrollTo(0, 0);
-  heading.focus();
-}
 
 // ---------- Lesson list ----------
 

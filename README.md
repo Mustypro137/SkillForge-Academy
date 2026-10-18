@@ -3,7 +3,7 @@
 A private website to practise English and professional communication.
 All data stays in your browser. No account, no server, no cost.
 
-Status: typing practice was removed (not needed). Milestone 4 (grammar lessons) is built. See `project-plan.md` for the full plan and `PROGRESS.md` for progress.
+Status: typing practice was removed (not needed). Milestone 5 (mistake notebook) is built. See `project-plan.md` for the full plan and `PROGRESS.md` for progress.
 
 ## Run the website
 
@@ -28,7 +28,7 @@ No `npm install` is needed. There are no dependencies.
 - `index.html` - the one page of the app
 - `css/` - styles (colors, layout, components)
 - `js/` - code: `main.js` starts the app, `router.js` picks the page, `routes.js` lists the pages, `storage.js` saves and loads your data, `state.js` keeps it in memory
-- `js/logic/` - rules without screens: `answer-check.js` (checks answers), `progress.js` (scores and lesson status)
+- `js/logic/` - rules without screens: `answer-check.js` (checks answers), `progress.js` (scores and lesson status), `review-schedule.js` (when to review mistakes)
 - `content/grammar/` - the grammar lessons (data only). Add a lesson by adding a file and listing it in `index.js`
 - `js/pages/` - one file per page
 - `tests/` - automated tests
