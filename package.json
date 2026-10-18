@@ -1,0 +1,10 @@
+{
+  "name": "skillforge-academy",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Private English, typing and professional communication practice. No dependencies.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

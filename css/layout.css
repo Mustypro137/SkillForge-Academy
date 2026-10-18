@@ -1,0 +1,73 @@
+/* Page structure: header, sidebar, main area.
+   Mobile first: one column. From 768px wide: sidebar on the left. */
+
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: -4rem;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: var(--accent-text);
+  border-radius: var(--radius);
+  z-index: 10;
+}
+.skip-link:focus { top: 0.5rem; }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.brand { font-weight: 700; }
+
+.menu-button {
+  min-height: 44px;
+  padding: 0 1rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+
+/* Mobile: the menu is hidden until the button opens it. */
+.site-nav {
+  display: none;
+  padding: 0.5rem 1rem 1rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.site-nav.is-open { display: block; }
+
+.app-main {
+  padding: 1.5rem 1rem 3rem; /* 16px side gutter */
+  max-width: 60rem;
+}
+
+@media (min-width: 768px) {
+  .menu-button { display: none; }
+
+  .app-body {
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+    align-items: start;
+  }
+
+  .site-nav {
+    display: block;
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+    overflow-y: auto;
+    border-bottom: 0;
+    border-right: 1px solid var(--border);
+    min-height: calc(100vh - 3.5rem);
+  }
+
+  .app-main { padding: 2rem 2rem 3rem; }
+}

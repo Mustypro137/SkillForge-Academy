@@ -1,0 +1,61 @@
+/* Colors, fonts and basic element styles.
+   All colors are CSS variables, so a theme is just a new set of values. */
+
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --text: #1c2430;
+  --text-muted: #556070;
+  --border: #d5dae1;
+  --accent: #2b5fd9;
+  --accent-text: #ffffff;
+  --focus: #b35c00;
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-size: 18px;
+  --radius: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12161c;
+    --surface: #1b212a;
+    --text: #e8ecf1;
+    --text-muted: #a2adbb;
+    --border: #333c48;
+    --accent: #7aa2ff;
+    --accent-text: #0d1117;
+    --focus: #ffb454;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { font-size: var(--font-size); }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+h1 { font-size: 1.8rem; line-height: 1.25; margin: 0 0 1rem; }
+h2 { font-size: 1.3rem; margin: 1.5rem 0 0.5rem; }
+p  { margin: 0 0 1rem; max-width: 70ch; }
+
+a { color: var(--accent); }
+
+/* Focus must always be easy to see (keyboard users). */
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* The page heading gets focus after navigation, but needs no ring. */
+h1[tabindex="-1"]:focus { outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
