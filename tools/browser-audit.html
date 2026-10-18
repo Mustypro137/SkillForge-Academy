@@ -1,0 +1,127 @@
+<!-- Page audit: opens every page and key screen at 360, 768 and 1366 px and reports sideways scrolling, missing labels, small tap targets, duplicate ids.
+     Run: python -m http.server 8771, then in Edge:
+     msedge --headless=new --virtual-time-budget=120000 --dump-dom http://localhost:8771/tools/browser-audit.html
+     Every line in the output should end with 'ok'. -->
+<!doctype html><meta charset="utf-8">
+<style>iframe{border:0;display:block}</style>
+<iframe id="f" src="../index.html#/"></iframe>
+<pre id="out">RUNNING</pre>
+<script type="module">
+import { routes } from '../js/routes.js';
+import { grammarLessons } from '../content/grammar/index.js';
+import { solutionText } from '../js/logic/answer-check.js';
+
+const out = [];
+const f = document.getElementById('f');
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const d = () => f.contentDocument;
+const reload = async (hash = '#/') => {
+  f.src = '../index.html?' + Math.random() + hash;
+  await new Promise((r) => { f.onload = r; });
+  await sleep(250);
+};
+const btn = (re) => [...d().querySelectorAll('button')].find((b) => re.test(b.textContent) && !b.hidden);
+const click = async (re) => { const b = btn(re); if (!b) throw new Error('no button ' + re); b.click(); await sleep(25); };
+const typeText = (v) => { d().querySelector('.answer-input').value = v; };
+const chooseRadio = (i) => d().querySelectorAll('input[type=radio]')[i].click();
+const store = () => JSON.parse(f.contentWindow.localStorage.getItem('skillforge-data') || 'null');
+const setStore = (fn) => {
+  const s = store() ?? { app: 'skillforge', schemaVersion: 1, createdAt: new Date().toISOString(), lastBackupAt: null, settings: { theme: 'system', fontSize: 18, showComingSoon: true }, progress: {}, attempts: [], mistakes: {} };
+  fn(s); f.contentWindow.localStorage.setItem('skillforge-data', JSON.stringify(s));
+};
+
+// ----- the audit of the page that is on screen now -----
+function accessibleName(el, doc) {
+  const aria = el.getAttribute('aria-label'); if (aria) return aria;
+  const by = el.getAttribute('aria-labelledby');
+  if (by) return by.split(' ').map((id) => doc.getElementById(id)?.textContent ?? '').join(' ').trim();
+  if (el.id) { const l = doc.querySelector(`label[for="${CSS.escape(el.id)}"]`); if (l) return l.textContent; }
+  if (el.closest('label')) return el.closest('label').textContent;
+  if (['BUTTON', 'A', 'SUMMARY'].includes(el.tagName)) return el.textContent;
+  if (el.tagName === 'INPUT' && ['submit', 'button'].includes(el.type)) return el.value;
+  return el.getAttribute('title') ?? '';
+}
+function audit(label, checkSizes) {
+  const doc = d(); const win = f.contentWindow; const issues = [];
+  const html = doc.documentElement;
+  if (html.scrollWidth > html.clientWidth + 1) {
+    const wide = [...doc.querySelectorAll('body *')].filter((e) => e.getBoundingClientRect().right > html.clientWidth + 1).slice(0, 3).map((e) => e.tagName + '.' + e.className);
+    issues.push('HORIZONTAL SCROLL ' + wide.join(','));
+  }
+  const h1 = doc.querySelectorAll('h1').length; if (h1 !== 1) issues.push('h1 count=' + h1);
+  for (const sel of ['main', 'nav', 'header']) { const n = doc.querySelectorAll(sel).length; if (n !== 1) issues.push(sel + ' count=' + n); }
+  const ids = [...doc.querySelectorAll('[id]')].map((e) => e.id);
+  const dup = ids.filter((id, i) => ids.indexOf(id) !== i); if (dup.length) issues.push('duplicate ids ' + dup.join(','));
+  for (const e of doc.querySelectorAll('[aria-controls]')) if (!doc.getElementById(e.getAttribute('aria-controls'))) issues.push('aria-controls missing target');
+  for (const e of doc.querySelectorAll('button, a[href], input:not([type=hidden]), select, textarea, summary')) {
+    const r = e.getBoundingClientRect(); if (r.width === 0 && r.height === 0) continue;
+    if (!accessibleName(e, doc).trim()) issues.push('NO NAME: ' + e.outerHTML.slice(0, 80));
+    if (checkSizes) {
+      let box = r;
+      if (e.type === 'radio' || e.type === 'checkbox') { const l = e.id && doc.querySelector(`label[for="${e.id}"]`); box = l ? l.getBoundingClientRect() : r; }
+      if (e.matches('.skip-link')) continue;
+      if (box.height < 43.5) issues.push(`SMALL (${Math.round(box.height)}px high): ${e.tagName} "${(e.textContent || e.value || e.id).trim().slice(0, 30)}"`);
+    }
+  }
+  const imgs = [...doc.querySelectorAll('img')].filter((i) => !i.hasAttribute('alt')); if (imgs.length) issues.push('img without alt');
+  const lang = doc.documentElement.lang; if (!lang) issues.push('no lang');
+  const bad = issues.length ? issues : ['ok'];
+  out.push(`[${f.offsetWidth}px] ${label}: ${bad.join(' | ')}`);
+}
+
+async function scenario(width) {
+  f.style.width = width + 'px'; f.style.height = '900px';
+  const sizes = width <= 400;
+
+  // every page
+  for (const r of routes) { await reload('#/' + r.path); audit('page ' + (r.path || 'dashboard'), sizes); }
+  await reload('#/nope'); audit('page not found', sizes);
+
+  // lesson 1 states
+  const lesson = grammarLessons[0];
+  await reload('#/grammar'); audit('grammar list', sizes);
+  d().querySelectorAll('.card button')[0].click(); await sleep(40); audit('lesson page', sizes);
+  await click(/Start exercises/); audit('exercise: multiple choice', sizes);
+  chooseRadio(0); await click(/^Check$/); audit('exercise: wrong answer feedback', sizes);
+  await click(/Show hint/); audit('exercise: hint shown', sizes);
+  chooseRadio(1); await click(/^Check$/); audit('exercise: finished (explanation)', sizes);
+  await click(/Next question/);
+  for (let i = 1; i < lesson.exercises.length; i++) {
+    const ex = lesson.exercises[i];
+    if (ex.type !== 'multiple-choice' && !seen.has(ex.type)) { seen.add(ex.type); audit('exercise: ' + ex.type, sizes); }
+    if (ex.type === 'reorder') for (const w of solutionText(ex).split(' ')) [...d().querySelectorAll('.word-button')].find((b) => !b.disabled && b.textContent === w).click();
+    else if (ex.type === 'multiple-choice') chooseRadio(ex.correct);
+    else typeText(i === 2 ? 'wrong' : solutionText(ex));
+    await click(/^Check$/);
+    if (i === 2) { audit('exercise: wrong text answer', sizes); typeText('x'); await click(/^Check$/); audit('exercise: solution shown', sizes); }
+    await click(/Next question|See results/);
+  }
+  audit('lesson results', sizes);
+
+  // notebook, dashboard, settings with data
+  setStore((s) => { s.lastBackupAt = new Date().toISOString(); });
+  await reload('#/mistakes'); audit('notebook: due', sizes);
+  await click(/All mistakes/); d().querySelector('details').open = true; audit('notebook: all (answer open)', sizes);
+  const m = Object.keys(store().mistakes)[0];
+  setStore((s) => { s.mistakes[m].dueDate = '2020-01-01'; });
+  await reload('#/mistakes'); await click(/Start review/); audit('notebook: review', sizes);
+  await reload('#/'); audit('dashboard with data', sizes);
+  await reload('#/settings');
+  const input = d().getElementById('set-import');
+  const dt = new f.contentWindow.DataTransfer();
+  dt.items.add(new f.contentWindow.File([JSON.stringify(store())], 'x.json', { type: 'application/json' }));
+  input.files = dt.files; input.dispatchEvent(new Event('change', { bubbles: true })); await sleep(1500);
+  audit('settings: import preview', sizes);
+}
+
+const seen = new Set();
+try {
+  f.contentWindow.localStorage.clear();
+  for (const width of [360, 768, 1366]) { seen.clear(); f.contentWindow.localStorage.clear(); await scenario(width); }
+  // largest text + dark at phone width
+  setStore((s) => { s.settings.theme = 'dark'; s.settings.fontSize = 22; });
+  f.style.width = '360px';
+  for (const r of routes) { await reload('#/' + r.path); audit('dark 22px page ' + (r.path || 'dashboard'), false); }
+} catch (e) { out.push('ERROR ' + e.stack); }
+document.getElementById('out').textContent = out.join('\n');
+</script>

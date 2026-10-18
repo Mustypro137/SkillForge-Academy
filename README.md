@@ -1,13 +1,24 @@
 # SkillForge Academy
 
-A private website to practise English and professional communication.
-All data stays in your browser. No account, no server, no cost.
+A private website to practice English for work: grammar lessons, a mistake notebook that brings mistakes back at the right time, and a dashboard that tells you what to do next.
 
-Status: typing practice was removed (not needed). Milestone 6 (dashboard) is built. See `project-plan.md` for the full plan and `PROGRESS.md` for progress.
+- Everything stays in your browser on your device. No account, no server, no tracking, no cost.
+- No packages to install. Plain HTML, CSS and JavaScript.
+
+Version 1 (MVP) is built. See `PROGRESS.md` for what is done and what you still need to check, and `project-plan.md` for the full plan.
+
+## What you can do
+
+- **Dashboard:** your next step, lessons done, mistakes due, practice in the last 7 days, weak skills, backup reminder.
+- **Grammar:** 3 lessons (capital letters and punctuation, present simple, articles), 12 exercises each. Four exercise types: multiple choice, fill in the blank, correct the sentence, word order. Try first, then use hints, then see the solution and the reason.
+- **Mistake notebook:** wrong answers are saved and come back after 1, 2, 4, 8 and 16 days. Add notes, review, master them.
+- **Settings and backup:** color theme, text size, export and import your progress as a file, reset.
+
+Pages that appear in the menu with "Soon" (Writing, Reading, Roleplay, LinkedIn, Freelance, Technical English, Progress reports) are planned for later. You can hide them in Settings.
 
 ## Run the website
 
-Browsers do not allow ES modules from a double-clicked file, so use a small local server:
+Browsers do not allow this kind of app from a double-clicked file, so use a small local server. In the project folder:
 
 ```
 python -m http.server 8000
@@ -15,20 +26,51 @@ python -m http.server 8000
 
 Then open <http://localhost:8000>. Stop the server with `Ctrl+C`.
 
+To use it on your phone at home, run `python -m http.server 8000 --bind 0.0.0.0` and open `http://<your PC address>:8000` on a phone on the same Wi-Fi. Stop the server when you are done. Your progress is stored separately in each browser, so the phone and the PC do not share progress. Use Export and Import in Settings to move it.
+
+## Your data and backups
+
+- Progress is saved in this browser only (localStorage). If you clear your browser data, it is gone.
+- Use **Settings > Export backup** now and then, and keep the file somewhere safe. The dashboard reminds you.
+- **Import** checks the file first and shows what it contains. A copy of your current data is downloaded before it is replaced.
+- Never put a backup file in this project folder. Backup files are ignored by git for safety.
+
 ## Run the tests
 
 ```
 npm test
 ```
 
-No `npm install` is needed. There are no dependencies.
+No `npm install` is needed. The tests cover the calculations and rules: answer checking, scoring, review schedule, saving and loading, backup files, dashboard numbers, lesson content, and color contrast.
+
+Optional browser checks (need Microsoft Edge) are in `tools/`. Their instructions are at the top of each file.
 
 ## Folders
 
 - `index.html` - the one page of the app
-- `css/` - styles (colors, layout, components)
-- `js/` - code: `main.js` starts the app, `router.js` picks the page, `routes.js` lists the pages, `storage.js` saves and loads your data, `state.js` keeps it in memory
-- `js/logic/` - rules without screens: `answer-check.js` (checks answers), `progress.js` (scores and lesson status), `review-schedule.js` (when to review mistakes), `dashboard.js` (dashboard numbers and next step)
-- `content/grammar/` - the grammar lessons (data only). Add a lesson by adding a file and listing it in `index.js`
-- `js/pages/` - one file per page
-- `tests/` - automated tests
+- `css/` - styles (colors and themes, layout, components)
+- `js/main.js` - starts the app; `js/router.js` and `js/routes.js` - which page to show
+- `js/storage.js` - the only code that touches localStorage; `js/state.js` - your data in memory
+- `js/logic/` - rules without screens: `answer-check.js`, `progress.js`, `review-schedule.js`, `dashboard.js`
+- `js/pages/` - one file per page; `exercise-view.js` is the exercise screen shared by lessons and reviews
+- `js/ui/` - small helpers (safe element builder, theme, file download)
+- `content/` - lessons and names (data only, no logic)
+- `tests/` - automated tests (`npm test`)
+- `tools/` - optional browser checks
+
+## Add or change a grammar lesson
+
+1. Copy one file in `content/grammar/` and change the text. Keep the same fields.
+2. Add it to the list in `content/grammar/index.js`.
+3. Give every exercise a new, unique `id`. Never change an `id` after you have used the app, because your progress is saved by `id`.
+4. Add any new skill tag to `content/skill-tags.js`.
+5. Run `npm test`. It checks that every accepted answer is accepted, and that no listed mistake is accepted.
+
+Accepted answers can use `{a|b}` for alternatives. Example: `'I {have sent|sent} the file.'`
+
+## Known limits
+
+- Answers are accepted only if they match the wording listed in the lesson (after ignoring capitals, extra spaces, commas, the final full stop, and short forms like don't). If a correct answer is rejected, tell the person maintaining the lessons, and a new accepted answer can be added.
+- Free writing cannot be graded by the app without an AI service. Writing practice is planned with checklists and model answers.
+- One device, one browser: there is no sync.
+- Tested in Microsoft Edge (Chromium). Chrome should behave the same. Firefox and Safari have not been tested.

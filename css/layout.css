@@ -30,7 +30,7 @@
   font: inherit;
   color: var(--text);
   background: var(--bg);
-  border: 1px solid var(--border);
+  border: 1px solid var(--control-border);
   border-radius: var(--radius);
   cursor: pointer;
 }
@@ -44,7 +44,10 @@
 }
 .site-nav.is-open { display: block; }
 
+.app-main:focus { outline: none; } /* focused by the skip link only */
+
 .app-main {
+  min-width: 0;
   padding: 1.5rem 1rem 3rem; /* 16px side gutter */
   max-width: 60rem;
 }
@@ -54,7 +57,7 @@
 
   .app-body {
     display: grid;
-    grid-template-columns: 15rem 1fr;
+    grid-template-columns: 15rem minmax(0, 1fr); /* minmax(0, ...) stops wide content from pushing the page wider */
     align-items: start;
   }
 

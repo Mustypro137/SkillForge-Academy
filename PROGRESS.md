@@ -2,89 +2,79 @@
 
 ## Milestones
 
-- [ ] M1 Foundation and app shell (code written; waiting for manual checks and your approval)
-- [x] M2 Typing practice - REMOVED at owner's request (code kept in git commit 65305ca)
-- [ ] M3 Storage, settings, backup (code written; waiting for manual checks and your approval)
-- [ ] M4 Question engine and grammar (code written; waiting for manual checks and your approval)
-- [ ] M5 Mistake notebook (code written; waiting for manual checks and your approval)
-- [ ] M6 Dashboard (code written; waiting for manual checks and your approval)
-- [ ] M7 MVP polish and full check
+- [x] M1 Foundation and app shell
+- [x] M2 Typing practice - REMOVED at the owner's request (code kept in git commit 65305ca)
+- [x] M3 Storage, settings, backup
+- [x] M4 Question engine and grammar
+- [x] M5 Mistake notebook
+- [x] M6 Dashboard
+- [x] M7 Polish and full check - done by Claude; **version 1 is not tagged `v1.0` until you finish the checklist below**
 
-## M1 manual checklist (you do these)
+"Done" here means built, tested by Claude, and committed. Only you can confirm the items in "Your final check".
+
+## Checked by Claude (what was really run)
+
+| Check | Result |
+|---|---|
+| `npm test` (126 tests: router, storage, state, answer checking, progress, review schedule, dashboard, lesson content, color contrast) | all pass |
+| Color contrast of every text/background and control-border pair, light and dark theme (also part of `npm test`) | all meet WCAG AA |
+| Page audit in Edge: 12 pages + lesson, 4 exercise types, feedback, results, notebook, review, settings preview, dashboard, at 360 / 768 / 1366 px (`tools/browser-audit.html`) | 98 of 98 clean: one h1, one main/nav/header, every control named, no duplicate ids, tap targets at least 44 px on phone, no sideways scrolling |
+| Dark mode + 22 px text on all pages at 360 px | no sideways scrolling |
+| Keyboard-only run with real key presses (`tools/keyboard-check.mjs`): skip link, menu, open lesson, number keys, Enter to check/next, hint, typing an answer, word-order exercise, phone menu with Escape, Settings | 33 of 33 pass |
+| Edge cases (`tools/edge-cases-check.mjs`): browser blocks storage, storage full, app code not running (double-click) shows a helpful message, no uncaught errors | all pass |
+| Console errors during the audit | none from the app |
+
+Bugs found and fixed in M7: the skip link broke the router (it showed "Page not found"), the first page load took keyboard focus away from the skip link and menu, faint borders on inputs and buttons (contrast 1.3:1), unreadable text on the red Reset button in dark mode, sideways scrolling of the dashboard at 768 px, a too-small file chooser on phones, and a wrong instruction in lesson exercise `ps-04` ("write two words" for a three-word answer).
+
+## Your final check (only you can do these)
 
 Run `python -m http.server 8000` and open http://localhost:8000.
 
-- [ ] Every menu link opens a page; the current link is highlighted
-- [ ] Browser Back and Forward buttons work
-- [ ] Refreshing the page keeps you on the same page
-- [ ] `#/something-wrong` shows "Page not found"
-- [ ] Tab key: focus ring is always visible; the "Skip to main content" link appears first
-- [ ] Narrow the window to about 360px: no sideways scrolling, Menu button opens and closes the menu (also with Escape)
-- [ ] Dark mode looks fine (change your system theme)
-- [ ] No red errors in the browser console (F12)
-- [ ] Works in Chrome, Edge and Firefox
+**1. Read the lessons (most important)**
+- [ ] Read the 3 lesson explanations. Is the English clear and correct?
+- [ ] Do each lesson. Did any correct answer get rejected? Does any explanation sound wrong? (Tell Claude the exercise number, for example `ps-07`.)
+- [ ] The hints help without giving the answer away
 
-## M3 manual checklist (you do these)
+**2. Learning flow**
+- [ ] Wrong answers: feedback, hint, retry, then the solution and "Why" after 2 wrong tries
+- [ ] A typo in a one-word answer says "Almost!" and does not use a try
+- [ ] Capitals and the final full stop do not matter in normal exercises; they DO matter in the capital-letters lesson
+- [ ] Refresh in the middle of a lesson, then "Continue" starts at the next question
+- [ ] 80% or more right on the first try = "Mastered"
+- [ ] A mistake appears in the Mistake notebook; notes save; Delete asks first
+- [ ] To test a review today: DevTools (F12) > Application > Local Storage > `skillforge-data`, set a mistake's `dueDate` to `2020-01-01`, refresh. Review it: it moves up a box. Wrong: back to box 1. Right in box 5: mastered
+- [ ] Does the review timing (1, 2, 4, 8, 16 days) feel right?
 
-- [ ] Settings: change theme to Dark, text size to 22 px; refresh the page; the settings are still there
-- [ ] Turn off "Show pages that are coming soon"; the menu shows only 4 pages; turn it on again
-- [ ] Export backup: a file `skillforge-backup-YYYY-MM-DD.json` downloads; "Last backup" shows today
-- [ ] Reset (type RESET): settings go back to default and a backup downloads first
-- [ ] Import the backup you exported: the preview shows counts, then your settings come back
-- [ ] Import a wrong file (for example a photo or a .txt file): you get a clear error and nothing changes
-- [ ] In DevTools (F12) > Application > Local Storage, change `skillforge-data` to `{abc`, refresh: a red warning appears and the app still works
-- [ ] Works on phone: the Settings page is readable and the file chooser opens
-- [ ] No console errors
+**3. Dashboard**
+- [ ] The next-step button opens the right place
+- [ ] Numbers look right after a few lessons; weak areas appear after 5+ answers on a skill under 80%
+- [ ] The backup card says "No backup yet", then "Last backup today" after an export
 
-## M4 manual checklist (you do these)
+**4. Backup and safety**
+- [ ] Export a backup file; Reset; Import it: everything comes back
+- [ ] Import a wrong file (for example a .txt file): clear error, nothing changes
+- [ ] Change `skillforge-data` to `{abc` in DevTools and refresh: a red warning appears and the app still works
 
-- [ ] Grammar page shows 3 lessons; open one and read the explanation (is the English clear and correct?)
-- [ ] Do a whole lesson. Try a wrong answer first on purpose: you see feedback, can use a hint, and after 2 wrong tries you see the solution and a "Why" explanation
-- [ ] A small typo in a one-word answer (for example `wantss`) says "Almost! Check your spelling." and does not use a try
-- [ ] Capital letters and the final full stop do not matter in normal exercises (`he does not like long emails` is accepted, with a tip)
-- [ ] `don't` and `do not` are both accepted
-- [ ] In the capital-letters lesson, `i work with a client in london.` is NOT accepted (capitals matter there)
-- [ ] Word-order exercise: tap words, Undo and Clear work, Tab and Enter work without a mouse
-- [ ] Multiple choice: keys 1 to 4 choose an option; Enter checks
-- [ ] Lesson results: score, list of questions to review, "Practice the ones I missed"
-- [ ] Refresh the page in the middle of a lesson: "Continue" starts at the next unanswered question
-- [ ] 80% or more first-try correct = "Mastered"
-- [ ] On your phone: buttons are easy to tap and the keyboard does not hide the answer box
-- [ ] Please tell me any exercise where a correct answer was rejected, or the English sounds wrong
+**5. Phone and other browsers**
+- [ ] On your phone: the pages are readable, buttons are easy to tap, the on-screen keyboard does not hide the answer box, the menu opens and closes
+- [ ] Chrome (should be the same as Edge) and Firefox, if you have them: all pages open and a lesson works
+- [ ] Windows Narrator (optional): the page heading and the "Correct" / "Not quite" feedback are read aloud
 
-## M5 manual checklist (you do these)
+When everything is ticked, tell Claude. Then the version can be tagged:
 
-- [ ] Give 2 wrong answers on one grammar exercise: after the solution is shown, it appears in the Mistake notebook (All mistakes)
-- [ ] An answer that was wrong first but right on the second try (with a hint or retry) does NOT appear in the notebook
-- [ ] "Show answer and explanation" is hidden until you open it
-- [ ] Write a note and press Save note; refresh the page: the note is still there
-- [ ] Delete asks "Delete this mistake?" first; Cancel keeps it
-- [ ] To test a review today: open DevTools (F12) > Application > Local Storage > `skillforge-data`, change a mistake's `dueDate` to `2020-01-01`, refresh. It appears under "Due today". Start review, answer it right: it moves to box 2
-- [ ] Wrong in a review: it goes back to box 1. Right in box 5: it becomes Mastered and moves to the Mastered tab
-- [ ] Keyboard only: tabs, Start review, answering, Next, Delete confirmation
-- [ ] Phone: cards and buttons are easy to read and tap
-- [ ] Tell me if the review timing (1, 2, 4, 8, 16 days) feels right
+```
+git tag v1.0
+```
 
-## M6 manual checklist (you do these)
-
-- [ ] New user (Settings > Reset first, after exporting a backup): the dashboard says "Start your first lesson" and every card shows zeros without errors
-- [ ] The next-step button opens the right place: first lesson, the notebook, or the lesson you were doing
-- [ ] After a few lessons, the cards show real numbers (lessons done, mistakes due, answers in the last 7 days)
-- [ ] Weak areas: after you answer at least 5 questions on a skill, a skill under 80% appears with its percentage
-- [ ] The backup card shows "No backup yet", then "Last backup today" after you export
-- [ ] The "Last 7 days" numbers look right to you
-- [ ] Phone: no sideways scrolling, text is readable, buttons are easy to tap
-- [ ] Dark mode and the largest text size (22 px) look fine
-
-## Automated tests
-
-- Last run by Claude: 122 tests, all passed (router, storage, state, answer checking, progress, review schedule, dashboard, lesson content). Run `npm test` yourself to check.
-- A headless Edge smoke test of the Dashboard ran once (empty state, each next-step rule, weak areas, backup card, damaged data, no sideways scroll at 360px).
-- A headless Edge smoke test of the Mistake notebook ran once (saving mistakes, notes, delete, review, moving boxes, mastering, damaged data).
-- A headless Edge smoke test played through a whole grammar lesson once (wrong answers, hints, solutions, all 4 types, results, saving, reload, extra practice).
-- A headless Edge smoke test of the Settings page ran once (theme and size saved across reload, hide coming-soon pages, export, bad and good import, reset, corrupt-data banner).
-
-## Known bugs
+## Known limits and bugs
 
 - Wrong answers given before Milestone 5 are not in the Mistake notebook (they are only in the attempt history). New wrong answers are saved automatically.
-- Free-form answers: only listed wording is accepted. If a correct answer is rejected, tell Claude and the exercise will get a new accepted answer.
+- Answers are accepted only if they match the wording listed in the lesson (after ignoring capitals, spaces, commas, the final full stop and short forms). A correct answer in different words may be rejected. Report it and the exercise gets a new accepted answer.
+- Free writing cannot be graded by the app (no AI service). Writing practice is planned with checklists and model answers.
+- No sync between devices. Use Export and Import.
+- Not tested: Firefox, Safari, a real phone, screen readers, and long-term use (the 16-day review gaps were tested with changed dates, not real waiting).
+- Typing practice was removed, so the typing items in `project-plan.md` are no longer part of the project.
+
+## After version 1 (not started)
+
+M8 Writing practice, M9 Communication roleplay, M10 LinkedIn academy, M11 Freelance communication, M12 Technical English, M13 Reading comprehension, M14 Progress reports, M15 Offline install. Each one is planned in detail before it starts. See `project-plan.md`.

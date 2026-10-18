@@ -56,7 +56,7 @@ export const presentSimple = {
     },
     {
       id: 'ps-04', type: 'fill-blank',
-      prompt: "They ___ (not / work) on Sundays. Write two words: do/does + not + verb.",
+      prompt: "They ___ (not / work) on Sundays. Write the whole answer: do/does + not + verb.",
       acceptedAnswers: ['do not work'],
       commonMistakes: [
         { answer: 'does not work', feedback: "With they, use do not (don't). Does not is for he, she and it." },
@@ -146,7 +146,7 @@ export const presentSimple = {
     },
     {
       id: 'ps-12', type: 'fill-blank',
-      prompt: 'Anna ___ (not / reply) quickly. Write two or three words: does/do + not + verb.',
+      prompt: 'Anna ___ (not / reply) quickly. Write the whole answer: do/does + not + verb.',
       acceptedAnswers: ['does not reply'],
       commonMistakes: [
         { answer: 'do not reply', feedback: "Anna is one person (she), so use does not (doesn't), not do not." },

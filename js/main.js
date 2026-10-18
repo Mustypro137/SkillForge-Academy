@@ -23,6 +23,8 @@ const main = document.getElementById('main');
 const nav = document.getElementById('site-nav');
 const menuButton = document.getElementById('menu-button');
 const banner = document.getElementById('banner');
+const skipLink = document.querySelector('.skip-link');
+let firstRender = true;
 let currentRoute = null;
 
 function linkFor(route) {
@@ -40,8 +42,8 @@ function buildMenu() {
   for (const route of routes) {
     if (!route.ready && !showSoon) continue;
     if (route.group !== lastGroup || list === null) {
-      if (route.group) nav.append(el('p', { class: 'nav-group' }, route.group));
-      list = el('ul', { class: 'nav-list' });
+      if (route.group) nav.append(el('p', { class: 'nav-group', 'aria-hidden': 'true' }, route.group));
+      list = el('ul', { class: 'nav-list', 'aria-label': route.group || null });
       nav.append(list);
       lastGroup = route.group;
     }
@@ -83,7 +85,13 @@ function showPage(route) {
   document.title = `${route ? route.label : 'Page not found'} - SkillForge Academy`;
   setMenuOpen(false);
   window.scrollTo(0, 0);
-  main.querySelector('h1')?.focus(); // so screen readers announce the new page
+  if (firstRender) {
+    // On the first load, let the keyboard start at the top (skip link, menu).
+    firstRender = false;
+    document.activeElement?.blur();
+  } else {
+    main.querySelector('h1')?.focus(); // so screen readers announce the new page
+  }
 }
 
 function safeLocalStorage() {
@@ -97,6 +105,12 @@ subscribe((data) => {
   applyAppearance(data.settings);
   buildMenu();
   markCurrentLink(currentRoute);
+});
+
+// A normal link to #main would change the address and confuse the router.
+skipLink.addEventListener('click', (event) => {
+  event.preventDefault();
+  main.focus();
 });
 
 buildMenu();

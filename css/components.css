@@ -68,7 +68,7 @@
 .button-secondary {
   color: var(--text);
   background: transparent;
-  border-color: var(--border);
+  border-color: var(--control-border);
 }
 
 .button-row {
@@ -95,7 +95,7 @@
   font: inherit;
   color: var(--text);
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--control-border);
   border-radius: var(--radius);
 }
 
@@ -111,11 +111,23 @@
   font: inherit;
   color: var(--text);
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--control-border);
   border-radius: var(--radius);
 }
 
 .field input[type="file"] { max-width: 100%; font: inherit; color: var(--text); }
+.field input[type="file"]::file-selector-button {
+  min-height: 44px;
+  margin-right: 0.75rem;
+  padding: 0 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--control-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
 
 .field-check {
   display: flex;
@@ -139,7 +151,7 @@
 .status { min-height: 1.6em; font-weight: 600; color: var(--success); }
 .status-error { color: var(--error); }
 
-.button-danger { background: var(--error); border-color: var(--error); color: #fff; }
+.button-danger { background: var(--error); border-color: var(--error); color: var(--on-error); }
 .button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* ---------- Grammar: lesson list and lesson ---------- */
@@ -194,7 +206,7 @@ fieldset.choices legend { padding: 0; }
   min-height: 48px;
   padding: 0.5rem 0.75rem 0.5rem 3rem;
   background: var(--surface);
-  border: 2px solid var(--border);
+  border: 2px solid var(--control-border);
   border-radius: var(--radius);
   cursor: pointer;
 }
@@ -205,7 +217,7 @@ fieldset.choices legend { padding: 0; }
 .choice label.is-right { border-color: var(--success); }
 .choice-key { color: var(--text-muted); font-size: 0.85rem; }
 
-.answer-input { width: 100%; max-width: 40rem; min-height: 44px; padding: 0.5rem 0.75rem; font: inherit; color: var(--text); background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); }
+.answer-input { width: 100%; max-width: 40rem; min-height: 44px; padding: 0.5rem 0.75rem; font: inherit; color: var(--text); background: var(--surface); border: 2px solid var(--control-border); border-radius: var(--radius); }
 
 .answer-line {
   min-height: 3.5rem;
@@ -260,7 +272,7 @@ fieldset.choices legend { padding: 0; }
   font: inherit;
   color: var(--text);
   background: var(--surface);
-  border: 2px solid var(--border);
+  border: 2px solid var(--control-border);
   border-radius: var(--radius);
   cursor: pointer;
 }
