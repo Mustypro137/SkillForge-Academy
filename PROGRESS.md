@@ -5,7 +5,7 @@
 - [ ] M1 Foundation and app shell (code written; waiting for manual checks and your approval)
 - [x] M2 Typing practice - REMOVED at owner's request (code kept in git commit 65305ca)
 - [ ] M3 Storage, settings, backup (code written; waiting for manual checks and your approval)
-- [ ] M4 Question engine and grammar
+- [ ] M4 Question engine and grammar (code written; waiting for manual checks and your approval)
 - [ ] M5 Mistake notebook
 - [ ] M6 Dashboard
 - [ ] M7 MVP polish and full check
@@ -36,11 +36,29 @@ Run `python -m http.server 8000` and open http://localhost:8000.
 - [ ] Works on phone: the Settings page is readable and the file chooser opens
 - [ ] No console errors
 
+## M4 manual checklist (you do these)
+
+- [ ] Grammar page shows 3 lessons; open one and read the explanation (is the English clear and correct?)
+- [ ] Do a whole lesson. Try a wrong answer first on purpose: you see feedback, can use a hint, and after 2 wrong tries you see the solution and a "Why" explanation
+- [ ] A small typo in a one-word answer (for example `wantss`) says "Almost! Check your spelling." and does not use a try
+- [ ] Capital letters and the final full stop do not matter in normal exercises (`he does not like long emails` is accepted, with a tip)
+- [ ] `don't` and `do not` are both accepted
+- [ ] In the capital-letters lesson, `i work with a client in london.` is NOT accepted (capitals matter there)
+- [ ] Word-order exercise: tap words, Undo and Clear work, Tab and Enter work without a mouse
+- [ ] Multiple choice: keys 1 to 4 choose an option; Enter checks
+- [ ] Lesson results: score, list of questions to review, "Practice the ones I missed"
+- [ ] Refresh the page in the middle of a lesson: "Continue" starts at the next unanswered question
+- [ ] 80% or more first-try correct = "Mastered"
+- [ ] On your phone: buttons are easy to tap and the keyboard does not hide the answer box
+- [ ] Please tell me any exercise where a correct answer was rejected, or the English sounds wrong
+
 ## Automated tests
 
-- Last run by Claude: 27 tests, all passed (router, storage, state). Run `npm test` yourself to check.
+- Last run by Claude: 81 tests, all passed (router, storage, state, answer checking, progress, lesson content). Run `npm test` yourself to check.
+- A headless Edge smoke test played through a whole grammar lesson once (wrong answers, hints, solutions, all 4 types, results, saving, reload, extra practice).
 - A headless Edge smoke test of the Settings page ran once (theme and size saved across reload, hide coming-soon pages, export, bad and good import, reset, corrupt-data banner).
 
 ## Known bugs
 
-- None known yet.
+- Mistakes are not saved to the Mistake notebook yet. Wrong answers are recorded in the attempt history, and Milestone 5 will use it.
+- Free-form answers: only listed wording is accepted. If a correct answer is rejected, tell Claude and the exercise will get a new accepted answer.

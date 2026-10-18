@@ -141,3 +141,111 @@
 
 .button-danger { background: var(--error); border-color: var(--error); color: #fff; }
 .button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ---------- Grammar: lesson list and lesson ---------- */
+
+.lesson-list { list-style: none; margin: 1.5rem 0 0; padding: 0; display: grid; gap: 1rem; }
+
+.card {
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.card h2 { margin-top: 0; }
+.card p { margin-bottom: 0.5rem; }
+
+.meta { color: var(--text-muted); }
+
+.lesson-text { max-width: 70ch; padding: 0.25rem 1.25rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.examples { max-width: 70ch; padding-left: 1.25rem; }
+.examples li { margin-bottom: 0.75rem; }
+
+.score { font-size: 1.3rem; font-weight: 700; }
+
+.missed-list { max-width: 70ch; padding-left: 1.25rem; }
+.missed-list li { margin-bottom: 0.75rem; }
+
+/* ---------- Exercise ---------- */
+
+.progress-label { margin: 0 0 0.25rem; color: var(--text-muted); font-weight: 600; }
+
+progress { display: block; width: 100%; max-width: 28rem; height: 0.5rem; margin-bottom: 1.25rem; accent-color: var(--accent); }
+
+.exercise .prompt { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.75rem; }
+
+.quote {
+  margin: 0 0 1rem;
+  padding: 0.5rem 1rem;
+  border-left: 4px solid var(--border);
+  background: var(--surface);
+  font-style: italic;
+}
+
+fieldset.choices { margin: 0 0 1rem; padding: 0; border: 0; }
+fieldset.choices legend { padding: 0; }
+
+.choice { position: relative; margin-bottom: 0.5rem; max-width: 28rem; }
+.choice input { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); width: 1.25rem; height: 1.25rem; margin: 0; }
+.choice label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.5rem 0.75rem 0.5rem 3rem;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.choice input:checked + label { border-color: var(--accent); background: var(--highlight); }
+.choice input:focus-visible + label { outline: 3px solid var(--focus); outline-offset: 2px; }
+.choice input:disabled + label { cursor: default; }
+.choice label.is-wrong { border-color: var(--error); color: var(--error); text-decoration: line-through; }
+.choice label.is-right { border-color: var(--success); }
+.choice-key { color: var(--text-muted); font-size: 0.85rem; }
+
+.answer-input { width: 100%; max-width: 40rem; min-height: 44px; padding: 0.5rem 0.75rem; font: inherit; color: var(--text); background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius); }
+
+.answer-line {
+  min-height: 3.5rem;
+  max-width: 40rem;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  font-size: 1.15rem;
+}
+.answer-line.is-empty { color: var(--text-muted); }
+
+.word-bank { display: flex; flex-wrap: wrap; gap: 0.5rem; max-width: 40rem; }
+.word-button {
+  min-height: 44px;
+  padding: 0 1rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.word-button:disabled { opacity: 0.35; cursor: default; }
+
+.hint-list { max-width: 70ch; margin: 0.5rem 0; padding-left: 1.25rem; }
+.hint-list:empty { display: none; }
+.hint-list li::marker { content: "Hint: "; font-weight: 700; }
+
+.feedback { max-width: 70ch; margin-top: 1rem; border-radius: var(--radius); }
+.feedback:empty { display: none; }
+.feedback > * { margin: 0; }
+.feedback { padding: 0.75rem 1rem; border-left: 6px solid var(--border); background: var(--surface); }
+.feedback p { margin-top: 0.25rem; }
+.feedback-good { border-left-color: var(--success); }
+.feedback-good strong { color: var(--success); }
+.feedback-bad { border-left-color: var(--error); }
+.feedback-bad strong { color: var(--error); }
+.feedback-warn { border-left-color: var(--focus); }
+
+.after { max-width: 70ch; }
+.solution, .explanation { margin-top: 1rem; }

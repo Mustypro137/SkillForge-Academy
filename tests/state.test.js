@@ -66,3 +66,58 @@ test('corrupt saved data gives a warning', () => {
   initState(store);
   assert.equal(getWarning(), 'corrupt');
 });
+
+// ----- recording exercise results -----
+
+import { recordExerciseResult, startLessonRun } from '../js/state.js';
+
+const ids = ['e1', 'e2'];
+const info = (extra = {}) => ({
+  lessonId: 'l1', exerciseId: 'e1', exerciseIds: ids, outcome: 'correct',
+  answer: 'wants', tries: 0, hintsUsed: 0, ...extra,
+});
+
+test('recordExerciseResult adds an attempt and updates progress', () => {
+  initState(fakeStorage());
+  recordExerciseResult(info());
+  const d = getData();
+  assert.equal(d.attempts.length, 1);
+  assert.equal(d.attempts[0].exerciseId, 'e1');
+  assert.equal(d.attempts[0].firstTry, true);
+  assert.equal(d.progress.l1.answered.e1, 'correct');
+  assert.equal(d.progress.l1.status, 'in-progress');
+});
+
+test('finishing the last exercise completes the lesson', () => {
+  initState(fakeStorage());
+  recordExerciseResult(info());
+  recordExerciseResult(info({ exerciseId: 'e2', outcome: 'incorrect', tries: 2 }));
+  assert.equal(getData().progress.l1.status, 'completed');
+  assert.equal(getData().progress.l1.lastScore, 0.5);
+  assert.equal(getData().attempts[1].firstTry, false);
+});
+
+test('practice results are saved as attempts but do not change progress', () => {
+  initState(fakeStorage());
+  recordExerciseResult(info({ practice: true }));
+  assert.equal(getData().attempts.length, 1);
+  assert.equal(getData().attempts[0].practice, true);
+  assert.deepEqual(getData().progress, {});
+});
+
+test('attempts stay capped at the maximum', () => {
+  initState(fakeStorage());
+  updateData((d) => { d.attempts = Array.from({ length: 3000 }, (_, i) => ({ n: i })); });
+  recordExerciseResult(info());
+  assert.equal(getData().attempts.length, 3000);
+  assert.equal(getData().attempts[0].n, 1);
+});
+
+test('startLessonRun clears answers and keeps the best score', () => {
+  initState(fakeStorage());
+  recordExerciseResult(info());
+  recordExerciseResult(info({ exerciseId: 'e2' }));
+  startLessonRun('l1');
+  assert.deepEqual(getData().progress.l1.answered, {});
+  assert.equal(getData().progress.l1.bestScore, 1);
+});

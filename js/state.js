@@ -2,7 +2,8 @@
 // Pages read with getData() and change data with updateData(). They never touch
 // storage directly.
 
-import { loadData, saveData, createDefaultData } from './storage.js';
+import { loadData, saveData, createDefaultData, MAX_ATTEMPTS } from './storage.js';
+import { applyOutcome, startRun } from './logic/progress.js';
 
 let storage = null;
 let data = null;
@@ -40,6 +41,34 @@ export function replaceData(newData) {
 
 export function resetData(now = new Date()) {
   replaceData(createDefaultData(now));
+}
+
+// Saves the result of one finished exercise.
+//   - always adds an attempt (the history, newest last, capped)
+//   - updates the lesson progress too, unless this was extra practice
+export function recordExerciseResult(info, now = new Date()) {
+  const { lessonId, exerciseId, exerciseIds, outcome, answer, tries, hintsUsed, practice = false } = info;
+  updateData((d) => {
+    d.attempts.push({
+      id: `a_${now.getTime().toString(36)}${Math.random().toString(36).slice(2, 6)}`,
+      lessonId,
+      exerciseId,
+      answer,
+      result: outcome,
+      firstTry: outcome === 'correct',
+      tries,
+      hintsUsed,
+      practice,
+      at: now.toISOString(),
+    });
+    if (d.attempts.length > MAX_ATTEMPTS) d.attempts = d.attempts.slice(-MAX_ATTEMPTS);
+    if (!practice) d.progress[lessonId] = applyOutcome(d.progress[lessonId], exerciseId, outcome, exerciseIds, now);
+  });
+}
+
+// Begins a fresh run of a lesson (keeps the best score).
+export function startLessonRun(lessonId) {
+  updateData((d) => { d.progress[lessonId] = startRun(d.progress[lessonId]); });
 }
 
 function persist() {
