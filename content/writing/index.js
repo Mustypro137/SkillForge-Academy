@@ -6,8 +6,10 @@ import { updateTasks } from './updates-and-help.js';
 import { linkedinTasks } from './linkedin.js';
 import { freelanceTasks } from './freelance.js';
 import { freelanceStartTasks } from './freelance-start.js';
+import { technicalTasks } from './technical.js';
+import { readingWriteTasks } from './reading.js';
 
-export const writingTasks = [...emailTasks, ...updateTasks, ...linkedinTasks, ...freelanceTasks, ...freelanceStartTasks].sort((a, b) => a.order - b.order);
+export const writingTasks = [...emailTasks, ...updateTasks, ...linkedinTasks, ...freelanceTasks, ...freelanceStartTasks, ...technicalTasks, ...readingWriteTasks].sort((a, b) => a.order - b.order);
 
 export function findTask(id) {
   return writingTasks.find((task) => task.id === id) ?? null;

@@ -26,6 +26,13 @@ export const percent = (fraction) => `${Math.round(fraction * 100)}%`;
 
 // ---------- One lesson ----------
 
+// Reading lessons have a long text. Show it on the lesson page and above every question.
+function passageBlock(lesson) {
+  return el('section', { class: 'lesson-text reading-passage' },
+    el('h2', {}, lesson.passage.title),
+    ...lesson.passage.paragraphs.map((text) => el('p', {}, text)));
+}
+
 export function showLesson(container, lesson, config) {
   const ids = exerciseIds(lesson);
   const entry = getData().progress[lesson.id];
@@ -51,6 +58,7 @@ export function showLesson(container, lesson, config) {
   setPage(container,
     el('h1', { tabindex: '-1' }, lesson.title),
     el('p', { class: 'meta' }, `Level ${lesson.level} · ${summary.total} exercises · ${status.join(' ')}`),
+    ...(lesson.passage ? [passageBlock(lesson)] : []),
     el('div', { class: 'lesson-text' }, ...lesson.explanation.map((text) => el('p', {}, text))),
     el('h2', {}, 'Examples'),
     el('ul', { class: 'examples' },
@@ -95,7 +103,11 @@ export function runExercises(container, lesson, runIds, practice, config) {
     });
   }
 
-  container.replaceChildren(heading, ...intro, box, el('div', { class: 'button-row' }, leave));
+  container.replaceChildren(
+    heading,
+    ...(lesson.passage ? [passageBlock(lesson)] : []),
+    ...intro, box,
+    el('div', { class: 'button-row' }, leave));
   window.scrollTo(0, 0);
   showCurrent();
 }

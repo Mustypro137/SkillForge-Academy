@@ -12,12 +12,12 @@ export const routes = [
 
   { id: 'grammar',   path: 'grammar',  label: 'Grammar',            group: 'Practice',     ready: true,  note: 'Milestone 4' },
   { id: 'writing',   path: 'writing',  label: 'Writing',            group: 'Practice',     ready: true,  note: 'Milestone 8' },
-  { id: 'reading',   path: 'reading',  label: 'Reading',            group: 'Practice',     ready: false, note: 'Milestone 13' },
+  { id: 'reading',   path: 'reading',  label: 'Reading',            group: 'Practice',     ready: true,  note: 'Milestone 13' },
 
   { id: 'roleplay',  path: 'roleplay', label: 'Roleplay',           group: 'Professional', ready: true,  note: 'Milestone 9' },
   { id: 'linkedin',  path: 'linkedin', label: 'LinkedIn',           group: 'Professional', ready: true,  note: 'Milestone 10' },
   { id: 'freelance', path: 'freelance',label: 'Freelance',          group: 'Professional', ready: true,  note: 'Milestone 11' },
-  { id: 'technical', path: 'technical',label: 'Technical English',  group: 'Professional', ready: false, note: 'Milestone 12' },
+  { id: 'technical', path: 'technical',label: 'Technical English',  group: 'Professional', ready: true,  note: 'Milestone 12' },
 
   { id: 'mistakes',  path: 'mistakes', label: 'Mistake notebook',   group: 'Review',       ready: true,  note: 'Milestone 5' },
   { id: 'reports',   path: 'reports',  label: 'Progress reports',   group: 'Review',       ready: false, note: 'Milestone 14' },

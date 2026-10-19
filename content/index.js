@@ -4,8 +4,10 @@
 import { grammarLessons } from './grammar/index.js';
 import { linkedinLessons } from './linkedin/index.js';
 import { freelanceLessons } from './freelance/index.js';
+import { technicalLessons } from './technical/index.js';
+import { readingLessons } from './reading/index.js';
 
-export const allLessons = [...grammarLessons, ...linkedinLessons, ...freelanceLessons];
+export const allLessons = [...grammarLessons, ...linkedinLessons, ...freelanceLessons, ...technicalLessons, ...readingLessons];
 
 // Returns { lesson, exercise }, or null if the exercise does not exist (any more).
 export function findExercise(lessonId, exerciseId) {

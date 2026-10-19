@@ -16,7 +16,7 @@
 
 export const MAX_SENTENCE_WORDS = 25;
 // Common short words in capitals that are not shouting.
-const SHOUT_ALLOWED = new Set(['HTML', 'JSON', 'HTTP', 'HTTPS', 'API', 'PDF', 'URL', 'CSS', 'SQL', 'XML', 'CEO', 'USA', 'FAQ', 'SEO', 'CRM', 'CMS', 'PHP', 'GPS']);
+const SHOUT_ALLOWED = new Set(['HTML', 'JSON', 'HTTP', 'HTTPS', 'API', 'PDF', 'URL', 'CSS', 'SQL', 'XML', 'CEO', 'USA', 'FAQ', 'SEO', 'CRM', 'CMS', 'PHP', 'GPS', 'EST', 'GMT', 'JPG', 'PNG']);
 
 const GREETING = /^\s*(hi|hello|dear|hey|good (morning|afternoon|evening))\b/i;
 const CLOSING_LINE = /^\s*(thanks|thank you|many thanks|best regards|kind regards|warm regards|regards|best wishes|best|sincerely|cheers)\b(.*)$/i;

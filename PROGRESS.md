@@ -149,6 +149,37 @@ Run `python -m http.server 8000` and open http://localhost:8000/#/freelance
 
 When this is done, tell Claude to start batch 3.
 
+## Milestone 11, batch 3: your check (only you can do these)
+
+Run `python -m http.server 8000` and open http://localhost:8000/#/freelance
+
+- [ ] **Read the 7 new lessons and the 70 quiz exercises** (`fa-` time zones, `ft-` working with a team, `fu-` progress updates, `fw-` difficult clients, `fx-` feedback, `fv-` delivery, `fz-` after the job). Is the English clear and correct (American spelling)? Did any correct answer get rejected? Tell Claude the exercise number, for example `fw-06`.
+- [ ] **Is the advice right for you?** For example: agree on time zones in writing, give a short update before the client asks, separate the person from the problem, ask for specific feedback, send a delivery checklist, ask for a testimonial after a good result. Tell Claude if something does not match how you work.
+- [ ] Read the 7 new writing tasks (`wr-23` to `wr-29`) and the 7 new roleplays (`rp-21` to `rp-27`) with their model answers.
+- [ ] Do one whole topic from the "Do the job" or "Finish the job" stage. Does the page show your progress and the next step correctly?
+- [ ] On your phone: the longer topic list is still easy to use
+
+## Milestone 12: your check (only you can do these)
+
+Run `python -m http.server 8000` and open http://localhost:8000/#/technical
+
+- [ ] **Read the 5 lessons and the 50 quiz exercises** (`tb-` bug reports, `tc-` commit messages, `tr-` README sections, `td-` technical decisions, `tu-` status updates). Is the English clear and correct (American spelling)? Did any correct answer get rejected? Tell Claude the exercise number, for example `tc-04`.
+- [ ] **Is the technical advice right for you?** For example: a bug report with exact steps and device, a commit subject under 50 characters, a README with setup and usage, a decision note with options and a trade-off, a status update with blocked and next. Tell Claude if something does not match your tools or team.
+- [ ] Read the 5 writing tasks (`wr-30` to `wr-34`) and the 5 roleplays (`rp-28` to `rp-32`) with their model answers.
+- [ ] Do one whole topic: lesson and quiz, Write, Talk. Does the page show your progress and the next step correctly?
+- [ ] On your phone: code examples and lists are easy to read
+
+## Milestone 13: your check (only you can do these)
+
+Run `python -m http.server 8000` and open http://localhost:8000/#/reading
+
+- [ ] **Read the 5 texts and the 50 questions** (`rj-` job post, `rc-` client brief, `ra-` API change, `rs-` status report, `rm-` meeting notes). Is the English clear, natural and correct (American spelling)? Did any correct answer get rejected? Tell Claude the exercise number, for example `ra-05`.
+- [ ] **Is each question fair?** Does the text really contain the answer? Is the "unclear" part really unclear, and is the best clarifying question the one you would ask? Tell Claude if a question has two good answers or feels like a trick.
+- [ ] **Is the text long enough and still easy to read?** The whole text stays above the questions while you answer. Is that helpful on your phone, or does it take too much space?
+- [ ] Read the 5 writing tasks (`wr-35` to `wr-39`) with their model answers. Do the checks accept your own question? The tasks ask for one short question, not a full email.
+- [ ] Do one whole text: read and answer the quiz, then click "Ask a clarifying question". Does the Writing page open the right task?
+- [ ] On your phone: the text, the question and the buttons are easy to use
+
 ## Known limits and bugs
 
 - Wrong answers given before Milestone 5 are not in the Mistake notebook (they are only in the attempt history). New wrong answers are saved automatically.
@@ -162,6 +193,8 @@ When this is done, tell Claude to start batch 3.
 - Not tested: Firefox, Safari, a real phone, screen readers, and long-term use (the 16-day review gaps were tested with changed dates, not real waiting).
 - Typing practice was removed, so the typing items in `project-plan.md` are no longer part of the project.
 
-## After version 1 (not started)
+## After version 1 (in progress)
 
-M11 Freelance academy (batches 2 and 3), M12 Technical English, M13 Reading comprehension, M14 Progress reports, M15 Offline install. Each one is planned in detail before it starts. See `project-plan.md`.
+Done: M11 Freelance academy (batches 1 to 3), M12 Technical English, M13 Reading comprehension.
+
+Next: M14 Progress reports, M15 Offline install. Each one is planned in detail before it starts. See `project-plan.md`.
