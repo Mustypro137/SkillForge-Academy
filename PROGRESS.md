@@ -8,7 +8,7 @@
 - [x] M4 Question engine and grammar
 - [x] M5 Mistake notebook
 - [x] M6 Dashboard
-- [x] M7 Polish and full check - done by Claude; **version 1 is not tagged `v1.0` until you finish the checklist below**
+- [x] M7 Polish and full check - done. **Version 1 is tagged `v1.0`** (owner finished the final check)
 
 "Done" here means built, tested by Claude, and committed. Only you can confirm the items in "Your final check".
 
