@@ -118,6 +118,11 @@ async function scenario(width) {
   { const box = d().getElementById('writing-text'); box.value = 'Hi Maria, ' + 'I read your post about hiring. '.repeat(10); box.dispatchEvent(new Event('input', { bubbles: true })); }
   await click(/Check my text/); audit('writing: connection note over the character limit', sizes);
 
+  // Freelance academy: topics in stages, a lesson, a quote email over the checks
+  await reload('#/freelance'); audit('freelance topics (stages)', sizes);
+  d().querySelector('.step-row button').click(); await sleep(60); audit('freelance lesson page', sizes);
+  await click(/Start exercises/); audit('freelance: first exercise', sizes);
+
   // roleplay: list, intro, a choice, its feedback, the writing step, the summary
   await reload('#/roleplay'); audit('roleplay list', sizes);
   d().querySelectorAll('.card button')[0].click(); await sleep(60); audit('roleplay intro', sizes);

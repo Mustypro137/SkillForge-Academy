@@ -41,7 +41,7 @@ function stepRow({ name, status, isNext, openLabel, ariaLabel, onOpen }) {
     open);
 }
 
-function topicCard(container, config, lessonConfig, topic) {
+function topicCard(container, config, lessonConfig, topic, headingTag) {
   const progress = topicProgress(getData(), topic, config.lessons);
   const lesson = config.lessons.find((l) => l.id === topic.lessonId);
   const steps = [
@@ -62,10 +62,25 @@ function topicCard(container, config, lessonConfig, topic) {
     }),
   ];
   return el('li', { class: 'card' },
-    el('h2', {}, topic.title),
+    el(headingTag, {}, topic.title),
     el('p', {}, topic.summary),
     el('p', { class: 'meta' }, progress.next === null ? 'All 3 steps done' : `${progress.done} of 3 steps done`),
     el('ul', { class: 'step-list' }, ...steps));
+}
+
+// Topics with a "stage" are shown under a heading for each stage, in the order they appear.
+// Topics without a stage are shown in one list.
+function topicLists(container, config, lessonConfig) {
+  const stages = [...new Set(config.topics.map((topic) => topic.stage).filter(Boolean))];
+  if (stages.length === 0) {
+    return [el('ul', { class: 'lesson-list' }, ...config.topics.map((topic) => topicCard(container, config, lessonConfig, topic, 'h2')))];
+  }
+  return stages.flatMap((stage) => [
+    el('h2', { class: 'stage-heading' }, stage),
+    el('ul', { class: 'lesson-list' }, ...config.topics
+      .filter((topic) => topic.stage === stage)
+      .map((topic) => topicCard(container, config, lessonConfig, topic, 'h3'))),
+  ]);
 }
 
 function showTopics(container, config, lessonConfig) {
@@ -73,5 +88,5 @@ function showTopics(container, config, lessonConfig) {
     el('h1', { tabindex: '-1' }, config.title),
     el('p', {}, config.intro),
     el('p', { class: 'note' }, 'Each topic has three steps: a lesson with a quiz, a writing task, and a roleplay conversation. Wrong quiz answers go to your mistake notebook.'),
-    el('ul', { class: 'lesson-list' }, ...config.topics.map((topic) => topicCard(container, config, lessonConfig, topic))));
+    ...topicLists(container, config, lessonConfig));
 }

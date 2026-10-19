@@ -6,6 +6,7 @@ import { button } from '../ui/page.js';
 import { allLessons, findExercise } from '../../content/index.js';
 import { grammarLessons } from '../../content/grammar/index.js';
 import { linkedinLessons, linkedinTopics } from '../../content/linkedin/index.js';
+import { freelanceLessons, freelanceTopics } from '../../content/freelance/index.js';
 import { academySummary } from '../logic/academy.js';
 import { writingTasks } from '../../content/writing/index.js';
 import { writingSummary } from '../logic/writing-progress.js';
@@ -80,6 +81,7 @@ export function render(container) {
   const step = nextStep(data, allLessons, now);
   const overview = lessonOverview(data, grammarLessons);
   const linkedin = academySummary(data, linkedinTopics, linkedinLessons);
+  const freelance = academySummary(data, freelanceTopics, freelanceLessons);
   const mistakes = listMistakes(data.mistakes, now);
   const week = practiceSummary(data.attempts, now, data.writing, data.roleplay);
   const writing = writingSummary(data.writing, writingTasks);
@@ -124,6 +126,9 @@ export function render(container) {
     card('LinkedIn academy', `${linkedin.complete} of ${linkedin.total} topics done`,
       [`${linkedin.started} started`, 'Each topic: lesson and quiz, writing, roleplay.'],
       { href: '#/linkedin', text: 'Open LinkedIn academy' }),
+    card('Freelance academy', `${freelance.complete} of ${freelance.total} topics done`,
+      [`${freelance.started} started`, 'Each topic: lesson and quiz, writing, roleplay.'],
+      { href: '#/freelance', text: 'Open Freelance academy' }),
     card('Roleplay', `${roleplay.done} of ${roleplay.total} done`,
       [`${roleplay.strong} with a best result of 80% or more`],
       { href: '#/roleplay', text: 'Open roleplay' }),

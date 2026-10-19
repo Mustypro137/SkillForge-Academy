@@ -32,6 +32,11 @@ export const skillTagLabels = {
   'verb-tense': 'Verb tenses',
   prepositions: 'Prepositions (on, in, about, to)',
   'your-you': 'Your and you',
+  'client-briefs': 'Understanding a client brief',
+  quotes: 'Prices and quotes',
+  deadlines: 'Deadlines and delays',
+  'scope-changes': 'Scope changes and revisions',
+  payments: 'Invoices and payment',
 };
 
 export function skillTagLabel(tag) {

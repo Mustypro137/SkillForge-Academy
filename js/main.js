@@ -11,6 +11,7 @@ import { render as renderMistakes } from './pages/mistakes.js';
 import { render as renderWriting } from './pages/writing.js';
 import { render as renderRoleplay } from './pages/roleplay.js';
 import { render as renderLinkedin } from './pages/linkedin.js';
+import { render as renderFreelance } from './pages/freelance.js';
 import { render as renderSettings } from './pages/settings.js';
 import { renderComingSoon, renderNotFound } from './pages/coming-soon.js';
 
@@ -21,6 +22,7 @@ const pageRenderers = {
   writing: renderWriting,
   roleplay: renderRoleplay,
   linkedin: renderLinkedin,
+  freelance: renderFreelance,
   mistakes: renderMistakes,
   settings: renderSettings,
 };

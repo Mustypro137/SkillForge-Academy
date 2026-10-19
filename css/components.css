@@ -371,6 +371,7 @@ fieldset.choices legend { padding: 0; }
   padding: 0.5rem 0;
   border-top: 1px solid var(--border);
 }
+.stage-heading { margin: 2rem 0 0; }
 .step-name { font-weight: 700; grid-column: 1; }
 .step-status { grid-column: 1; color: var(--text-muted); }
 .step-row .button { grid-column: 2; grid-row: 1 / span 2; }

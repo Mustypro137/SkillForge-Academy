@@ -4,8 +4,9 @@
 import { emailTasks } from './emails.js';
 import { updateTasks } from './updates-and-help.js';
 import { linkedinTasks } from './linkedin.js';
+import { freelanceTasks } from './freelance.js';
 
-export const writingTasks = [...emailTasks, ...updateTasks, ...linkedinTasks].sort((a, b) => a.order - b.order);
+export const writingTasks = [...emailTasks, ...updateTasks, ...linkedinTasks, ...freelanceTasks].sort((a, b) => a.order - b.order);
 
 export function findTask(id) {
   return writingTasks.find((task) => task.id === id) ?? null;
