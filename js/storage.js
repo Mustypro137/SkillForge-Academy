@@ -3,11 +3,14 @@
 // one in tests), so everything here can be tested without a browser.
 //
 // Your data is one object saved as JSON text under one key:
-//   { app, schemaVersion, createdAt, lastBackupAt, settings, progress, attempts, mistakes }
+//   { app, schemaVersion, createdAt, lastBackupAt, settings, progress, attempts, mistakes, writing }
 // When the data shape changes later, raise SCHEMA_VERSION and add a migration.
+//   version 1 -> 2: added "writing" (drafts and history). Old data gets an empty one.
+
+import { emptyWriting, MAX_TEXT, MAX_NOTE, MAX_HISTORY, RATINGS } from './logic/writing-progress.js';
 
 export const APP_NAME = 'skillforge';
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const STORAGE_KEY = 'skillforge-data';
 export const CORRUPT_KEY = 'skillforge-data-corrupt'; // raw text of data we could not read
 export const MAX_ATTEMPTS = 3000;
@@ -32,6 +35,7 @@ export function createDefaultData(now = new Date()) {
     progress: {},   // key = lessonId
     attempts: [],   // newest last, at most MAX_ATTEMPTS
     mistakes: {},   // key = "lessonId/exerciseId"
+    writing: emptyWriting(), // drafts: key = taskId; history: newest last
   };
 }
 
@@ -58,6 +62,35 @@ function cleanRecords(source) {
   return result;
 }
 
+const isText = (value) => typeof value === 'string';
+
+// Keeps only well-formed drafts and history entries, and cuts texts to their limits.
+function cleanWriting(source) {
+  const writing = emptyWriting();
+  if (!isPlainObject(source)) return writing;
+  if (isPlainObject(source.drafts)) {
+    for (const [taskId, draft] of Object.entries(source.drafts)) {
+      if (FORBIDDEN_KEYS.has(taskId) || !isPlainObject(draft) || !isText(draft.text)) continue;
+      writing.drafts[taskId] = {
+        text: draft.text.slice(0, MAX_TEXT),
+        updatedAt: isIsoDateText(draft.updatedAt) ? draft.updatedAt : null,
+      };
+    }
+  }
+  if (Array.isArray(source.history)) {
+    writing.history = source.history
+      .filter((e) => isPlainObject(e) && isText(e.taskId) && isText(e.text) && isIsoDateText(e.at))
+      .map((e) => ({
+        ...e,
+        text: e.text.slice(0, MAX_TEXT),
+        note: isText(e.note) ? e.note.slice(0, MAX_NOTE) : '',
+        rating: RATINGS.includes(e.rating) ? e.rating : null,
+      }))
+      .slice(-MAX_HISTORY);
+  }
+  return writing;
+}
+
 function cleanSettings(source) {
   const defaults = defaultSettings();
   const s = isPlainObject(source) ? source : {};
@@ -79,13 +112,17 @@ export function validateData(raw, { strict = false } = {}) {
   if (raw.schemaVersion > SCHEMA_VERSION) {
     return { ok: false, error: 'This backup was made by a newer version of the app. Update the app first.' };
   }
-  // Older versions would be migrated here when they exist.
+  // Version 1 data has no "writing"; cleanWriting() below gives it an empty one.
 
   if (strict) {
     if (!Array.isArray(raw.attempts)) return { ok: false, error: 'The backup is damaged: "attempts" must be a list.' };
     for (const name of ['progress', 'mistakes', 'settings']) {
       if (!isPlainObject(raw[name])) return { ok: false, error: `The backup is damaged: "${name}" is missing or wrong.` };
     }
+  }
+
+  if (strict && raw.writing !== undefined && !isPlainObject(raw.writing)) {
+    return { ok: false, error: 'The backup is damaged: "writing" is wrong.' };
   }
 
   const base = createDefaultData();
@@ -102,6 +139,7 @@ export function validateData(raw, { strict = false } = {}) {
       progress: isPlainObject(raw.progress) ? cleanRecords(raw.progress) : {},
       attempts: attempts.slice(-MAX_ATTEMPTS), // drop the oldest if too many
       mistakes: isPlainObject(raw.mistakes) ? cleanRecords(raw.mistakes) : {},
+      writing: cleanWriting(raw.writing),
     },
   };
 }
@@ -176,6 +214,7 @@ export function parseImport(text) {
       lessons: Object.keys(data.progress).length,
       attempts: data.attempts.length,
       mistakes: Object.keys(data.mistakes).length,
+      writings: data.writing.history.length,
       createdAt: data.createdAt,
       lastBackupAt: data.lastBackupAt,
     },

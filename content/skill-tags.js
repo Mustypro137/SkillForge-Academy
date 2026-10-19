@@ -17,6 +17,10 @@ export const skillTagLabels = {
   'no-article': 'No article',
   uncountable: 'Uncountable nouns',
   jobs: 'Jobs and a/an',
+  'polite-requests': 'Polite requests',
+  'client-replies': 'Replies to clients',
+  'clear-updates': 'Clear status updates',
+  'asking-for-help': 'Asking for help',
 };
 
 export function skillTagLabel(tag) {

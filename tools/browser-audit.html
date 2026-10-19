@@ -10,6 +10,7 @@
 import { routes } from '../js/routes.js';
 import { grammarLessons } from '../content/grammar/index.js';
 import { solutionText } from '../js/logic/answer-check.js';
+import { writingTasks } from '../content/writing/index.js';
 
 const out = [];
 const f = document.getElementById('f');
@@ -26,7 +27,7 @@ const typeText = (v) => { d().querySelector('.answer-input').value = v; };
 const chooseRadio = (i) => d().querySelectorAll('input[type=radio]')[i].click();
 const store = () => JSON.parse(f.contentWindow.localStorage.getItem('skillforge-data') || 'null');
 const setStore = (fn) => {
-  const s = store() ?? { app: 'skillforge', schemaVersion: 1, createdAt: new Date().toISOString(), lastBackupAt: null, settings: { theme: 'system', fontSize: 18, showComingSoon: true }, progress: {}, attempts: [], mistakes: {} };
+  const s = store() ?? { app: 'skillforge', schemaVersion: 2, createdAt: new Date().toISOString(), lastBackupAt: null, settings: { theme: 'system', fontSize: 18, showComingSoon: true }, progress: {}, attempts: [], mistakes: {}, writing: { drafts: {}, history: [] } };
   fn(s); f.contentWindow.localStorage.setItem('skillforge-data', JSON.stringify(s));
 };
 
@@ -97,6 +98,15 @@ async function scenario(width) {
     await click(/Next question|See results/);
   }
   audit('lesson results', sizes);
+
+  // writing: list, task, bad text checked, good text checked, saved
+  await reload('#/writing'); audit('writing list', sizes);
+  d().querySelectorAll('.card button')[0].click(); await sleep(60); audit('writing task (empty)', sizes);
+  const box = () => d().getElementById('writing-text');
+  const setText = (v) => { box().value = v; box().dispatchEvent(new Event('input', { bubbles: true })); };
+  setText('HEY!! send it NOW'); await click(/Check my text/); audit('writing: bad text, checks + model', sizes);
+  setText(writingTasks[0].modelAnswers[0].text); await click(/Check my text/);
+  d().getElementById('rating-good').click(); await click(/Save to my history/); audit('writing: saved, history shown', sizes);
 
   // notebook, dashboard, settings with data
   setStore((s) => { s.lastBackupAt = new Date().toISOString(); });

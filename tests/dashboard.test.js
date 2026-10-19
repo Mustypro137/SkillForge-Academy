@@ -107,7 +107,7 @@ test('practiceSummary counts only the last 7 days', () => {
 });
 
 test('practiceSummary with no attempts has no accuracy and no date', () => {
-  assert.deepEqual(practiceSummary([], now), { answers: 0, firstTry: 0, accuracy: null, daysPracticed: 0, lastPractice: null });
+  assert.deepEqual(practiceSummary([], now), { answers: 0, writings: 0, firstTry: 0, accuracy: null, daysPracticed: 0, lastPractice: null });
   assert.equal(practiceSummary(undefined, now).answers, 0);
 });
 
@@ -160,4 +160,20 @@ test('backupStatus', () => {
   assert.deepEqual(backupStatus(daysAgo(0), now), { never: false, days: 0 });
   assert.deepEqual(backupStatus(daysAgo(10), now), { never: false, days: 10 });
   assert.equal(backupStatus(new Date(2027, 0, 1).toISOString(), now).days, 0); // date in the future
+});
+
+test('saved writing counts as a practice day and as last practice, but not as an answer', () => {
+  const writing = { drafts: {}, history: [{ taskId: 'wr-01', at: daysAgo(1) }, { taskId: 'wr-02', at: daysAgo(20) }] };
+  const s = practiceSummary([], now, writing);
+  assert.equal(s.answers, 0);
+  assert.equal(s.accuracy, null);
+  assert.equal(s.writings, 1);
+  assert.equal(s.daysPracticed, 1);
+  assert.equal(new Date(s.lastPractice).getTime(), new Date(daysAgo(1)).getTime());
+});
+
+test('a day with both answers and writing counts once', () => {
+  const at = daysAgo(2);
+  const s = practiceSummary([{ at, firstTry: true }], now, { history: [{ at }] });
+  assert.equal(s.daysPracticed, 1);
 });

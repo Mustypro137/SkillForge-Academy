@@ -4,6 +4,8 @@
 import { el } from '../ui/dom.js';
 import { button } from '../ui/page.js';
 import { allLessons, findExercise } from '../../content/index.js';
+import { writingTasks } from '../../content/writing/index.js';
+import { writingSummary } from '../logic/writing-progress.js';
 import { skillTagLabel } from '../../content/skill-tags.js';
 import { getData } from '../state.js';
 import { setIntent } from '../intent.js';
@@ -73,7 +75,8 @@ export function render(container) {
   const step = nextStep(data, allLessons, now);
   const overview = lessonOverview(data, allLessons);
   const mistakes = listMistakes(data.mistakes, now);
-  const week = practiceSummary(data.attempts, now);
+  const week = practiceSummary(data.attempts, now, data.writing);
+  const writing = writingSummary(data.writing, writingTasks);
 
   const heading = el('h1', { tabindex: '-1' }, 'Dashboard');
   const welcome = data.attempts.length === 0
@@ -103,9 +106,13 @@ export function render(container) {
     card('Last 7 days', `${week.answers} ${week.answers === 1 ? 'answer' : 'answers'}`,
       [
         week.accuracy === null ? 'No answers this week yet.' : `${percent(week.accuracy)} right on the first try`,
+        `${week.writings} ${week.writings === 1 ? 'writing' : 'writings'} saved`,
         `Practiced on ${week.daysPracticed} of the last 7 days`,
         lastPractice,
       ]),
+    card('Writing', `${writing.done} of ${writing.total} done`,
+      [`${writing.great} rated Great`, 'Your own rating, because the app cannot grade writing.'],
+      { href: '#/writing', text: 'Open writing' }),
     backupCard(data),
     weakAreasCard(data.attempts));
 

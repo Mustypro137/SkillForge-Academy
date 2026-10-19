@@ -136,7 +136,8 @@
   min-height: 44px;
   margin-bottom: 1rem;
 }
-.field-check input { width: 1.4rem; height: 1.4rem; }
+.field-check input { flex: none; width: 1.4rem; height: 1.4rem; }
+.field-check label { display: flex; align-items: center; flex: 1; min-height: 44px; }
 
 .panel {
   max-width: 40rem;
@@ -309,3 +310,54 @@ fieldset.choices legend { padding: 0; }
 .card-link { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
 
 .weak-list { padding-left: 1.25rem; }
+
+/* ---------- Writing practice ---------- */
+
+.phrase-list { max-width: 70ch; padding-left: 1.25rem; }
+.writing-input {
+  display: block;
+  width: 100%;
+  max-width: 44rem;
+  min-height: 12rem;
+  padding: 0.75rem;
+  font: inherit;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--control-border);
+  border-radius: var(--radius);
+  resize: vertical;
+}
+.field .writing-input { max-width: 44rem; }
+.writing-results, .writing-after { max-width: 50rem; }
+.writing-results:empty, .writing-after:empty { display: none; }
+.check-list, .history-list { list-style: none; margin: 1rem 0; padding: 0; display: grid; gap: 0.5rem; }
+.check-item {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.6rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--border);
+  border-radius: var(--radius);
+}
+.check-ok { border-left-color: var(--success); }
+.check-ok .check-mark { color: var(--success); }
+.check-look { border-left-color: var(--focus); }
+.check-mark { font-weight: 700; font-size: 0.9rem; }
+.plain-fieldset { margin: 1rem 0; padding: 0; border: 0; }
+.plain-fieldset legend { padding: 0; font-weight: 700; }
+.model-text, .saved-text {
+  margin: 0.5rem 0 1rem;
+  padding: 0.75rem 1rem;
+  font: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--accent);
+  border-radius: var(--radius);
+}
+.saved-text { border-left-color: var(--border); }
+.history-list details { padding: 0.25rem 0.9rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.history-list summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }

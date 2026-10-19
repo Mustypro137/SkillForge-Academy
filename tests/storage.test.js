@@ -5,6 +5,7 @@ import {
   createDefaultData, loadData, saveData, validateData, exportData, parseImport,
   localDateString, dataSizeKb,
 } from '../js/storage.js';
+import { MAX_TEXT, MAX_HISTORY } from '../js/logic/writing-progress.js';
 
 // A tiny fake of localStorage.
 function fakeStorage(initial = {}) {
@@ -161,4 +162,68 @@ test('import rejects bad files with a clear message', () => {
 
 test('dataSizeKb returns a small number for small data', () => {
   assert.ok(dataSizeKb(createDefaultData()) < 1);
+});
+
+test('new data has an empty writing area', () => {
+  assert.deepEqual(createDefaultData().writing, { drafts: {}, history: [] });
+});
+
+test('version 1 data (without writing) is still loaded and gets an empty writing area', () => {
+  const store = fakeStorage({
+    [STORAGE_KEY]: JSON.stringify({ app: APP_NAME, schemaVersion: 1, attempts: [{ exerciseId: 'a' }], progress: {}, mistakes: {}, settings: {} }),
+  });
+  const { data, warning } = loadData(store);
+  assert.equal(warning, null);
+  assert.equal(data.schemaVersion, SCHEMA_VERSION);
+  assert.equal(data.attempts.length, 1);
+  assert.deepEqual(data.writing, { drafts: {}, history: [] });
+});
+
+test('a version 1 backup file can be imported', () => {
+  const old = { app: APP_NAME, schemaVersion: 1, attempts: [], progress: {}, mistakes: {}, settings: {} };
+  const result = parseImport(JSON.stringify(old));
+  assert.equal(result.ok, true);
+  assert.equal(result.summary.writings, 0);
+});
+
+test('writing drafts and history are cleaned: bad parts removed, long text cut, dangerous keys dropped', () => {
+  const long = 'x'.repeat(MAX_TEXT + 50);
+  const raw = JSON.parse(`{
+    "app": "${APP_NAME}", "schemaVersion": ${SCHEMA_VERSION}, "attempts": [], "progress": {}, "mistakes": {}, "settings": {},
+    "writing": {
+      "drafts": {
+        "wr-01": { "text": "${long}", "updatedAt": "2026-10-19T10:00:00.000Z" },
+        "wr-02": { "text": 5 },
+        "__proto__": { "text": "bad" }
+      },
+      "history": [
+        { "taskId": "wr-01", "text": "ok", "at": "2026-10-19T10:00:00.000Z", "rating": "great", "note": "n" },
+        { "taskId": "wr-01", "text": "bad rating", "at": "2026-10-19T10:00:00.000Z", "rating": "amazing" },
+        { "taskId": 5, "text": "no task id", "at": "2026-10-19T10:00:00.000Z" },
+        { "taskId": "wr-01", "text": "no date", "at": "not a date" },
+        "junk"
+      ]
+    }
+  }`);
+  const { data } = validateData(raw);
+  assert.deepEqual(Object.keys(data.writing.drafts), ['wr-01']);
+  assert.equal(data.writing.drafts['wr-01'].text.length, MAX_TEXT);
+  assert.equal(data.writing.history.length, 2);
+  assert.equal(data.writing.history[0].rating, 'great');
+  assert.equal(data.writing.history[1].rating, null);
+  assert.equal({}.text, undefined);
+});
+
+test('writing history is capped at the newest entries', () => {
+  const history = Array.from({ length: MAX_HISTORY + 5 }, (_, n) => ({ taskId: 'wr-01', text: String(n), at: '2026-10-19T10:00:00.000Z' }));
+  const { data } = validateData({ app: APP_NAME, schemaVersion: SCHEMA_VERSION, writing: { history } });
+  assert.equal(data.writing.history.length, MAX_HISTORY);
+  assert.equal(data.writing.history[0].text, '5');
+});
+
+test('import rejects a damaged writing area, and counts saved writings', () => {
+  const good = JSON.parse(exportData(createDefaultData()).json);
+  assert.equal(parseImport(JSON.stringify({ ...good, writing: [] })).ok, false);
+  good.writing.history.push({ taskId: 'wr-01', text: 'hi', at: '2026-10-19T10:00:00.000Z' });
+  assert.equal(parseImport(JSON.stringify(good)).summary.writings, 1);
 });

@@ -11,7 +11,7 @@ export const routes = [
   { id: 'dashboard', path: '',         label: 'Dashboard',          group: '',             ready: true,  note: 'Milestone 6' },
 
   { id: 'grammar',   path: 'grammar',  label: 'Grammar',            group: 'Practice',     ready: true,  note: 'Milestone 4' },
-  { id: 'writing',   path: 'writing',  label: 'Writing',            group: 'Practice',     ready: false, note: 'Milestone 8' },
+  { id: 'writing',   path: 'writing',  label: 'Writing',            group: 'Practice',     ready: true,  note: 'Milestone 8' },
   { id: 'reading',   path: 'reading',  label: 'Reading',            group: 'Practice',     ready: false, note: 'Milestone 13' },
 
   { id: 'roleplay',  path: 'roleplay', label: 'Roleplay',           group: 'Professional', ready: false, note: 'Milestone 9' },

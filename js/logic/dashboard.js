@@ -82,19 +82,23 @@ export function lessonOverview(data, lessons) {
   };
 }
 
-// Practice in the last 7 days.
-export function practiceSummary(attempts, now = new Date()) {
+// Practice in the last 7 days. "writing" is the saved writing data (drafts and history).
+// Saved writing attempts count as practice days, but not as answers (they have no right or wrong).
+export function practiceSummary(attempts, now = new Date(), writing = null) {
   const since = now.getTime() - 7 * DAY_MS;
   const recent = (attempts ?? []).filter((a) => {
     const time = Date.parse(a?.at);
     return Number.isFinite(time) && time >= since && time <= now.getTime();
   });
   const firstTry = recent.filter((a) => a.firstTry === true).length;
-  const days = new Set(recent.map((a) => localDateString(new Date(a.at))));
+  const writingTimes = (writing?.history ?? []).map((e) => Date.parse(e?.at)).filter(Number.isFinite);
+  const recentWriting = writingTimes.filter((time) => time >= since && time <= now.getTime());
+  const days = new Set([...recent.map((a) => a.at), ...recentWriting].map((at) => localDateString(new Date(at))));
 
-  const times = (attempts ?? []).map((a) => Date.parse(a?.at)).filter(Number.isFinite);
+  const times = [...(attempts ?? []).map((a) => Date.parse(a?.at)).filter(Number.isFinite), ...writingTimes];
   return {
     answers: recent.length,
+    writings: recentWriting.length,
     firstTry,
     accuracy: recent.length > 0 ? firstTry / recent.length : null,
     daysPracticed: days.size,

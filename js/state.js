@@ -5,6 +5,7 @@
 import { loadData, saveData, createDefaultData, MAX_ATTEMPTS } from './storage.js';
 import { applyOutcome, startRun } from './logic/progress.js';
 import { mistakeKey, recordMistake, applyReview } from './logic/review-schedule.js';
+import { makeEntry, MAX_TEXT, MAX_HISTORY } from './logic/writing-progress.js';
 
 let storage = null;
 let data = null;
@@ -90,6 +91,22 @@ export function deleteMistake(key) {
 // Begins a fresh run of a lesson (keeps the best score).
 export function startLessonRun(lessonId) {
   updateData((d) => { d.progress[lessonId] = startRun(d.progress[lessonId]); });
+}
+
+// Keeps the text of a writing task, so a refresh does not lose it. Empty text removes the draft.
+export function saveWritingDraft(taskId, text, now = new Date()) {
+  updateData((d) => {
+    if (String(text).trim() === '') delete d.writing.drafts[taskId];
+    else d.writing.drafts[taskId] = { text: String(text).slice(0, MAX_TEXT), updatedAt: now.toISOString() };
+  });
+}
+
+// Saves one finished writing attempt to the history (see makeEntry for the fields).
+export function recordWriting(info, now = new Date()) {
+  updateData((d) => {
+    d.writing.history.push(makeEntry(info, now));
+    if (d.writing.history.length > MAX_HISTORY) d.writing.history = d.writing.history.slice(-MAX_HISTORY);
+  });
 }
 
 function persist() {

@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   initState, getData, getWarning, getSaveError, updateData, replaceData, resetData, subscribe,
+  saveWritingDraft, recordWriting,
 } from '../js/state.js';
 import { STORAGE_KEY, createDefaultData } from '../js/storage.js';
 
@@ -186,4 +187,30 @@ test('notes are saved (500 characters at most) and mistakes can be deleted', () 
   setMistakeNote('missing', 'hello'); // no crash
   deleteMistake('l1/e1');
   assert.deepEqual(getData().mistakes, {});
+});
+
+test('a writing draft is saved, survives a restart, and is removed when the text is empty', () => {
+  const store = fakeStorage();
+  initState(store);
+  saveWritingDraft('wr-01', 'Hi Sam,', new Date('2026-10-19T10:00:00Z'));
+  initState(store);
+  assert.equal(getData().writing.drafts['wr-01'].text, 'Hi Sam,');
+  saveWritingDraft('wr-01', '   ');
+  assert.deepEqual(getData().writing.drafts, {});
+});
+
+test('recordWriting adds a history entry with the result, checklist, rating and note', () => {
+  const store = fakeStorage();
+  initState(store);
+  const result = { wordCount: 42, passed: 5, total: 6 };
+  recordWriting({ taskId: 'wr-01', text: 'My text', result, checklist: [true, false, true], rating: 'good', note: 'Next time: shorter' },
+    new Date('2026-10-19T10:00:00Z'));
+  const entry = getData().writing.history[0];
+  assert.equal(entry.taskId, 'wr-01');
+  assert.equal(entry.wordCount, 42);
+  assert.deepEqual([entry.checksPassed, entry.checksTotal], [5, 6]);
+  assert.deepEqual([entry.checklistDone, entry.checklistTotal], [2, 3]);
+  assert.equal(entry.rating, 'good');
+  assert.equal(entry.at, '2026-10-19T10:00:00.000Z');
+  assert.equal(JSON.parse(store.getItem(STORAGE_KEY)).writing.history.length, 1);
 });

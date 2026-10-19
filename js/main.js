@@ -8,6 +8,7 @@ import { initState, getData, getWarning, subscribe } from './state.js';
 import { render as renderDashboard } from './pages/dashboard.js';
 import { render as renderGrammar } from './pages/grammar.js';
 import { render as renderMistakes } from './pages/mistakes.js';
+import { render as renderWriting } from './pages/writing.js';
 import { render as renderSettings } from './pages/settings.js';
 import { renderComingSoon, renderNotFound } from './pages/coming-soon.js';
 
@@ -15,6 +16,7 @@ import { renderComingSoon, renderNotFound } from './pages/coming-soon.js';
 const pageRenderers = {
   dashboard: renderDashboard,
   grammar: renderGrammar,
+  writing: renderWriting,
   mistakes: renderMistakes,
   settings: renderSettings,
 };
