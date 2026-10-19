@@ -12,7 +12,7 @@
 - [x] M8 Writing practice - built and tested by Claude; **waits for your check (see "Milestone 8: your check" below)**
 - [x] M9 Roleplay - built and tested by Claude; **waits for your check (see "Milestone 9: your check" below)**
 - [x] M10 LinkedIn academy - built and tested by Claude; **waits for your check (see "Milestone 10: your check" below)**
-- [~] M11 Freelance academy - **batch 1 of 3 done** (5 core topics); **waits for your check (see "Milestone 11, batch 1: your check" below)**. Batch 2 (finding clients, proposals, portfolio, first call, contracts in simple English, saying no) and batch 3 (progress updates, difficult clients, feedback, delivery, after the job, time zones, working with a team) are not started.
+- [~] M11 Freelance academy - **batches 1 and 2 of 3 done** (11 topics); **waits for your checks (see "Milestone 11, batch 1: your check" and "Milestone 11, batch 2: your check" below)**. Batch 3 (progress updates, difficult clients, feedback, delivery, after the job, time zones, working with a team) is not started.
 
 "Done" here means built, tested by Claude, and committed. Only you can confirm the items in the checklists below.
 
@@ -20,7 +20,7 @@
 
 | Check | Result |
 |---|---|
-| `npm test` (213 tests: router, storage, state, answer checking, progress, review schedule, dashboard, lesson content, writing checks, writing content, roleplay engine, roleplay content, LinkedIn and Freelance content (100 exercises), academy progress, color contrast) | all pass |
+| `npm test` (213 tests: router, storage, state, answer checking, progress, review schedule, dashboard, lesson content, writing checks, writing content, roleplay engine, roleplay content, LinkedIn and Freelance content (160 exercises), academy progress, color contrast) | all pass |
 | Color contrast of every text/background and control-border pair, light and dark theme (also part of `npm test`) | all meet WCAG AA |
 | Page audit in Edge: 12 pages + lesson, 4 exercise types, feedback, results, notebook, review, settings preview, dashboard, at 360 / 768 / 1366 px (`tools/browser-audit.html`) | 152 of 152 clean (includes the Writing, Roleplay, LinkedIn and Freelance screens): one h1, one main/nav/header, every control named, no duplicate ids, tap targets at least 44 px on phone, no sideways scrolling |
 | Dark mode + 22 px text on all pages at 360 px | no sideways scrolling |
@@ -29,8 +29,11 @@
 | Roleplay page with real key presses (`tools/roleplay-check.mjs`): version 2 data still loads, open and start with the keyboard, choose a reply, feedback for all 3 replies, the order changes between games, a whole conversation with only Best replies (100%), a whole conversation with weak replies and a bad free reply (To improve list), best result kept, leaving in the middle does not save, dashboard card, export and import, phone width, no errors | 30 of 30 pass |
 | LinkedIn academy with real key presses and typing (`tools/linkedin-check.mjs`): the topic list, open a lesson with the keyboard, answer all 10 exercises (100%, Mastered), a wrong answer lands in the mistake notebook, the writing task and the roleplay open from the hub and are played, the topic shows "All 3 steps done", dashboard card, backup round trip, the 200-character limit, phone width, no errors | 28 of 28 pass |
 | Freelance academy with real key presses and typing (`tools/freelance-check.mjs`): stage headings, a whole topic (quiz 100%, writing task, roleplay), reused items open the right task and roleplay, a wrong answer reaches the notebook, dashboard card, backup round trip, LinkedIn page unchanged, phone width, no errors | 23 of 23 pass |
+| Every one of the 11 Freelance topics in a real browser (`tools/freelance-check.mjs`, part 9): the quiz with all correct answers (10 of 10), the writing task with its model text (all automatic checks OK, saved), and the roleplay with all Best replies (100%); then all topics say "All 3 steps done" and the dashboard shows 11 of 11 | 58 of 58 pass (the whole Freelance test) |
 | Edge cases (`tools/edge-cases-check.mjs`): browser blocks storage, storage full, app code not running (double-click) shows a helpful message, no uncaught errors | all pass |
 | Console errors during the audit | none from the app |
+
+Found and fixed in M11 batch 2: nothing in the app. The new content passed all the content tests the first time.
 
 Found and fixed in M11 batch 1: nothing in the app. The new content passed all the content tests and the browser tests the first time.
 
@@ -132,7 +135,19 @@ Run `python -m http.server 8000` and open http://localhost:8000/#/freelance
 - [ ] Do one whole topic: lesson and quiz, Write, Talk. Does the page show your progress and the next step correctly? Are the three stage headings easy to use?
 - [ ] On your phone: the topic list, the buttons and the quiz are easy to use
 
-When this is done, tell Claude to start batch 2.
+When this is done, check batch 2 as well.
+
+## Milestone 11, batch 2: your check (only you can do these)
+
+Run `python -m http.server 8000` and open http://localhost:8000/#/freelance
+
+- [ ] **Read the 6 new lessons and the 60 quiz exercises** (`ff-` finding clients, `fq-` proposal, `fo-` portfolio, `fl-` first call, `fk-` contracts, `fn-` saying no). Is the English clear and correct (American spelling)? Did any correct answer get rejected? Tell Claude the exercise number, for example `fk-07`.
+- [ ] **Is the advice right for you?** For example: a short, specific first message (no copying), the proposal parts (problem, plan, price, next step), a portfolio with a number as the result, asking to repeat on a call, a deposit, a polite no with an option. The contracts lesson says "not legal advice": is it clear enough? Tell Claude if something does not match how you work.
+- [ ] Read the 6 new writing tasks (`wr-17` to `wr-22`) and the 6 new roleplays (`rp-15` to `rp-20`) with their model answers.
+- [ ] Do one whole topic from the "Get clients" stage. Are the four stage headings easy to use?
+- [ ] On your phone: the longer topic list is still easy to use
+
+When this is done, tell Claude to start batch 3.
 
 ## Known limits and bugs
 

@@ -37,6 +37,12 @@ export const skillTagLabels = {
   deadlines: 'Deadlines and delays',
   'scope-changes': 'Scope changes and revisions',
   payments: 'Invoices and payment',
+  'finding-clients': 'Finding clients',
+  proposals: 'Writing proposals',
+  portfolio: 'Portfolio and profile',
+  'first-call': 'The first call with a client',
+  contracts: 'Contracts and terms',
+  'saying-no': 'Saying no politely',
 };
 
 export function skillTagLabel(tag) {

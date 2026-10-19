@@ -119,13 +119,18 @@ try {
   await send('Page.enable'); await send('Runtime.enable');
   await go(BASE + '#/');
   await evaluate('localStorage.clear()');
-  const topic = freelanceTopics[0];
-  const lesson = freelanceLessons[0];
+  const topic = freelanceTopics.find((t) => t.id === 'fr-brief');
+  const lesson = freelanceLessons.find((l) => l.id === topic.lessonId);
+  const stages = [...new Set(freelanceTopics.map((t) => t.stage))];
+  // The card of a topic, found by its title
+  const cardOf = (title) => `[...document.querySelectorAll('.lesson-list > .card')].find((c) => c.querySelector('h3, h2').textContent === ${JSON.stringify(title)})`;
+  const cardText = (title) => evaluate(`${cardOf(title)}?.textContent ?? ''`);
+  const stepText = (title, i) => evaluate(`${cardOf(title)}.querySelectorAll('.step-row')[${i}].textContent`);
 
   // 1. The hub, grouped in stages
   await go(BASE + '?fr1#/freelance');
   check('the Freelance page opens', (await text('h1')) === 'Freelance academy', await text('h1'));
-  check('the topics are grouped under stage headings', JSON.stringify(await evaluate(`[...document.querySelectorAll('h2.stage-heading')].map((h) => h.textContent)`)) === JSON.stringify(['Start the job', 'Do the job', 'Finish the job']));
+  check(`the topics are grouped under ${stages.length} stage headings (${stages.join(', ')})`, JSON.stringify(await evaluate(`[...document.querySelectorAll('h2.stage-heading')].map((h) => h.textContent)`)) === JSON.stringify(stages));
   check('the topic titles are level-3 headings under the stages', (await count('main h3')) === freelanceTopics.length);
   check('all topics and 3 steps each are listed', (await count('.lesson-list > .card')) === freelanceTopics.length && (await count('.step-row')) === freelanceTopics.length * 3);
   check('Tab reaches the lesson button of the first topic', await tabTo((a) => /^BUTTON:Open the lesson and quiz: Understand the brief/.test(a)), await active());
@@ -137,10 +142,10 @@ try {
   for (const exercise of lesson.exercises) await answer(exercise);
   check('the quiz gives 10 of 10 right on the first try', /^10 of 10 right on the first try/.test(await text('.score')), await text('.score'));
   await clickButton(/All topics/); await sleep(150);
-  check('the topic shows 1 of 3 steps done, and Write is the next step', /1 of 3 steps done/.test(await text('.lesson-list > .card')) && /Not started · Next step/.test(await evaluate(`[...document.querySelectorAll('.lesson-list > .card:first-child .step-row')][1].textContent`)));
+  check('the topic shows 1 of 3 steps done, and Write is the next step', /1 of 3 steps done/.test(await cardText('Understand the brief')) && /Not started · Next step/.test(await stepText('Understand the brief', 1)));
 
   // 3. A wrong answer goes to the mistake notebook
-  const lesson2 = freelanceLessons[1];
+  const lesson2 = freelanceLessons.find((l) => l.id === 'freelance-pricing');
   await clickByLabel(/Open the lesson and quiz: Pricing and quotes/); await sleep(150);
   await clickButton(/Start exercises/); await sleep(150);
   await answer(lesson2.exercises[0], true);
@@ -181,7 +186,7 @@ try {
   }
   check('the conversation ends with 100%', /^100% of the points/.test(await text('.turn .score')), await text('.turn .score'));
   await go(BASE + '?fr4#/freelance');
-  check('the first topic now says all 3 steps are done', /All 3 steps done/.test(await text('.lesson-list > .card')));
+  check('the first topic now says all 3 steps are done', /All 3 steps done/.test(await cardText('Understand the brief')));
 
   // 5. Reused items open the existing writing task and roleplay
   const deadlines = freelanceTopics.find((t) => t.id === 'fr-deadlines');
@@ -194,7 +199,7 @@ try {
   // 6. Dashboard and backup
   await go(BASE + '?fr6#/');
   const grid = (await text('.stat-grid')).replace(/\s+/g, ' ');
-  check('the dashboard has a Freelance card: 1 of 5 topics done, 2 started', /Freelance academy1 of 5 topics done2 started/.test(grid), grid.slice(0, 300));
+  check(`the dashboard has a Freelance card: 1 of ${freelanceTopics.length} topics done, 2 started`, new RegExp(`Freelance academy1 of ${freelanceTopics.length} topics done2 started`).test(grid), grid.slice(0, 300));
   check('the LinkedIn card is unchanged (0 of 5)', /LinkedIn academy0 of 5 topics done/.test(grid));
   const roundTrip = await evaluate(`(async () => { const mod = await import('/js/storage.js'); const out = mod.exportData(JSON.parse(localStorage.getItem('skillforge-data'))); const back = mod.parseImport(out.json); return back.ok ? [back.summary.lessons, back.summary.writings, back.summary.roleplays] : null; })()`);
   check('an exported backup keeps the Freelance lessons, writing and roleplay', JSON.stringify(roundTrip) === '[2,1,1]', JSON.stringify(roundTrip));
@@ -207,6 +212,57 @@ try {
   await go(BASE + '?fr8#/freelance', 360);
   check('phone: no sideways scrolling on the Freelance page', (await evaluate(`document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1`)) === true);
   check('phone: every step button is at least 44 px high', (await evaluate(`[...document.querySelectorAll('.step-row .button')].every((b) => b.getBoundingClientRect().height >= 43.5)`)) === true);
+
+  // 9. Every topic: lesson (all correct), writing task (model text), roleplay (all Best). Proves each topic works in a browser.
+  await go(BASE + '?fr9#/');
+  await evaluate('localStorage.clear()');
+  for (const t of freelanceTopics) {
+    const les = freelanceLessons.find((l) => l.id === t.lessonId);
+    await go(BASE + '?all-' + t.id + '#/freelance');
+    await clickByLabel(new RegExp('Open the lesson and quiz: ' + t.title.replace(/[()]/g, '.')));
+    await sleep(150); await clickButton(/Start exercises/); await sleep(120);
+    for (const exercise of les.exercises) await answer(exercise);
+    check(`${t.id}: the quiz gives 10 of 10`, /^10 of 10 right on the first try/.test(await text('.score')), await text('.score'));
+
+    await go(BASE + '?allw-' + t.id + '#/freelance');
+    await clickByLabel(new RegExp('Open the writing task: ' + t.title));
+    await sleep(250);
+    const wt = findTask(t.taskId);
+    await evaluate(`document.getElementById('writing-text').focus()`);
+    await typeIntoFocused(wt.modelAnswers[0].text);
+    await clickButton(/Check my text/); await sleep(100);
+    check(`${t.id}: the model text of ${t.taskId} passes every check`, /^(\d+) of \1 checks are OK/.test(await text('.writing-results .score')), await text('.writing-results .score'));
+
+    await evaluate(`document.getElementById('rating-good').click()`);
+    await clickButton(/Save to my history/); await sleep(100);
+
+    await go(BASE + '?allr-' + t.id + '#/freelance');
+    await clickByLabel(new RegExp('Open the roleplay: ' + t.title));
+    await sleep(250);
+    const sc = findScenario(t.scenarioId);
+    await clickButton(/Start the conversation/); await sleep(120);
+    let st = sc.steps[sc.start];
+    for (let guard = 0; guard < 20 && !st.end; guard++) {
+      if (st.write) {
+        await evaluate(`document.getElementById('rp-text').focus()`);
+        await typeIntoFocused(st.write.model.text);
+        await clickButton(/Check my reply/); await sleep(80);
+        await evaluate(`document.querySelector('.writing-after input[type=radio]').click()`);
+        await clickButton(/Send my reply/); await sleep(80);
+        st = sc.steps[st.write.next];
+      } else {
+        const option = bestOption(st);
+        await evaluate(`[...document.querySelectorAll('.reply-option')].find((x) => x.textContent === ${JSON.stringify(option.text)}).click()`); await sleep(50);
+        await clickButton(/^Continue$/); await sleep(50);
+        st = sc.steps[option.next];
+      }
+    }
+    check(`${t.id}: the roleplay ${t.scenarioId} ends with 100%`, /^100% of the points/.test(await text('.turn .score')), await text('.turn .score'));
+  }
+  await go(BASE + '?fr10#/freelance');
+  check('after all topics, every topic says "All 3 steps done"', (await count('.lesson-list > .card')) === freelanceTopics.length && (await evaluate(`[...document.querySelectorAll('.lesson-list > .card')].every((c) => /All 3 steps done/.test(c.textContent))`)) === true);
+  await go(BASE + '?fr11#/');
+  check('the dashboard then shows all Freelance topics done', new RegExp(`Freelance academy${freelanceTopics.length} of ${freelanceTopics.length} topics done`).test((await text('.stat-grid')).replace(/\s+/g, ' ')));
 
   check('no uncaught errors', errors.length === 0, errors.join(' | ').slice(0, 200));
 } catch (error) {
