@@ -5,7 +5,7 @@ A private website to practice English for work: grammar lessons, a mistake noteb
 - Everything stays in your browser on your device. No account, no server, no tracking, no cost.
 - No packages to install. Plain HTML, CSS and JavaScript.
 
-Version 1 (MVP, tag `v1.0`) is built, and Milestones 8 (Writing practice), 9 (Roleplay), 10 (LinkedIn academy), 11 (Freelance academy), 12 (Technical English) and 13 (Reading comprehension) are added. See `PROGRESS.md` for what is done and what you still need to check, and `project-plan.md` for the full plan.
+Version 1 (MVP, tag `v1.0`) is built, and all planned milestones are added: 8 (Writing practice), 9 (Roleplay), 10 (LinkedIn academy), 11 (Freelance academy), 12 (Technical English), 13 (Reading comprehension), 14 (Progress reports) and 15 (Offline install). See `PROGRESS.md` for what is done and what you still need to check, and `project-plan.md` for the full plan.
 
 ## What you can do
 
@@ -18,9 +18,11 @@ Version 1 (MVP, tag `v1.0`) is built, and Milestones 8 (Writing practice), 9 (Ro
 - **Technical English:** 5 topics (bug reports, commit messages, README sections, technical decisions, status updates). It works like the other academies: a lesson with a 10-exercise quiz, a writing task, and a roleplay for each topic.
 - **Reading comprehension:** 5 work texts (a job post, a client brief, an API change notice, a status report, meeting notes). The whole text stays on the screen while you answer 10 questions about the main idea, the details, and what is unclear. Then you write one short clarifying question about the text. Each text has a link to its writing task.
 - **Mistake notebook:** wrong answers are saved and come back after 1, 2, 4, 8 and 16 days. Add notes, review, master them.
+- **Progress reports:** answers and first-try accuracy, lessons done, mistakes mastered, a five-week practice calendar, 14-day practice chart, accuracy by week, review answers right per week, and accuracy by skill tag. Simple SVG charts with text descriptions for screen readers.
 - **Settings and backup:** color theme, text size, export and import your progress as a file, reset.
+- **Offline and install:** after the first load, a service worker saves the app so it opens with no internet. You can install it as an app from Chrome or Edge. Your data still stays in this browser.
 
-Pages that appear in the menu with "Soon" (Progress reports) are planned for later. You can hide them in Settings.
+All pages in the menu are built now, so nothing shows "Soon".
 
 ## Run the website
 
@@ -31,6 +33,10 @@ python -m http.server 8000
 ```
 
 Then open <http://localhost:8000>. Stop the server with `Ctrl+C`.
+
+After the first full load from localhost, the app works offline: the service worker saves every file it needs. Open the same `http://localhost:8000` address again with no internet and it should still start. In Chrome or Edge, use the install button in the address bar (or the browser menu) to install it as an app. On Android, use "Install app"; on iPhone or iPad, use Share > Add to Home Screen.
+
+Service workers need `localhost` or HTTPS. That means the phone-on-Wi-Fi address below loads the app but does not install it or keep it offline. For offline use on a phone, put the site on an HTTPS address (for example GitHub Pages) or use a local HTTPS server.
 
 To use it on your phone at home, run `python -m http.server 8000 --bind 0.0.0.0` and open `http://<your PC address>:8000` on a phone on the same Wi-Fi. Stop the server when you are done. Your progress is stored separately in each browser, so the phone and the PC do not share progress. Use Export and Import in Settings to move it.
 
@@ -47,7 +53,7 @@ To use it on your phone at home, run `python -m http.server 8000 --bind 0.0.0.0`
 npm test
 ```
 
-No `npm install` is needed. The tests cover the calculations and rules: answer checking, writing checks, roleplay engine, academy progress, scoring, review schedule, saving and loading, backup files, dashboard numbers, lesson content, and color contrast.
+No `npm install` is needed. The tests cover the calculations and rules: answer checking, writing checks, roleplay engine, academy progress, scoring, review schedule, report numbers and calendars, saving and loading, backup files, dashboard numbers, lesson content, color contrast, the manifest, icons, service worker file list and offline registration.
 
 Optional browser checks (need Microsoft Edge) are in `tools/`. Their instructions are at the top of each file.
 
@@ -55,12 +61,13 @@ Optional browser checks (need Microsoft Edge) are in `tools/`. Their instruction
 
 - `index.html` - the one page of the app
 - `css/` - styles (colors and themes, layout, components)
-- `js/main.js` - starts the app; `js/router.js` and `js/routes.js` - which page to show
+- `js/main.js` - starts the app; `js/pwa.js` - registers the offline service worker; `js/router.js` and `js/routes.js` - which page to show
 - `js/storage.js` - the only code that touches localStorage; `js/state.js` - your data in memory
-- `js/logic/` - rules without screens: `answer-check.js`, `progress.js`, `review-schedule.js`, `dashboard.js`, `writing-check.js`, `writing-progress.js`, `roleplay.js`, `roleplay-progress.js`, `academy.js`
+- `js/logic/` - rules without screens: `answer-check.js`, `progress.js`, `review-schedule.js`, `dashboard.js`, `reports.js`, `writing-check.js`, `writing-progress.js`, `roleplay.js`, `roleplay-progress.js`, `academy.js`
 - `js/pages/` - one file per page; `exercise-view.js` is the exercise screen shared by lessons and reviews, `lesson-player.js` is the lesson screens shared by Grammar and the academies, `academy.js` is the topic list of an academy
 - `js/ui/` - small helpers (safe element builder, theme, file download)
 - `content/` - lessons, writing tasks, roleplay scenarios and names (data only, no logic)
+- `manifest.webmanifest`, `service-worker.js`, `icons/` - install and offline support
 - `tests/` - automated tests (`npm test`)
 - `tools/` - optional browser checks
 

@@ -14,6 +14,8 @@ import { render as renderLinkedin } from './pages/linkedin.js';
 import { render as renderFreelance } from './pages/freelance.js';
 import { render as renderReading } from './pages/reading.js';
 import { render as renderTechnical } from './pages/technical.js';
+import { render as renderReports } from './pages/reports.js';
+import { registerServiceWorker } from './pwa.js';
 import { render as renderSettings } from './pages/settings.js';
 import { renderComingSoon, renderNotFound } from './pages/coming-soon.js';
 
@@ -27,6 +29,7 @@ const pageRenderers = {
   freelance: renderFreelance,
   reading: renderReading,
   technical: renderTechnical,
+  reports: renderReports,
   mistakes: renderMistakes,
   settings: renderSettings,
 };
@@ -134,3 +137,4 @@ document.addEventListener('keydown', (event) => {
   }
 });
 startRouter(showPage);
+registerServiceWorker();

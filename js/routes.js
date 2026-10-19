@@ -20,7 +20,7 @@ export const routes = [
   { id: 'technical', path: 'technical',label: 'Technical English',  group: 'Professional', ready: true,  note: 'Milestone 12' },
 
   { id: 'mistakes',  path: 'mistakes', label: 'Mistake notebook',   group: 'Review',       ready: true,  note: 'Milestone 5' },
-  { id: 'reports',   path: 'reports',  label: 'Progress reports',   group: 'Review',       ready: false, note: 'Milestone 14' },
+  { id: 'reports',   path: 'reports',  label: 'Progress reports',   group: 'Review',       ready: true,  note: 'Milestone 14' },
 
   { id: 'settings',  path: 'settings', label: 'Settings and backup',group: '',             ready: true,  note: 'Milestone 3' },
 ];

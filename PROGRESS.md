@@ -180,6 +180,29 @@ Run `python -m http.server 8000` and open http://localhost:8000/#/reading
 - [ ] Do one whole text: read and answer the quiz, then click "Ask a clarifying question". Does the Writing page open the right task?
 - [ ] On your phone: the text, the question and the buttons are easy to use
 
+## Milestone 14: your check (only you can do these)
+
+Run `python -m http.server 8000` and open http://localhost:8000/#/reports
+
+- [ ] **Do the numbers match what you did?** Compare the answer total and first-try accuracy with the Dashboard. Check the lessons done, mistakes mastered, writings and conversations.
+- [ ] **Read the charts.** Does the practice calendar fill the right days? Does the 14-day chart match your recent practice? Does "Accuracy by week" use the right weeks?
+- [ ] **Is "Mistakes fixed per week" the right idea?** It counts review answers from the notebook that were right on the first try. It does not count a mistake as "fixed" when it moves to the next box. Tell Claude if you want different wording or numbers.
+- [ ] **Check "Accuracy by skill".** Does it show the skills you expect? Is the lowest-first order useful? A skill with one or two answers can jump around; is that clear?
+- [ ] With no data (use a private window or reset a copy), the page should show friendly empty text, not zero-height bars or "NaN".
+- [ ] On your phone: the calendar and charts are easy to read and do not need sideways scrolling (except the calendar wrapper if the screen is very narrow)
+
+## Milestone 15: your check (only you can do these)
+
+Run `python -m http.server 8000` and open http://localhost:8000
+
+- [ ] **Check the install:** in Chrome or Edge, the address bar or menu shows an install button. Install the app, open it from the new icon, and check that it starts at the Dashboard.
+- [ ] **Check the manifest:** open DevTools > Application > Manifest. The name, icons, theme color and start URL should be correct, with no errors.
+- [ ] **Check the service worker:** DevTools > Application > Service Workers shows `service-worker.js` as activated. The Cache Storage list shows `skillforge-v1`.
+- [ ] **Check offline:** in DevTools > Network, choose Offline, then reload. The app should open and all pages, lessons, writing tasks and roleplays should still work. Your saved progress should still be there.
+- [ ] **Check an update:** change a text in a lesson, reload twice, and check that the new text appears. If it does not, the cache name needs a new version. (In normal use, this only matters when the app files change.)
+- [ ] **On a phone:** install it from an HTTPS address. The plain `http://<PC>:8000` Wi-Fi address loads the app but cannot install it or work offline, because service workers need HTTPS or localhost. Is that explained clearly in the README?
+- [ ] Clear the site data and check that the app still starts and creates fresh data (nothing should break).
+
 ## Known limits and bugs
 
 - Wrong answers given before Milestone 5 are not in the Mistake notebook (they are only in the attempt history). New wrong answers are saved automatically.
@@ -190,11 +213,13 @@ Run `python -m http.server 8000` and open http://localhost:8000/#/reading
 - LinkedIn advice changes over time. The lessons keep the advice general, and the 200-character limit for connection notes is the one rule that may differ on your account. The app never connects to LinkedIn.
 - Roleplay is a fixed script: the other person does not react to your free reply, and a conversation left in the middle is not saved (only finished conversations count).
 - Writing checks look at words and shape only. They can be fooled (a long text of nonsense can pass), and they do not check grammar or spelling. Your own reading and rating are the real test.
-- Not tested: Firefox, Safari, a real phone, screen readers, and long-term use (the 16-day review gaps were tested with changed dates, not real waiting).
+- Progress reports use your local days and the last 5 or 8 weeks. "Mistakes fixed per week" counts review answers that were right on the first try; it is not the same as the number of mistakes that reached box 5.
+- Offline install needs one full online load first. Service workers need `localhost` or HTTPS, so the plain phone-on-Wi-Fi address cannot install or work offline. When app files change, the cache name in `service-worker.js` must be updated, and the browser may need two reloads to show the new version.
+- Not tested: Firefox, Safari, a real phone, screen readers, and long-term use (the 16-day review gaps were tested with changed dates, not real waiting). Offline mode and install were tested in headless Edge, not on a real phone.
 - Typing practice was removed, so the typing items in `project-plan.md` are no longer part of the project.
 
-## After version 1 (in progress)
+## After version 1 (complete)
 
-Done: M11 Freelance academy (batches 1 to 3), M12 Technical English, M13 Reading comprehension.
+Done: M8 Writing practice, M9 Roleplay, M10 LinkedIn academy, M11 Freelance academy (batches 1 to 3), M12 Technical English, M13 Reading comprehension, M14 Progress reports, M15 Offline install.
 
-Next: M14 Progress reports, M15 Offline install. Each one is planned in detail before it starts. See `project-plan.md`.
+All planned milestones are built. Your manual checks above are still the real test. See `project-plan.md` for the original plan and optional ideas.
