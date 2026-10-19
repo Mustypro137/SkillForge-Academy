@@ -14,7 +14,7 @@ export const routes = [
   { id: 'writing',   path: 'writing',  label: 'Writing',            group: 'Practice',     ready: true,  note: 'Milestone 8' },
   { id: 'reading',   path: 'reading',  label: 'Reading',            group: 'Practice',     ready: false, note: 'Milestone 13' },
 
-  { id: 'roleplay',  path: 'roleplay', label: 'Roleplay',           group: 'Professional', ready: false, note: 'Milestone 9' },
+  { id: 'roleplay',  path: 'roleplay', label: 'Roleplay',           group: 'Professional', ready: true,  note: 'Milestone 9' },
   { id: 'linkedin',  path: 'linkedin', label: 'LinkedIn',           group: 'Professional', ready: false, note: 'Milestone 10' },
   { id: 'freelance', path: 'freelance',label: 'Freelance',          group: 'Professional', ready: false, note: 'Milestone 11' },
   { id: 'technical', path: 'technical',label: 'Technical English',  group: 'Professional', ready: false, note: 'Milestone 12' },

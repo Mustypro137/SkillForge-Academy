@@ -6,6 +6,7 @@ import {
   localDateString, dataSizeKb,
 } from '../js/storage.js';
 import { MAX_TEXT, MAX_HISTORY } from '../js/logic/writing-progress.js';
+import { MAX_LOG } from '../js/logic/roleplay-progress.js';
 
 // A tiny fake of localStorage.
 function fakeStorage(initial = {}) {
@@ -226,4 +227,59 @@ test('import rejects a damaged writing area, and counts saved writings', () => {
   assert.equal(parseImport(JSON.stringify({ ...good, writing: [] })).ok, false);
   good.writing.history.push({ taskId: 'wr-01', text: 'hi', at: '2026-10-19T10:00:00.000Z' });
   assert.equal(parseImport(JSON.stringify(good)).summary.writings, 1);
+});
+
+// ----- Milestone 9: roleplay data -----
+
+test('new data has an empty roleplay area, and version 2 data gets one', () => {
+  assert.deepEqual(createDefaultData().roleplay, { results: {}, log: [] });
+  const store = fakeStorage({
+    [STORAGE_KEY]: JSON.stringify({ app: APP_NAME, schemaVersion: 2, attempts: [], progress: {}, mistakes: {}, settings: {}, writing: { drafts: {}, history: [] } }),
+  });
+  const { data, warning } = loadData(store);
+  assert.equal(warning, null);
+  assert.equal(data.schemaVersion, SCHEMA_VERSION);
+  assert.deepEqual(data.roleplay, { results: {}, log: [] });
+});
+
+test('roleplay results and log are cleaned: bad entries removed, dangerous keys dropped, log capped', () => {
+  const good = { runs: 2, bestPercent: 90, lastPercent: 60, lastCounts: { best: 3, ok: 1, weak: 0 }, lastAt: '2026-10-19T10:00:00.000Z' };
+  const raw = JSON.parse(`{
+    "app": "${APP_NAME}", "schemaVersion": ${SCHEMA_VERSION}, "attempts": [], "progress": {}, "mistakes": {}, "settings": {},
+    "roleplay": {
+      "results": {
+        "rp-01": ${JSON.stringify(good)},
+        "rp-02": { "runs": -1, "bestPercent": 50 },
+        "rp-03": { "runs": 1, "bestPercent": 500 },
+        "rp-04": "junk",
+        "__proto__": ${JSON.stringify(good)}
+      },
+      "log": [
+        { "scenarioId": "rp-01", "at": "2026-10-19T10:00:00.000Z", "percent": 90, "extra": "x" },
+        { "scenarioId": "rp-01", "at": "not a date", "percent": 90 },
+        { "scenarioId": 5, "at": "2026-10-19T10:00:00.000Z", "percent": 90 },
+        { "scenarioId": "rp-01", "at": "2026-10-19T10:00:00.000Z", "percent": 101 },
+        "junk"
+      ]
+    }
+  }`);
+  const { data } = validateData(raw);
+  assert.deepEqual(Object.keys(data.roleplay.results), ['rp-01']);
+  assert.deepEqual(data.roleplay.results['rp-01'], good);
+  assert.deepEqual(data.roleplay.log, [{ scenarioId: 'rp-01', at: '2026-10-19T10:00:00.000Z', percent: 90 }]);
+  assert.equal({}.runs, undefined);
+
+  const many = Array.from({ length: MAX_LOG + 5 }, (_, n) => ({ scenarioId: 'rp-01', at: '2026-10-19T10:00:00.000Z', percent: n % 100 }));
+  const capped = validateData({ app: APP_NAME, schemaVersion: SCHEMA_VERSION, roleplay: { log: many } }).data;
+  assert.equal(capped.roleplay.log.length, MAX_LOG);
+});
+
+test('import rejects a damaged roleplay area, accepts version 2 files, and counts roleplays', () => {
+  const good = JSON.parse(exportData(createDefaultData()).json);
+  assert.equal(parseImport(JSON.stringify({ ...good, roleplay: [] })).ok, false);
+  const v2 = { ...good, schemaVersion: 2 };
+  delete v2.roleplay;
+  assert.equal(parseImport(JSON.stringify(v2)).ok, true);
+  good.roleplay.results['rp-01'] = { runs: 1, bestPercent: 70, lastPercent: 70, lastCounts: { best: 1, ok: 1, weak: 0 }, lastAt: '2026-10-19T10:00:00.000Z' };
+  assert.equal(parseImport(JSON.stringify(good)).summary.roleplays, 1);
 });

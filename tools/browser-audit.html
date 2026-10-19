@@ -11,6 +11,7 @@ import { routes } from '../js/routes.js';
 import { grammarLessons } from '../content/grammar/index.js';
 import { solutionText } from '../js/logic/answer-check.js';
 import { writingTasks } from '../content/writing/index.js';
+import { roleplayScenarios } from '../content/roleplay/index.js';
 
 const out = [];
 const f = document.getElementById('f');
@@ -27,7 +28,7 @@ const typeText = (v) => { d().querySelector('.answer-input').value = v; };
 const chooseRadio = (i) => d().querySelectorAll('input[type=radio]')[i].click();
 const store = () => JSON.parse(f.contentWindow.localStorage.getItem('skillforge-data') || 'null');
 const setStore = (fn) => {
-  const s = store() ?? { app: 'skillforge', schemaVersion: 2, createdAt: new Date().toISOString(), lastBackupAt: null, settings: { theme: 'system', fontSize: 18, showComingSoon: true }, progress: {}, attempts: [], mistakes: {}, writing: { drafts: {}, history: [] } };
+  const s = store() ?? { app: 'skillforge', schemaVersion: 3, createdAt: new Date().toISOString(), lastBackupAt: null, settings: { theme: 'system', fontSize: 18, showComingSoon: true }, progress: {}, attempts: [], mistakes: {}, writing: { drafts: {}, history: [] }, roleplay: { results: {}, log: [] } };
   fn(s); f.contentWindow.localStorage.setItem('skillforge-data', JSON.stringify(s));
 };
 
@@ -107,6 +108,25 @@ async function scenario(width) {
   setText('HEY!! send it NOW'); await click(/Check my text/); audit('writing: bad text, checks + model', sizes);
   setText(writingTasks[0].modelAnswers[0].text); await click(/Check my text/);
   d().getElementById('rating-good').click(); await click(/Save to my history/); audit('writing: saved, history shown', sizes);
+
+  // roleplay: list, intro, a choice, its feedback, the writing step, the summary
+  await reload('#/roleplay'); audit('roleplay list', sizes);
+  d().querySelectorAll('.card button')[0].click(); await sleep(60); audit('roleplay intro', sizes);
+  await click(/Start the conversation/); audit('roleplay: first choice', sizes);
+  d().querySelector('.reply-option').click(); await sleep(40); audit('roleplay: feedback after a reply', sizes);
+  await click(/^Continue$/);
+  for (let i = 0; i < 20; i++) {
+    if (/Conversation finished/.test(d().querySelector('.turn h2')?.textContent ?? '')) break;
+    if (d().querySelector('.reply-option')) { d().querySelector('.reply-option').click(); await sleep(30); await click(/^Continue$/); }
+    else if (d().getElementById('rp-text')) {
+      audit('roleplay: write step', sizes);
+      const box = d().getElementById('rp-text');
+      box.value = 'HEY!! send it NOW'; box.dispatchEvent(new Event('input', { bubbles: true }));
+      await click(/Check my reply/); audit('roleplay: bad reply checked + model', sizes);
+      d().querySelector('.writing-after input[type=radio]').click(); await click(/Send my reply/);
+    }
+  }
+  audit('roleplay: summary', sizes);
 
   // notebook, dashboard, settings with data
   setStore((s) => { s.lastBackupAt = new Date().toISOString(); });

@@ -8,7 +8,7 @@
 
 This document is written in simple English. Words in `code style` are file names, function names, or commands.
 
-> **Status:** Milestones 1 to 7 are built, tested and tagged `v1.0` (owner checked and approved). Milestone 8 (Writing practice) is built and tested; it waits for the owner's check (see `PROGRESS.md`). Later milestones are not started.
+> **Status:** Milestones 1 to 7 are built, tested and tagged `v1.0` (owner checked and approved). Milestones 8 (Writing practice) and 9 (Roleplay) are built and tested; they wait for the owner's checks (see `PROGRESS.md`). Later milestones (M10 onward) are not started.
 
 > **Change (after Milestone 2):** The typing module was removed at the owner's request (a typing project already exists elsewhere). Typing practice, WPM/accuracy (section 6.5) and typing results are no longer part of the plan. The roadmap continues with Milestone 3 (storage, settings, backup) without typing data. The removed code is in git commit `65305ca`.
 

@@ -107,7 +107,7 @@ test('practiceSummary counts only the last 7 days', () => {
 });
 
 test('practiceSummary with no attempts has no accuracy and no date', () => {
-  assert.deepEqual(practiceSummary([], now), { answers: 0, writings: 0, firstTry: 0, accuracy: null, daysPracticed: 0, lastPractice: null });
+  assert.deepEqual(practiceSummary([], now), { answers: 0, writings: 0, roleplays: 0, firstTry: 0, accuracy: null, daysPracticed: 0, lastPractice: null });
   assert.equal(practiceSummary(undefined, now).answers, 0);
 });
 
@@ -176,4 +176,22 @@ test('a day with both answers and writing counts once', () => {
   const at = daysAgo(2);
   const s = practiceSummary([{ at, firstTry: true }], now, { history: [{ at }] });
   assert.equal(s.daysPracticed, 1);
+});
+
+test('finished roleplay conversations count as practice days and as last practice, but not as answers', () => {
+  const roleplay = { results: {}, log: [{ scenarioId: 'rp-01', at: daysAgo(1), percent: 80 }, { scenarioId: 'rp-02', at: daysAgo(20), percent: 50 }] };
+  const s = practiceSummary([], now, null, roleplay);
+  assert.equal(s.answers, 0);
+  assert.equal(s.roleplays, 1);
+  assert.equal(s.writings, 0);
+  assert.equal(s.daysPracticed, 1);
+  assert.equal(new Date(s.lastPractice).getTime(), new Date(daysAgo(1)).getTime());
+});
+
+test('answers, writing and roleplay on the same day count as one practice day', () => {
+  const at = daysAgo(3);
+  const s = practiceSummary([{ at, firstTry: true }], now, { history: [{ at }] }, { log: [{ at }] });
+  assert.equal(s.daysPracticed, 1);
+  assert.equal(s.writings, 1);
+  assert.equal(s.roleplays, 1);
 });

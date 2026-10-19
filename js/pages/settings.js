@@ -105,6 +105,7 @@ function build(container, firstMessage) {
         el('li', {}, count(summary.attempts, 'answer', 'answers')),
         el('li', {}, count(summary.mistakes, 'saved mistake', 'saved mistakes')),
         el('li', {}, count(summary.writings, 'saved writing', 'saved writings')),
+        el('li', {}, count(summary.roleplays, 'roleplay with results', 'roleplays with results')),
         el('li', {}, `Created: ${formatDate(summary.createdAt)}`)),
       el('p', {}, 'Importing replaces everything you have now. A copy of your current data is downloaded first.'),
       el('div', { class: 'button-row' }, confirm, cancel));

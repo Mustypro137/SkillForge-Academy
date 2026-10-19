@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   initState, getData, getWarning, getSaveError, updateData, replaceData, resetData, subscribe,
-  saveWritingDraft, recordWriting,
+  saveWritingDraft, recordWriting, recordRoleplay,
 } from '../js/state.js';
 import { STORAGE_KEY, createDefaultData } from '../js/storage.js';
 
@@ -213,4 +213,15 @@ test('recordWriting adds a history entry with the result, checklist, rating and 
   assert.equal(entry.rating, 'good');
   assert.equal(entry.at, '2026-10-19T10:00:00.000Z');
   assert.equal(JSON.parse(store.getItem(STORAGE_KEY)).writing.history.length, 1);
+});
+
+test('recordRoleplay saves the result, keeps the best percent, and survives a restart', () => {
+  const store = fakeStorage();
+  initState(store);
+  recordRoleplay('rp-01', { percent: 90, best: 4, ok: 1, weak: 0 }, new Date('2026-10-19T10:00:00Z'));
+  recordRoleplay('rp-01', { percent: 40, best: 1, ok: 2, weak: 2 }, new Date('2026-10-20T10:00:00Z'));
+  initState(store);
+  const result = getData().roleplay.results['rp-01'];
+  assert.deepEqual([result.runs, result.bestPercent, result.lastPercent], [2, 90, 40]);
+  assert.equal(getData().roleplay.log.length, 2);
 });

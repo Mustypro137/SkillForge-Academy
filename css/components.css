@@ -360,4 +360,39 @@ fieldset.choices legend { padding: 0; }
 }
 .saved-text { border-left-color: var(--border); }
 .history-list details { padding: 0.25rem 0.9rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+/* ---------- Roleplay ---------- */
+
+.chat { list-style: none; margin: 1rem 0; padding: 0; display: grid; gap: 0.6rem; max-width: 46rem; }
+.bubble { max-width: 85%; padding: 0.6rem 0.9rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+.bubble-you { justify-self: end; background: var(--highlight); }
+.bubble-them { justify-self: start; }
+.bubble .who { display: block; margin-bottom: 0.15rem; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); }
+.bubble-you .who { color: var(--text); }
+.bubble p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.turn { max-width: 46rem; }
+.reply-options { display: grid; gap: 0.6rem; margin: 0.75rem 0; padding: 0; list-style: none; }
+.reply-option {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.7rem 0.9rem;
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  background: var(--surface);
+  border: 2px solid var(--control-border);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.reply-option:hover { background: var(--highlight); }
+.reply-feedback { list-style: none; margin: 0.75rem 0; padding: 0; display: grid; gap: 0.5rem; }
+.reply-feedback li { padding: 0.6rem 0.9rem; background: var(--surface); border: 1px solid var(--border); border-left: 6px solid var(--border); border-radius: var(--radius); }
+.reply-feedback .rating-best { border-left-color: var(--success); }
+.reply-feedback .rating-ok { border-left-color: var(--focus); }
+.reply-feedback .rating-weak { border-left-color: var(--error); }
+.reply-feedback .is-chosen { background: var(--highlight); }
+.rating-label { font-weight: 700; }
+.reply-feedback p { margin: 0.2rem 0 0; }
+.improve-list { padding-left: 1.25rem; max-width: 60rem; }
+.improve-list li { margin-bottom: 1rem; }
 .history-list summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }

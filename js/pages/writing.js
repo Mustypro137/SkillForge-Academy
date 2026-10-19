@@ -4,6 +4,7 @@
 
 import { el } from '../ui/dom.js';
 import { button, setPage } from '../ui/page.js';
+import { checkResults } from '../ui/check-list.js';
 import { writingTasks } from '../../content/writing/index.js';
 import { checkWriting, countWords } from '../logic/writing-check.js';
 import {
@@ -100,13 +101,6 @@ function showList(container) {
 
 // ---------- One task ----------
 
-function checkItem(result) {
-  return el('li', { class: `check-item ${result.ok ? 'check-ok' : 'check-look'}` },
-    el('span', { class: 'check-mark' }, result.ok ? '✓ OK' : '! Look at this'),
-    el('strong', {}, result.label),
-    el('span', {}, result.message));
-}
-
 function historyItem(entry) {
   const when = new Date(entry.at).toLocaleString();
   const parts = [when, `${entry.wordCount} words`, `checks ${entry.checksPassed} of ${entry.checksTotal}`];
@@ -175,14 +169,7 @@ function showTask(container, task) {
     lastResult = result;
     stale.hidden = true;
     status.textContent = '';
-    const summary = el('p', { class: 'score' }, `${result.passed} of ${result.total} checks are OK.`);
-    const advice = result.passed === result.total
-      ? el('p', {}, 'Every automatic check is OK. Now read your text once more, then compare it with the model answer below.')
-      : el('p', {}, 'Read each "Look at this" and decide if you want to change your text. You can edit the text and check again.');
-    results.replaceChildren(
-      el('h2', { tabindex: '-1', id: 'results-heading' }, 'Automatic checks'),
-      summary, advice,
-      el('ul', { class: 'check-list' }, ...result.results.map(checkItem)));
+    results.replaceChildren(...checkResults(result));
     if (!afterBuilt) { buildAfter(); afterBuilt = true; }
     results.querySelector('h2').focus();
   });

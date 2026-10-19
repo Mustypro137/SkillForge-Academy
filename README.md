@@ -5,17 +5,18 @@ A private website to practice English for work: grammar lessons, a mistake noteb
 - Everything stays in your browser on your device. No account, no server, no tracking, no cost.
 - No packages to install. Plain HTML, CSS and JavaScript.
 
-Version 1 (MVP, tag `v1.0`) is built, and Milestone 8 (Writing practice) is added. See `PROGRESS.md` for what is done and what you still need to check, and `project-plan.md` for the full plan.
+Version 1 (MVP, tag `v1.0`) is built, and Milestones 8 (Writing practice) and 9 (Roleplay) are added. See `PROGRESS.md` for what is done and what you still need to check, and `project-plan.md` for the full plan.
 
 ## What you can do
 
 - **Dashboard:** your next step, lessons done, mistakes due, practice in the last 7 days, weak skills, backup reminder.
 - **Grammar:** 3 lessons (capital letters and punctuation, present simple, articles), 12 exercises each. Four exercise types: multiple choice, fill in the blank, correct the sentence, word order. Try first, then use hints, then see the solution and the reason.
 - **Writing:** 8 work-writing tasks (emails to coworkers and clients, status updates, asking for help). You write in a box, the app runs automatic checks (length, greeting, closing, request, tone, long sentences, task words), then you tick a self-review checklist, compare with a model answer, and rate yourself. Drafts and attempts are saved. A button copies your text, for example to paste it into Claude for detailed feedback.
+- **Roleplay:** 6 work conversations (an angry client, a status update in a meeting, taking over a task, a recruiter, a discount request, saying no politely). The other person writes to you. You choose a reply from 3 options (in a new order each time) and see why each one is Best, OK or Weak. In each conversation you also write one free reply, which gets the same automatic checks as Writing, a model reply, and your own rating. At the end you see a summary and a "To improve" list. A weak reply never ends the conversation.
 - **Mistake notebook:** wrong answers are saved and come back after 1, 2, 4, 8 and 16 days. Add notes, review, master them.
 - **Settings and backup:** color theme, text size, export and import your progress as a file, reset.
 
-Pages that appear in the menu with "Soon" (Reading, Roleplay, LinkedIn, Freelance, Technical English, Progress reports) are planned for later. You can hide them in Settings.
+Pages that appear in the menu with "Soon" (Reading, LinkedIn, Freelance, Technical English, Progress reports) are planned for later. You can hide them in Settings.
 
 ## Run the website
 
@@ -42,7 +43,7 @@ To use it on your phone at home, run `python -m http.server 8000 --bind 0.0.0.0`
 npm test
 ```
 
-No `npm install` is needed. The tests cover the calculations and rules: answer checking, writing checks, scoring, review schedule, saving and loading, backup files, dashboard numbers, lesson content, and color contrast.
+No `npm install` is needed. The tests cover the calculations and rules: answer checking, writing checks, roleplay engine, scoring, review schedule, saving and loading, backup files, dashboard numbers, lesson content, and color contrast.
 
 Optional browser checks (need Microsoft Edge) are in `tools/`. Their instructions are at the top of each file.
 
@@ -52,10 +53,10 @@ Optional browser checks (need Microsoft Edge) are in `tools/`. Their instruction
 - `css/` - styles (colors and themes, layout, components)
 - `js/main.js` - starts the app; `js/router.js` and `js/routes.js` - which page to show
 - `js/storage.js` - the only code that touches localStorage; `js/state.js` - your data in memory
-- `js/logic/` - rules without screens: `answer-check.js`, `progress.js`, `review-schedule.js`, `dashboard.js`, `writing-check.js`, `writing-progress.js`
+- `js/logic/` - rules without screens: `answer-check.js`, `progress.js`, `review-schedule.js`, `dashboard.js`, `writing-check.js`, `writing-progress.js`, `roleplay.js`, `roleplay-progress.js`
 - `js/pages/` - one file per page; `exercise-view.js` is the exercise screen shared by lessons and reviews
 - `js/ui/` - small helpers (safe element builder, theme, file download)
-- `content/` - lessons, writing tasks and names (data only, no logic)
+- `content/` - lessons, writing tasks, roleplay scenarios and names (data only, no logic)
 - `tests/` - automated tests (`npm test`)
 - `tools/` - optional browser checks
 
@@ -76,9 +77,16 @@ Accepted answers can use `{a|b}` for alternatives. Example: `'I {have sent|sent}
 3. Choose its automatic checks in `checks` (see the top of `js/logic/writing-check.js`). Write a model answer.
 4. Run `npm test`. It checks that the model answer passes all the task's own checks.
 
+## Add or change a roleplay scenario
+
+1. Copy a scenario in `content/roleplay/` and change the text. A scenario is a set of steps: a step has what the other person says (`say`) and either 3 replies (`options`, each with a rating Best/OK/Weak, feedback, an optional `reaction`, and `next`), or a free reply (`write`), or it is the end (`end: true`).
+2. Give it a new, unique `id` and `order`. Never change a scenario `id` after you have used the app (your results are saved by `id`).
+3. Run `npm test`. It walks every path: no dead ends or loops, every reply has feedback, each step has a Best reply, always choosing Best gives 100%, and the model free replies pass their own checks.
+
 ## Known limits
 
 - Answers are accepted only if they match the wording listed in the lesson (after ignoring capitals, extra spaces, commas, the final full stop, and short forms like don't). If a correct answer is rejected, tell the person maintaining the lessons, and a new accepted answer can be added.
 - Free writing cannot be graded by the app without an AI service. Writing practice therefore uses automatic checks, a checklist, model answers and your own rating. A "Look at this" is advice, not a mistake.
+- Roleplay is a fixed script. The other person does not react to your free reply, and a conversation left in the middle is not saved.
 - One device, one browser: there is no sync.
 - Tested in Microsoft Edge (Chromium). Chrome should behave the same. Firefox and Safari have not been tested.

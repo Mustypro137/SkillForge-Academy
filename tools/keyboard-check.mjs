@@ -65,7 +65,12 @@ const feedback = () => evaluate(`document.querySelector('.feedback')?.textConten
 async function go(url, width = 1366) {
   await send('Emulation.setDeviceMetricsOverride', { width, height: 900, deviceScaleFactor: 1, mobile: false });
   await send('Page.navigate', { url });
-  await sleep(700);
+  await sleep(300);
+  for (let i = 0; i < 40; i++) {                // wait until the app has drawn the page (slow first load)
+    if (await evaluate(`!!document.querySelector('main h1, main p.note')`)) break;
+    await sleep(150);
+  }
+  await sleep(200);
 }
 async function tabTo(predicate, limit = 40) {   // press Tab until the focused element matches
   for (let i = 0; i < limit; i++) { if (predicate(await active())) return true; await press('Tab'); }

@@ -3,14 +3,16 @@
 // one in tests), so everything here can be tested without a browser.
 //
 // Your data is one object saved as JSON text under one key:
-//   { app, schemaVersion, createdAt, lastBackupAt, settings, progress, attempts, mistakes, writing }
+//   { app, schemaVersion, createdAt, lastBackupAt, settings, progress, attempts, mistakes, writing, roleplay }
 // When the data shape changes later, raise SCHEMA_VERSION and add a migration.
 //   version 1 -> 2: added "writing" (drafts and history). Old data gets an empty one.
+//   version 2 -> 3: added "roleplay" (results and log). Old data gets an empty one.
 
 import { emptyWriting, MAX_TEXT, MAX_NOTE, MAX_HISTORY, RATINGS } from './logic/writing-progress.js';
+import { emptyRoleplay, MAX_LOG } from './logic/roleplay-progress.js';
 
 export const APP_NAME = 'skillforge';
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 export const STORAGE_KEY = 'skillforge-data';
 export const CORRUPT_KEY = 'skillforge-data-corrupt'; // raw text of data we could not read
 export const MAX_ATTEMPTS = 3000;
@@ -36,6 +38,7 @@ export function createDefaultData(now = new Date()) {
     attempts: [],   // newest last, at most MAX_ATTEMPTS
     mistakes: {},   // key = "lessonId/exerciseId"
     writing: emptyWriting(), // drafts: key = taskId; history: newest last
+    roleplay: emptyRoleplay(), // results: key = scenarioId; log: newest last
   };
 }
 
@@ -91,6 +94,39 @@ function cleanWriting(source) {
   return writing;
 }
 
+const isCount = (value) => Number.isInteger(value) && value >= 0;
+const isPercent = (value) => Number.isFinite(value) && value >= 0 && value <= 100;
+
+// Keeps only well-formed roleplay results and log entries.
+function cleanRoleplay(source) {
+  const roleplay = emptyRoleplay();
+  if (!isPlainObject(source)) return roleplay;
+  if (isPlainObject(source.results)) {
+    for (const [id, r] of Object.entries(source.results)) {
+      if (FORBIDDEN_KEYS.has(id) || !isPlainObject(r) || !isCount(r.runs) || !isPercent(r.bestPercent)) continue;
+      const counts = isPlainObject(r.lastCounts) ? r.lastCounts : {};
+      roleplay.results[id] = {
+        runs: r.runs,
+        bestPercent: r.bestPercent,
+        lastPercent: isPercent(r.lastPercent) ? r.lastPercent : r.bestPercent,
+        lastCounts: {
+          best: isCount(counts.best) ? counts.best : 0,
+          ok: isCount(counts.ok) ? counts.ok : 0,
+          weak: isCount(counts.weak) ? counts.weak : 0,
+        },
+        lastAt: isIsoDateText(r.lastAt) ? r.lastAt : null,
+      };
+    }
+  }
+  if (Array.isArray(source.log)) {
+    roleplay.log = source.log
+      .filter((e) => isPlainObject(e) && isText(e.scenarioId) && isIsoDateText(e.at) && isPercent(e.percent))
+      .map((e) => ({ scenarioId: e.scenarioId, at: e.at, percent: e.percent }))
+      .slice(-MAX_LOG);
+  }
+  return roleplay;
+}
+
 function cleanSettings(source) {
   const defaults = defaultSettings();
   const s = isPlainObject(source) ? source : {};
@@ -112,7 +148,7 @@ export function validateData(raw, { strict = false } = {}) {
   if (raw.schemaVersion > SCHEMA_VERSION) {
     return { ok: false, error: 'This backup was made by a newer version of the app. Update the app first.' };
   }
-  // Version 1 data has no "writing"; cleanWriting() below gives it an empty one.
+  // Older data has no "writing" or "roleplay"; the clean functions below give it empty ones.
 
   if (strict) {
     if (!Array.isArray(raw.attempts)) return { ok: false, error: 'The backup is damaged: "attempts" must be a list.' };
@@ -123,6 +159,10 @@ export function validateData(raw, { strict = false } = {}) {
 
   if (strict && raw.writing !== undefined && !isPlainObject(raw.writing)) {
     return { ok: false, error: 'The backup is damaged: "writing" is wrong.' };
+  }
+
+  if (strict && raw.roleplay !== undefined && !isPlainObject(raw.roleplay)) {
+    return { ok: false, error: 'The backup is damaged: "roleplay" is wrong.' };
   }
 
   const base = createDefaultData();
@@ -140,6 +180,7 @@ export function validateData(raw, { strict = false } = {}) {
       attempts: attempts.slice(-MAX_ATTEMPTS), // drop the oldest if too many
       mistakes: isPlainObject(raw.mistakes) ? cleanRecords(raw.mistakes) : {},
       writing: cleanWriting(raw.writing),
+      roleplay: cleanRoleplay(raw.roleplay),
     },
   };
 }
@@ -215,6 +256,7 @@ export function parseImport(text) {
       attempts: data.attempts.length,
       mistakes: Object.keys(data.mistakes).length,
       writings: data.writing.history.length,
+      roleplays: Object.keys(data.roleplay.results).length,
       createdAt: data.createdAt,
       lastBackupAt: data.lastBackupAt,
     },

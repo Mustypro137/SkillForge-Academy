@@ -6,6 +6,8 @@ import { button } from '../ui/page.js';
 import { allLessons, findExercise } from '../../content/index.js';
 import { writingTasks } from '../../content/writing/index.js';
 import { writingSummary } from '../logic/writing-progress.js';
+import { roleplayScenarios } from '../../content/roleplay/index.js';
+import { roleplaySummary } from '../logic/roleplay-progress.js';
 import { skillTagLabel } from '../../content/skill-tags.js';
 import { getData } from '../state.js';
 import { setIntent } from '../intent.js';
@@ -75,8 +77,9 @@ export function render(container) {
   const step = nextStep(data, allLessons, now);
   const overview = lessonOverview(data, allLessons);
   const mistakes = listMistakes(data.mistakes, now);
-  const week = practiceSummary(data.attempts, now, data.writing);
+  const week = practiceSummary(data.attempts, now, data.writing, data.roleplay);
   const writing = writingSummary(data.writing, writingTasks);
+  const roleplay = roleplaySummary(data.roleplay, roleplayScenarios);
 
   const heading = el('h1', { tabindex: '-1' }, 'Dashboard');
   const welcome = data.attempts.length === 0
@@ -107,12 +110,16 @@ export function render(container) {
       [
         week.accuracy === null ? 'No answers this week yet.' : `${percent(week.accuracy)} right on the first try`,
         `${week.writings} ${week.writings === 1 ? 'writing' : 'writings'} saved`,
+        `${week.roleplays} ${week.roleplays === 1 ? 'conversation' : 'conversations'} finished`,
         `Practiced on ${week.daysPracticed} of the last 7 days`,
         lastPractice,
       ]),
     card('Writing', `${writing.done} of ${writing.total} done`,
       [`${writing.great} rated Great`, 'Your own rating, because the app cannot grade writing.'],
       { href: '#/writing', text: 'Open writing' }),
+    card('Roleplay', `${roleplay.done} of ${roleplay.total} done`,
+      [`${roleplay.strong} with a best result of 80% or more`],
+      { href: '#/roleplay', text: 'Open roleplay' }),
     backupCard(data),
     weakAreasCard(data.attempts));
 

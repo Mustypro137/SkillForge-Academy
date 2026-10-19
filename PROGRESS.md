@@ -10,6 +10,7 @@
 - [x] M6 Dashboard
 - [x] M7 Polish and full check - done. **Version 1 is tagged `v1.0`** (owner finished the final check)
 - [x] M8 Writing practice - built and tested by Claude; **waits for your check (see "Milestone 8: your check" below)**
+- [x] M9 Roleplay - built and tested by Claude; **waits for your check (see "Milestone 9: your check" below)**
 
 "Done" here means built, tested by Claude, and committed. Only you can confirm the items in the checklists below.
 
@@ -17,14 +18,17 @@
 
 | Check | Result |
 |---|---|
-| `npm test` (164 tests: router, storage, state, answer checking, progress, review schedule, dashboard, lesson content, writing checks, writing content, color contrast) | all pass |
+| `npm test` (195 tests: router, storage, state, answer checking, progress, review schedule, dashboard, lesson content, writing checks, writing content, roleplay engine, roleplay content, color contrast) | all pass |
 | Color contrast of every text/background and control-border pair, light and dark theme (also part of `npm test`) | all meet WCAG AA |
-| Page audit in Edge: 12 pages + lesson, 4 exercise types, feedback, results, notebook, review, settings preview, dashboard, at 360 / 768 / 1366 px (`tools/browser-audit.html`) | 110 of 110 clean (now includes the Writing screens): one h1, one main/nav/header, every control named, no duplicate ids, tap targets at least 44 px on phone, no sideways scrolling |
+| Page audit in Edge: 12 pages + lesson, 4 exercise types, feedback, results, notebook, review, settings preview, dashboard, at 360 / 768 / 1366 px (`tools/browser-audit.html`) | 131 of 131 clean (includes the Writing and Roleplay screens): one h1, one main/nav/header, every control named, no duplicate ids, tap targets at least 44 px on phone, no sideways scrolling |
 | Dark mode + 22 px text on all pages at 360 px | no sideways scrolling |
 | Keyboard-only run with real key presses (`tools/keyboard-check.mjs`): skip link, menu, open lesson, number keys, Enter to check/next, hint, typing an answer, word-order exercise, phone menu with Escape, Settings | 33 of 33 pass |
 | Writing page with real typing and key presses (`tools/writing-check.mjs`): old version-1 data still loads, open a task, empty check, weak text, model text passes all 8 checks, rating needed, save, history, copy button, draft kept after refresh and after leaving at once, dashboard card, phone width, no errors | 25 of 25 pass |
+| Roleplay page with real key presses (`tools/roleplay-check.mjs`): version 2 data still loads, open and start with the keyboard, choose a reply, feedback for all 3 replies, the order changes between games, a whole conversation with only Best replies (100%), a whole conversation with weak replies and a bad free reply (To improve list), best result kept, leaving in the middle does not save, dashboard card, export and import, phone width, no errors | 30 of 30 pass |
 | Edge cases (`tools/edge-cases-check.mjs`): browser blocks storage, storage full, app code not running (double-click) shows a helpful message, no uncaught errors | all pass |
 | Console errors during the audit | none from the app |
+
+Found and fixed in M9: the browser tools sometimes started before the app had finished loading (fixed in the tools by waiting for the page). Nothing was wrong in the app.
 
 Found and fixed in M8: the checkboxes and radio buttons of the writing checklist were only 29 px high on a phone (now 44 px), and 3-letter words in capitals such as NOW were not counted as shouting.
 
@@ -84,16 +88,31 @@ Run `python -m http.server 8000` and open http://localhost:8000/#/writing
 - [ ] On your phone: the writing box is easy to use and the on-screen keyboard does not hide the buttons
 - [ ] "Copy my text" copies your text (paste it somewhere to check)
 
+## Milestone 9: your check (only you can do these)
+
+Run `python -m http.server 8000` and open http://localhost:8000/#/roleplay
+
+- [ ] **Read the 6 conversations** (what the other person says, the 3 replies on each step, the feedback, the free-reply prompts and the model replies). Is the English natural and correct (American spelling)? Is every Best reply really the best? Is any Weak reply actually fine? Tell Claude the scenario and step, for example `rp-04`, step `s2`.
+- [ ] Play 2 conversations. Does the other person's reaction fit the reply you chose?
+- [ ] The feedback after a reply helps you understand why (not only "wrong")
+- [ ] Write your own free reply. Do the automatic checks feel fair?
+- [ ] The summary and the "To improve" list are clear
+- [ ] Play the same conversation again: the replies are in a new order
+- [ ] Dashboard: the Roleplay card and "conversations finished" in Last 7 days
+- [ ] Settings: export, reset, import: your roleplay results come back
+- [ ] On your phone: the chat is easy to read and the reply buttons are easy to tap
+
 ## Known limits and bugs
 
 - Wrong answers given before Milestone 5 are not in the Mistake notebook (they are only in the attempt history). New wrong answers are saved automatically.
 - Answers are accepted only if they match the wording listed in the lesson (after ignoring capitals, spaces, commas, the final full stop and short forms). A correct answer in different words may be rejected. Report it and the exercise gets a new accepted answer.
 - Free writing cannot be graded by the app (no AI service). Writing practice uses automatic checks, a checklist, model answers and your own rating.
 - No sync between devices. Use Export and Import.
+- Roleplay is a fixed script: the other person does not react to your free reply, and a conversation left in the middle is not saved (only finished conversations count).
 - Writing checks look at words and shape only. They can be fooled (a long text of nonsense can pass), and they do not check grammar or spelling. Your own reading and rating are the real test.
 - Not tested: Firefox, Safari, a real phone, screen readers, and long-term use (the 16-day review gaps were tested with changed dates, not real waiting).
 - Typing practice was removed, so the typing items in `project-plan.md` are no longer part of the project.
 
 ## After version 1 (not started)
 
-M9 Communication roleplay, M10 LinkedIn academy, M11 Freelance communication, M12 Technical English, M13 Reading comprehension, M14 Progress reports, M15 Offline install. Each one is planned in detail before it starts. See `project-plan.md`.
+M10 LinkedIn academy, M11 Freelance communication, M12 Technical English, M13 Reading comprehension, M14 Progress reports, M15 Offline install. Each one is planned in detail before it starts. See `project-plan.md`.

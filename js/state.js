@@ -6,6 +6,7 @@ import { loadData, saveData, createDefaultData, MAX_ATTEMPTS } from './storage.j
 import { applyOutcome, startRun } from './logic/progress.js';
 import { mistakeKey, recordMistake, applyReview } from './logic/review-schedule.js';
 import { makeEntry, MAX_TEXT, MAX_HISTORY } from './logic/writing-progress.js';
+import { applyRun } from './logic/roleplay-progress.js';
 
 let storage = null;
 let data = null;
@@ -107,6 +108,11 @@ export function recordWriting(info, now = new Date()) {
     d.writing.history.push(makeEntry(info, now));
     if (d.writing.history.length > MAX_HISTORY) d.writing.history = d.writing.history.slice(-MAX_HISTORY);
   });
+}
+
+// Saves a finished roleplay conversation. summary is the result of summarize() in logic/roleplay.js.
+export function recordRoleplay(scenarioId, summary, now = new Date()) {
+  updateData((d) => { d.roleplay = applyRun(d.roleplay, scenarioId, summary, now); });
 }
 
 function persist() {
