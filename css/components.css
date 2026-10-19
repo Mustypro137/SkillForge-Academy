@@ -360,6 +360,21 @@ fieldset.choices legend { padding: 0; }
 }
 .saved-text { border-left-color: var(--border); }
 .history-list details { padding: 0.25rem 0.9rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+/* ---------- Academy (LinkedIn) ---------- */
+
+.step-list { list-style: none; margin: 0.75rem 0 0; padding: 0; display: grid; gap: 0.5rem; }
+.step-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.25rem 0.75rem;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border);
+}
+.step-name { font-weight: 700; grid-column: 1; }
+.step-status { grid-column: 1; color: var(--text-muted); }
+.step-row .button { grid-column: 2; grid-row: 1 / span 2; }
+
 /* ---------- Roleplay ---------- */
 
 .chat { list-style: none; margin: 1rem 0; padding: 0; display: grid; gap: 0.6rem; max-width: 46rem; }

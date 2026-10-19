@@ -2,8 +2,9 @@
 // When a new module is added (writing, reading, ...), add its lessons here.
 
 import { grammarLessons } from './grammar/index.js';
+import { linkedinLessons } from './linkedin/index.js';
 
-export const allLessons = [...grammarLessons];
+export const allLessons = [...grammarLessons, ...linkedinLessons];
 
 // Returns { lesson, exercise }, or null if the exercise does not exist (any more).
 export function findExercise(lessonId, exerciseId) {

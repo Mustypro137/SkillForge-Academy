@@ -3,8 +3,9 @@
 
 import { clientAndJobScenarios } from './clients-and-jobs.js';
 import { workplaceScenarios } from './workplace.js';
+import { linkedinScenarios } from './linkedin.js';
 
-export const roleplayScenarios = [...clientAndJobScenarios, ...workplaceScenarios].sort((a, b) => a.order - b.order);
+export const roleplayScenarios = [...clientAndJobScenarios, ...workplaceScenarios, ...linkedinScenarios].sort((a, b) => a.order - b.order);
 
 export function findScenario(id) {
   return roleplayScenarios.find((scenario) => scenario.id === id) ?? null;

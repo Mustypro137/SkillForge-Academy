@@ -11,6 +11,7 @@
 - [x] M7 Polish and full check - done. **Version 1 is tagged `v1.0`** (owner finished the final check)
 - [x] M8 Writing practice - built and tested by Claude; **waits for your check (see "Milestone 8: your check" below)**
 - [x] M9 Roleplay - built and tested by Claude; **waits for your check (see "Milestone 9: your check" below)**
+- [x] M10 LinkedIn academy - built and tested by Claude; **waits for your check (see "Milestone 10: your check" below)**
 
 "Done" here means built, tested by Claude, and committed. Only you can confirm the items in the checklists below.
 
@@ -18,15 +19,18 @@
 
 | Check | Result |
 |---|---|
-| `npm test` (195 tests: router, storage, state, answer checking, progress, review schedule, dashboard, lesson content, writing checks, writing content, roleplay engine, roleplay content, color contrast) | all pass |
+| `npm test` (208 tests: router, storage, state, answer checking, progress, review schedule, dashboard, lesson content, writing checks, writing content, roleplay engine, roleplay content, LinkedIn content (50 exercises), academy progress, color contrast) | all pass |
 | Color contrast of every text/background and control-border pair, light and dark theme (also part of `npm test`) | all meet WCAG AA |
-| Page audit in Edge: 12 pages + lesson, 4 exercise types, feedback, results, notebook, review, settings preview, dashboard, at 360 / 768 / 1366 px (`tools/browser-audit.html`) | 131 of 131 clean (includes the Writing and Roleplay screens): one h1, one main/nav/header, every control named, no duplicate ids, tap targets at least 44 px on phone, no sideways scrolling |
+| Page audit in Edge: 12 pages + lesson, 4 exercise types, feedback, results, notebook, review, settings preview, dashboard, at 360 / 768 / 1366 px (`tools/browser-audit.html`) | 143 of 143 clean (includes the Writing, Roleplay and LinkedIn screens): one h1, one main/nav/header, every control named, no duplicate ids, tap targets at least 44 px on phone, no sideways scrolling |
 | Dark mode + 22 px text on all pages at 360 px | no sideways scrolling |
 | Keyboard-only run with real key presses (`tools/keyboard-check.mjs`): skip link, menu, open lesson, number keys, Enter to check/next, hint, typing an answer, word-order exercise, phone menu with Escape, Settings | 33 of 33 pass |
 | Writing page with real typing and key presses (`tools/writing-check.mjs`): old version-1 data still loads, open a task, empty check, weak text, model text passes all 8 checks, rating needed, save, history, copy button, draft kept after refresh and after leaving at once, dashboard card, phone width, no errors | 25 of 25 pass |
 | Roleplay page with real key presses (`tools/roleplay-check.mjs`): version 2 data still loads, open and start with the keyboard, choose a reply, feedback for all 3 replies, the order changes between games, a whole conversation with only Best replies (100%), a whole conversation with weak replies and a bad free reply (To improve list), best result kept, leaving in the middle does not save, dashboard card, export and import, phone width, no errors | 30 of 30 pass |
+| LinkedIn academy with real key presses and typing (`tools/linkedin-check.mjs`): the topic list, open a lesson with the keyboard, answer all 10 exercises (100%, Mastered), a wrong answer lands in the mistake notebook, the writing task and the roleplay open from the hub and are played, the topic shows "All 3 steps done", dashboard card, backup round trip, the 200-character limit, phone width, no errors | 28 of 28 pass |
 | Edge cases (`tools/edge-cases-check.mjs`): browser blocks storage, storage full, app code not running (double-click) shows a helpful message, no uncaught errors | all pass |
 | Console errors during the audit | none from the app |
+
+Found and fixed in M10: the "started" count on the dashboard card ignored a lesson in progress (now counted). Grammar was moved to a shared lesson player; the keyboard test (33 of 33) and the page audit prove that Grammar still works the same.
 
 Found and fixed in M9: the browser tools sometimes started before the app had finished loading (fixed in the tools by waiting for the page). Nothing was wrong in the app.
 
@@ -102,12 +106,25 @@ Run `python -m http.server 8000` and open http://localhost:8000/#/roleplay
 - [ ] Settings: export, reset, import: your roleplay results come back
 - [ ] On your phone: the chat is easy to read and the reply buttons are easy to tap
 
+## Milestone 10: your check (only you can do these)
+
+Run `python -m http.server 8000` and open http://localhost:8000/#/linkedin
+
+- [ ] **Read the 5 lessons and the 50 quiz exercises.** Is the English clear, natural and correct (American spelling)? Did any correct answer get rejected? Tell Claude the exercise number, for example `lr-04`.
+- [ ] **Is the LinkedIn advice right for you?** For example: the 200-character limit for connection notes (your account may allow 200 or 300), no empty words like "passionate", asking for small things. Tell Claude if something is wrong or out of date.
+- [ ] Read the 5 writing tasks (`wr-09` to `wr-13`) and the 5 roleplays (`rp-07` to `rp-11`) with their model answers
+- [ ] Do one whole topic: lesson and quiz, then Write, then Talk. Does the page show your progress and the next step correctly?
+- [ ] A wrong quiz answer appears in the Mistake notebook (under All mistakes, because new mistakes are due tomorrow)
+- [ ] Settings: export, reset, import: your LinkedIn progress comes back
+- [ ] On your phone: the topic list, the buttons and the quiz are easy to use
+
 ## Known limits and bugs
 
 - Wrong answers given before Milestone 5 are not in the Mistake notebook (they are only in the attempt history). New wrong answers are saved automatically.
 - Answers are accepted only if they match the wording listed in the lesson (after ignoring capitals, spaces, commas, the final full stop and short forms). A correct answer in different words may be rejected. Report it and the exercise gets a new accepted answer.
 - Free writing cannot be graded by the app (no AI service). Writing practice uses automatic checks, a checklist, model answers and your own rating.
 - No sync between devices. Use Export and Import.
+- LinkedIn advice changes over time. The lessons keep the advice general, and the 200-character limit for connection notes is the one rule that may differ on your account. The app never connects to LinkedIn.
 - Roleplay is a fixed script: the other person does not react to your free reply, and a conversation left in the middle is not saved (only finished conversations count).
 - Writing checks look at words and shape only. They can be fooled (a long text of nonsense can pass), and they do not check grammar or spelling. Your own reading and rating are the real test.
 - Not tested: Firefox, Safari, a real phone, screen readers, and long-term use (the 16-day review gaps were tested with changed dates, not real waiting).
@@ -115,4 +132,4 @@ Run `python -m http.server 8000` and open http://localhost:8000/#/roleplay
 
 ## After version 1 (not started)
 
-M10 LinkedIn academy, M11 Freelance communication, M12 Technical English, M13 Reading comprehension, M14 Progress reports, M15 Offline install. Each one is planned in detail before it starts. See `project-plan.md`.
+M11 Freelance communication, M12 Technical English, M13 Reading comprehension, M14 Progress reports, M15 Offline install. Each one is planned in detail before it starts. See `project-plan.md`.

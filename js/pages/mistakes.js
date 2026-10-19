@@ -65,7 +65,7 @@ function dueIntro(container, lists) {
   if (lists.nextDue) {
     return [el('p', { class: 'note' }, `Nothing to review today. Your next review is ${describeDue(lists.nextDue)}.`)];
   }
-  return [el('p', { class: 'note' }, 'Nothing to review. When you give a wrong answer in a grammar lesson, it appears here.')];
+  return [el('p', { class: 'note' }, 'Nothing to review. When you give a wrong answer in a lesson, it appears here.')];
 }
 
 let cardCounter = 0;

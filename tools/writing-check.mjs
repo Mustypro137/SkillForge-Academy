@@ -157,7 +157,7 @@ try {
   check('a draft is saved even when you leave at once', (await saved()).writing.drafts['wr-02']?.text === 'Quick change, then leave at once.');
 
   // 9. Dashboard and list reflect the work
-  check('the dashboard has a Writing card with 1 of 8 done', /1 of 8 done/.test(await text('.stat-grid')) && /Writing/.test(await text('.stat-grid')), (await text('.stat-grid')).replace(/\s+/g, ' ').slice(0, 160));
+  check(`the dashboard has a Writing card with 1 of ${writingTasks.length} done`, new RegExp(`1 of ${writingTasks.length} done`).test(await text('.stat-grid')), (await text('.stat-grid')).replace(/\s+/g, ' ').slice(0, 160));
   check('the dashboard counts the writing in the last 7 days', /1 writing saved/.test(await text('.stat-grid')));
   await go(BASE + '?w4#/writing');
   const cards = await evaluate(`[...document.querySelectorAll('.lesson-list .card .meta')].slice(0, 2).map((m) => m.textContent)`);

@@ -5,7 +5,7 @@ A private website to practice English for work: grammar lessons, a mistake noteb
 - Everything stays in your browser on your device. No account, no server, no tracking, no cost.
 - No packages to install. Plain HTML, CSS and JavaScript.
 
-Version 1 (MVP, tag `v1.0`) is built, and Milestones 8 (Writing practice) and 9 (Roleplay) are added. See `PROGRESS.md` for what is done and what you still need to check, and `project-plan.md` for the full plan.
+Version 1 (MVP, tag `v1.0`) is built, and Milestones 8 (Writing practice), 9 (Roleplay) and 10 (LinkedIn academy) are added. See `PROGRESS.md` for what is done and what you still need to check, and `project-plan.md` for the full plan.
 
 ## What you can do
 
@@ -13,10 +13,11 @@ Version 1 (MVP, tag `v1.0`) is built, and Milestones 8 (Writing practice) and 9 
 - **Grammar:** 3 lessons (capital letters and punctuation, present simple, articles), 12 exercises each. Four exercise types: multiple choice, fill in the blank, correct the sentence, word order. Try first, then use hints, then see the solution and the reason.
 - **Writing:** 8 work-writing tasks (emails to coworkers and clients, status updates, asking for help). You write in a box, the app runs automatic checks (length, greeting, closing, request, tone, long sentences, task words), then you tick a self-review checklist, compare with a model answer, and rate yourself. Drafts and attempts are saved. A button copies your text, for example to paste it into Claude for detailed feedback.
 - **Roleplay:** 6 work conversations (an angry client, a status update in a meeting, taking over a task, a recruiter, a discount request, saying no politely). The other person writes to you. You choose a reply from 3 options (in a new order each time) and see why each one is Best, OK or Weak. In each conversation you also write one free reply, which gets the same automatic checks as Writing, a model reply, and your own rating. At the end you see a summary and a "To improve" list. A weak reply never ends the conversation.
+- **LinkedIn academy:** 5 topics (headline and About, connection requests, messages to recruiters, asking for advice, posts and follow-ups). Each topic has 3 steps: a lesson with a 10-exercise quiz, a writing task, and a roleplay conversation. The quiz uses the same exercises as Grammar, so wrong answers go to the mistake notebook. The writing tasks and roleplays also appear on the Writing and Roleplay pages. The connection note task checks a character limit (200).
 - **Mistake notebook:** wrong answers are saved and come back after 1, 2, 4, 8 and 16 days. Add notes, review, master them.
 - **Settings and backup:** color theme, text size, export and import your progress as a file, reset.
 
-Pages that appear in the menu with "Soon" (Reading, LinkedIn, Freelance, Technical English, Progress reports) are planned for later. You can hide them in Settings.
+Pages that appear in the menu with "Soon" ( Freelance, Technical English, Progress reports) are planned for later. You can hide them in Settings.
 
 ## Run the website
 
@@ -43,7 +44,7 @@ To use it on your phone at home, run `python -m http.server 8000 --bind 0.0.0.0`
 npm test
 ```
 
-No `npm install` is needed. The tests cover the calculations and rules: answer checking, writing checks, roleplay engine, scoring, review schedule, saving and loading, backup files, dashboard numbers, lesson content, and color contrast.
+No `npm install` is needed. The tests cover the calculations and rules: answer checking, writing checks, roleplay engine, academy progress, scoring, review schedule, saving and loading, backup files, dashboard numbers, lesson content, and color contrast.
 
 Optional browser checks (need Microsoft Edge) are in `tools/`. Their instructions are at the top of each file.
 
@@ -53,8 +54,8 @@ Optional browser checks (need Microsoft Edge) are in `tools/`. Their instruction
 - `css/` - styles (colors and themes, layout, components)
 - `js/main.js` - starts the app; `js/router.js` and `js/routes.js` - which page to show
 - `js/storage.js` - the only code that touches localStorage; `js/state.js` - your data in memory
-- `js/logic/` - rules without screens: `answer-check.js`, `progress.js`, `review-schedule.js`, `dashboard.js`, `writing-check.js`, `writing-progress.js`, `roleplay.js`, `roleplay-progress.js`
-- `js/pages/` - one file per page; `exercise-view.js` is the exercise screen shared by lessons and reviews
+- `js/logic/` - rules without screens: `answer-check.js`, `progress.js`, `review-schedule.js`, `dashboard.js`, `writing-check.js`, `writing-progress.js`, `roleplay.js`, `roleplay-progress.js`, `academy.js`
+- `js/pages/` - one file per page; `exercise-view.js` is the exercise screen shared by lessons and reviews, `lesson-player.js` is the lesson screens shared by Grammar and the academies, `academy.js` is the topic list of an academy
 - `js/ui/` - small helpers (safe element builder, theme, file download)
 - `content/` - lessons, writing tasks, roleplay scenarios and names (data only, no logic)
 - `tests/` - automated tests (`npm test`)
@@ -76,6 +77,12 @@ Accepted answers can use `{a|b}` for alternatives. Example: `'I {have sent|sent}
 2. Give it a new, unique `id` and `order`. Never change an `id` after you have used the app (your drafts and history are saved by `id`).
 3. Choose its automatic checks in `checks` (see the top of `js/logic/writing-check.js`). Write a model answer.
 4. Run `npm test`. It checks that the model answer passes all the task's own checks.
+
+## Add or change a LinkedIn topic
+
+1. A topic is one lesson (`content/linkedin/`, same fields as a grammar lesson, with `module: 'linkedin'`), one writing task (`content/writing/linkedin.js`) and one roleplay (`content/roleplay/linkedin.js`).
+2. List the lesson and the topic in `content/linkedin/index.js`. Use new, unique `id`s and `order`s. Never change an `id` after you have used the app.
+3. Add any new skill tag to `content/skill-tags.js`. Run `npm test`: it checks every exercise, every roleplay path, and that each topic points to a real lesson, task and scenario.
 
 ## Add or change a roleplay scenario
 

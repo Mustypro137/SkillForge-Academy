@@ -110,6 +110,18 @@ test('checks that a task does not ask for are not run', () => {
   assert.deepEqual(result.results.map((r) => r.id), ['length', 'tone', 'sentences']);
 });
 
+test('a character limit is checked when the task has one', () => {
+  const limited = { targetWords: { min: 1, max: 100 }, checks: { maxChars: 40 } };
+  const ok = find(checkWriting(limited, 'Hi Sam, thanks for connecting.'), 'chars');
+  assert.equal(ok.ok, true);
+  assert.match(ok.message, /30 characters/);
+  const long = find(checkWriting(limited, 'Hi Sam, thanks a lot for connecting with me today.'), 'chars');
+  assert.equal(long.ok, false);
+  assert.match(long.message, /Remove 10 characters/);
+  assert.equal(find(checkWriting(task, good), 'chars'), undefined);   // no limit, no check
+  assert.equal(find(checkWriting(limited, '   \n  '), 'chars'), undefined);   // empty text: no checks at all
+});
+
 test('the result never says "wrong": messages are advice', () => {
   const result = checkWriting(task, 'HEY!!! gonna send it');
   for (const r of result.results) assert.doesNotMatch(r.message, /\bwrong\b|\bmistake\b/i);

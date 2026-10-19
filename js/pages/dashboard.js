@@ -4,6 +4,9 @@
 import { el } from '../ui/dom.js';
 import { button } from '../ui/page.js';
 import { allLessons, findExercise } from '../../content/index.js';
+import { grammarLessons } from '../../content/grammar/index.js';
+import { linkedinLessons, linkedinTopics } from '../../content/linkedin/index.js';
+import { academySummary } from '../logic/academy.js';
 import { writingTasks } from '../../content/writing/index.js';
 import { writingSummary } from '../logic/writing-progress.js';
 import { roleplayScenarios } from '../../content/roleplay/index.js';
@@ -27,7 +30,7 @@ function card(title, big, lines, link) {
 
 function goTo(step) {
   setIntent(step.lessonId ? { lessonId: step.lessonId } : null);
-  window.location.hash = step.target === 'mistakes' ? '#/mistakes' : '#/grammar';
+  window.location.hash = `#/${step.target}`; // mistakes, grammar or linkedin
 }
 
 function weakAreasCard(attempts) {
@@ -50,7 +53,7 @@ function weakAreasCard(attempts) {
   if (weak.length > 0) {
     item.append(el('ul', { class: 'weak-list' }, ...weak.map((w) =>
       el('li', {}, el('strong', {}, skillTagLabel(w.tag)), `: ${percent(w.accuracy)} right first time (${w.correct} of ${w.attempts})`))));
-    item.append(el('p', {}, 'Practice these in the grammar lessons and in your mistake notebook.'));
+    item.append(el('p', {}, 'Practice these in the lessons and in your mistake notebook.'));
   }
   return item;
 }
@@ -75,7 +78,8 @@ export function render(container) {
   const now = new Date();
 
   const step = nextStep(data, allLessons, now);
-  const overview = lessonOverview(data, allLessons);
+  const overview = lessonOverview(data, grammarLessons);
+  const linkedin = academySummary(data, linkedinTopics, linkedinLessons);
   const mistakes = listMistakes(data.mistakes, now);
   const week = practiceSummary(data.attempts, now, data.writing, data.roleplay);
   const writing = writingSummary(data.writing, writingTasks);
@@ -117,6 +121,9 @@ export function render(container) {
     card('Writing', `${writing.done} of ${writing.total} done`,
       [`${writing.great} rated Great`, 'Your own rating, because the app cannot grade writing.'],
       { href: '#/writing', text: 'Open writing' }),
+    card('LinkedIn academy', `${linkedin.complete} of ${linkedin.total} topics done`,
+      [`${linkedin.started} started`, 'Each topic: lesson and quiz, writing, roleplay.'],
+      { href: '#/linkedin', text: 'Open LinkedIn academy' }),
     card('Roleplay', `${roleplay.done} of ${roleplay.total} done`,
       [`${roleplay.strong} with a best result of 80% or more`],
       { href: '#/roleplay', text: 'Open roleplay' }),

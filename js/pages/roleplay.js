@@ -14,11 +14,16 @@ import { scenarioStatus, bestPercent } from '../logic/roleplay-progress.js';
 import { RATINGS as SELF_RATINGS, RATING_LABELS as SELF_LABELS, MAX_TEXT } from '../logic/writing-progress.js';
 import { checkWriting, countWords } from '../logic/writing-check.js';
 import { getData, getSaveError, recordRoleplay } from '../state.js';
+import { takeIntent } from '../intent.js';
 
 const STATUS_LABELS = { 'not-started': 'Not started', done: 'Done' };
 
 export function render(container) {
-  showList(container);
+  // The LinkedIn academy can ask for a specific scenario.
+  const intent = takeIntent();
+  const scenario = intent?.scenarioId ? roleplayScenarios.find((s) => s.id === intent.scenarioId) : null;
+  if (scenario) showIntro(container, scenario);
+  else showList(container);
 }
 
 // ---------- Scenario list ----------

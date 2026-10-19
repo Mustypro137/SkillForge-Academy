@@ -9,6 +9,7 @@
 //   targetWords: { min, max }                       always checked
 //   checks: {
 //     greeting: true, closing: true, request: true,
+//     maxChars: 200,                                          for texts with a character limit
 //     required: [{ label, tip, any: ['friday', 'by '] }],   at least one word or phrase
 //     avoid:    [{ label, tip, words: ['hey', 'gonna'] }],  none of these words
 //   }
@@ -77,6 +78,13 @@ function closingCheck(lines) {
     ok ? 'You end with a closing and a name.' : 'End with a closing and your name, for example "Thanks," and then your name on the next line.');
 }
 
+function charsCheck(text, max) {
+  const count = text.trim().length;
+  const label = `${max} characters or fewer`;
+  if (count <= max) return check('chars', label, true, `Your text has ${count} characters. The limit is ${max}.`);
+  return check('chars', label, false, `Your text has ${count} characters. The limit is ${max}. Remove ${count - max} characters.`);
+}
+
 function requestCheck(text) {
   const ok = REQUEST.test(text);
   return check('request', 'Has a clear request or question', ok,
@@ -126,6 +134,7 @@ export function checkWriting(task, rawText) {
   if (options.greeting) results.push(greetingCheck(lines));
   if (options.closing) results.push(closingCheck(lines));
   if (options.request) results.push(requestCheck(text));
+  if (options.maxChars) results.push(charsCheck(text, options.maxChars));
   (options.required ?? []).forEach((item, i) => results.push(requiredCheck(item, i, text)));
   (options.avoid ?? []).forEach((item, i) => results.push(avoidCheck(item, i, text)));
   results.push(shoutingCheck(text), longSentenceCheck(text));

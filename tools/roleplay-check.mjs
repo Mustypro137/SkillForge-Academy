@@ -179,7 +179,7 @@ try {
   // 8. Dashboard and list
   await go(BASE + '?dash#/');
   const grid = (await text('.stat-grid')).replace(/\s+/g, ' ');
-  check('the dashboard has a Roleplay card: 1 of 6 done, 1 strong', /Roleplay1 of 6 done1 with a best result of 80% or more/.test(grid), grid.slice(0, 200));
+  check(`the dashboard has a Roleplay card: 1 of ${roleplayScenarios.length} done, 1 strong`, new RegExp(`Roleplay1 of ${roleplayScenarios.length} done1 with a best result of 80% or more`).test(grid), grid.slice(0, 200));
   check('the dashboard counts 2 conversations in the last 7 days', /2 conversations finished/.test(grid));
   await go(BASE + '?list#/roleplay');
   check('the list shows Done and the best result', /Done · Best result: 100%/.test(await text('.lesson-list .card .meta')), await text('.lesson-list .card .meta'));

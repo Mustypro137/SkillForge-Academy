@@ -20,7 +20,7 @@ const percent = (fraction) => `${Math.round(fraction * 100)}%`;
 //   3. a lesson has not been started
 //   4. a lesson is finished but not mastered yet
 //   5. everything is mastered
-// Returns { kind, title, text, button, target: 'mistakes' | 'grammar', lessonId? }
+// Returns { kind, title, text, button, target: 'mistakes' | 'grammar' | 'linkedin' (the page to open), lessonId? }
 export function nextStep(data, lessons, now = new Date()) {
   const due = listMistakes(data.mistakes, now).due.length;
   if (due > 0) {
@@ -38,7 +38,7 @@ export function nextStep(data, lessons, now = new Date()) {
   if (inProgress) {
     const { lesson, summary } = inProgress;
     return {
-      kind: 'continue', target: 'grammar', lessonId: lesson.id, button: 'Continue',
+      kind: 'continue', target: lesson.module ?? 'grammar', lessonId: lesson.id, button: 'Continue',
       title: `Continue: ${lesson.title}`,
       text: `You answered ${summary.answeredCount} of ${summary.total} questions.`,
     };
@@ -48,7 +48,7 @@ export function nextStep(data, lessons, now = new Date()) {
   if (fresh) {
     const isFirst = Object.keys(data.progress ?? {}).length === 0;
     return {
-      kind: 'start', target: 'grammar', lessonId: fresh.lesson.id, button: 'Start lesson',
+      kind: 'start', target: fresh.lesson.module ?? 'grammar', lessonId: fresh.lesson.id, button: 'Start lesson',
       title: `${isFirst ? 'Start your first lesson' : 'Start'}: ${fresh.lesson.title}`,
       text: `${plural(fresh.summary.total, 'exercise', 'exercises')}. Take your time and read each hint.`,
     };
@@ -58,7 +58,7 @@ export function nextStep(data, lessons, now = new Date()) {
   if (improve) {
     const { lesson, summary } = improve;
     return {
-      kind: 'improve', target: 'grammar', lessonId: lesson.id, button: 'Open lesson',
+      kind: 'improve', target: lesson.module ?? 'grammar', lessonId: lesson.id, button: 'Open lesson',
       title: `Improve: ${lesson.title}`,
       text: `Your last score was ${percent(summary.lastScore ?? 0)}. Reach 80% to master this lesson.`,
     };

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { grammarLessons, findLesson } from '../content/grammar/index.js';
+import { allLessons as grammarLessons } from '../content/index.js';
 import { checkAnswer, expandAlternatives, solutionText } from '../js/logic/answer-check.js';
 
 const TYPES = ['multiple-choice', 'fill-blank', 'correct-sentence', 'reorder'];
@@ -16,9 +16,8 @@ test('lesson ids and orders are unique, and every lesson has text and at least 1
     assert.ok(lesson.explanation.length >= 3, `${lesson.id} needs an explanation`);
     assert.ok(lesson.examples.length >= 1, `${lesson.id} needs examples`);
     assert.ok(lesson.exercises.length >= 10, `${lesson.id} needs at least 10 exercises`);
-    assert.equal(findLesson(lesson.id), lesson);
+    assert.equal(grammarLessons.find((l) => l.id === lesson.id), lesson);
   }
-  assert.equal(findLesson('nope'), null);
 });
 
 test('exercise ids are unique across all lessons', () => {

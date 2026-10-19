@@ -10,6 +10,7 @@ import { render as renderGrammar } from './pages/grammar.js';
 import { render as renderMistakes } from './pages/mistakes.js';
 import { render as renderWriting } from './pages/writing.js';
 import { render as renderRoleplay } from './pages/roleplay.js';
+import { render as renderLinkedin } from './pages/linkedin.js';
 import { render as renderSettings } from './pages/settings.js';
 import { renderComingSoon, renderNotFound } from './pages/coming-soon.js';
 
@@ -19,6 +20,7 @@ const pageRenderers = {
   grammar: renderGrammar,
   writing: renderWriting,
   roleplay: renderRoleplay,
+  linkedin: renderLinkedin,
   mistakes: renderMistakes,
   settings: renderSettings,
 };
