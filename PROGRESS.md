@@ -12,7 +12,11 @@
 - [x] M8 Writing practice - built and tested by Claude; **waits for your check (see "Milestone 8: your check" below)**
 - [x] M9 Roleplay - built and tested by Claude; **waits for your check (see "Milestone 9: your check" below)**
 - [x] M10 LinkedIn academy - built and tested by Claude; **waits for your check (see "Milestone 10: your check" below)**
-- [~] M11 Freelance academy - **batches 1 and 2 of 3 done** (11 topics); **waits for your checks (see "Milestone 11, batch 1: your check" and "Milestone 11, batch 2: your check" below)**. Batch 3 (progress updates, difficult clients, feedback, delivery, after the job, time zones, working with a team) is not started.
+- [~] M11 Freelance academy - **all 3 batches done** (18 topics); **waits for your checks (see "Milestone 11, batch 1", "batch 2" and "batch 3" below)**
+- [x] M12 Technical English - built and tested by Claude; **waits for your check (see "Milestone 12" below)**
+- [x] M13 Reading comprehension - built and tested by Claude; **waits for your check (see "Milestone 13" below)**
+- [x] M14 Progress reports - built and tested by Claude; **waits for your check (see "Milestone 14" below)**
+- [x] M15 Offline install - built and tested by Claude; **waits for your check (see "Milestone 15" below)**
 
 "Done" here means built, tested by Claude, and committed. Only you can confirm the items in the checklists below.
 
@@ -20,18 +24,23 @@
 
 | Check | Result |
 |---|---|
-| `npm test` (213 tests: router, storage, state, answer checking, progress, review schedule, dashboard, lesson content, writing checks, writing content, roleplay engine, roleplay content, LinkedIn and Freelance content (160 exercises), academy progress, color contrast) | all pass |
+| `npm test` (230 tests: router, storage, state, answer checking, progress, review schedule, dashboard, report numbers and calendars, lesson content, writing checks, writing content, roleplay engine, roleplay content, LinkedIn, Freelance, Technical and Reading content (366 quiz exercises), academy progress, color contrast, the manifest, icons and service worker file list) | all pass |
 | Color contrast of every text/background and control-border pair, light and dark theme (also part of `npm test`) | all meet WCAG AA |
-| Page audit in Edge: 12 pages + lesson, 4 exercise types, feedback, results, notebook, review, settings preview, dashboard, at 360 / 768 / 1366 px (`tools/browser-audit.html`) | 152 of 152 clean (includes the Writing, Roleplay, LinkedIn and Freelance screens): one h1, one main/nav/header, every control named, no duplicate ids, tap targets at least 44 px on phone, no sideways scrolling |
+| Page audit in Edge: 11 pages + lesson, 4 exercise types, feedback, results, notebook, review, settings preview, dashboard and the Progress reports screens, at 360 / 768 / 1366 px (`tools/browser-audit.html`) | 152 of 152 clean (includes the Writing, Roleplay, LinkedIn, Freelance and Progress reports screens): one h1, one main/nav/header, every control named, no duplicate ids, tap targets at least 44 px on phone, no sideways scrolling |
 | Dark mode + 22 px text on all pages at 360 px | no sideways scrolling |
 | Keyboard-only run with real key presses (`tools/keyboard-check.mjs`): skip link, menu, open lesson, number keys, Enter to check/next, hint, typing an answer, word-order exercise, phone menu with Escape, Settings | 33 of 33 pass |
 | Writing page with real typing and key presses (`tools/writing-check.mjs`): old version-1 data still loads, open a task, empty check, weak text, model text passes all 8 checks, rating needed, save, history, copy button, draft kept after refresh and after leaving at once, dashboard card, phone width, no errors | 25 of 25 pass |
 | Roleplay page with real key presses (`tools/roleplay-check.mjs`): version 2 data still loads, open and start with the keyboard, choose a reply, feedback for all 3 replies, the order changes between games, a whole conversation with only Best replies (100%), a whole conversation with weak replies and a bad free reply (To improve list), best result kept, leaving in the middle does not save, dashboard card, export and import, phone width, no errors | 30 of 30 pass |
 | LinkedIn academy with real key presses and typing (`tools/linkedin-check.mjs`): the topic list, open a lesson with the keyboard, answer all 10 exercises (100%, Mastered), a wrong answer lands in the mistake notebook, the writing task and the roleplay open from the hub and are played, the topic shows "All 3 steps done", dashboard card, backup round trip, the 200-character limit, phone width, no errors | 28 of 28 pass |
-| Freelance academy with real key presses and typing (`tools/freelance-check.mjs`): stage headings, a whole topic (quiz 100%, writing task, roleplay), reused items open the right task and roleplay, a wrong answer reaches the notebook, dashboard card, backup round trip, LinkedIn page unchanged, phone width, no errors | 23 of 23 pass |
-| Every one of the 11 Freelance topics in a real browser (`tools/freelance-check.mjs`, part 9): the quiz with all correct answers (10 of 10), the writing task with its model text (all automatic checks OK, saved), and the roleplay with all Best replies (100%); then all topics say "All 3 steps done" and the dashboard shows 11 of 11 | 58 of 58 pass (the whole Freelance test) |
+| Every one of the 18 Freelance topics in a real browser (`tools/freelance-check.mjs`, part 9): the quiz with all correct answers (10 of 10), the writing task with its model text (all automatic checks OK, saved), and the roleplay with all Best replies (100%); then all topics say "All 3 steps done" and the dashboard shows all 18 | 79 of 79 pass (the whole Freelance test) |
+| Progress reports with seeded data (`tools/reports-check.mjs`): the friendly empty state with no charts, the stat cards, the mistakes card, the practice calendar and its day labels, the 14-day activity chart, accuracy by week, review answers right per week, accuracy by skill (lowest first), phone width, no NaN and no errors | 31 of 31 pass |
+| Offline and install in Edge (`tools/pwa-check.mjs`): the manifest parses with no errors, the service worker activates at the site root and claims the page, the cache holds all 105 files, then a real offline reload opens the app and the Grammar lesson and Progress reports pages from the cache with the saved progress still there, and normal use continues online | 28 of 28 pass |
 | Edge cases (`tools/edge-cases-check.mjs`): browser blocks storage, storage full, app code not running (double-click) shows a helpful message, no uncaught errors | all pass |
 | Console errors during the audit | none from the app |
+
+Found and fixed in M15: nothing in the app. The manifest, the service worker, the cache and a real offline reload all worked the first time in headless Edge.
+
+Found and fixed in M14: the reports page wrote "1 writings" and "1 conversations" when a count was one (now "1 writing" and "1 conversation", in the stat card, the chart tooltips and the calendar day labels). Nothing else.
 
 Found and fixed in M11 batch 2: nothing in the app. The new content passed all the content tests the first time.
 

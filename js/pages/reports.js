@@ -13,6 +13,7 @@ import { skillTagLabel } from '../../content/skill-tags.js';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const percent = (fraction) => (fraction === null ? 'No data' : `${Math.round(fraction * 100)}%`);
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const shortDate = (date) => {
   const [, month, day] = String(date).split('-').map(Number);
   return `${month}/${day}`;
@@ -101,7 +102,7 @@ function activityChart(data, now) {
     label: shortDate(day.date),
     value: day.total,
     short: String(day.total),
-    title: `${day.date}: ${day.answers} answers, ${day.writings} writings, ${day.roleplays} conversations`,
+    title: `${day.date}: ${plural(day.answers, 'answer', 'answers')}, ${plural(day.writings, 'writing', 'writings')}, ${plural(day.roleplays, 'conversation', 'conversations')}`,
   }));
   return barChart('activity-chart', 'Practice in the last 14 days',
     'Each bar shows answers, saved writings and finished conversations added together for one day.', bars);
@@ -128,7 +129,7 @@ function reviewChart(attempts, now) {
     label: shortDate(week.start),
     value: week.reviewCorrect,
     short: String(week.reviewCorrect),
-    title: `Week of ${week.start}: ${week.reviewCorrect} right out of ${week.reviewTotal} review answers`,
+    title: `Week of ${week.start}: ${week.reviewCorrect} right out of ${plural(week.reviewTotal, 'review answer', 'review answers')}`,
   }));
   return barChart('review-chart', 'Review answers right by week',
     'Each bar counts review answers from the mistake notebook that were right on the first try.', bars);
@@ -145,7 +146,7 @@ function calendarTable(rows) {
       if (day.future) classes.push('future');
       const label = day.future
         ? `${day.date}: future`
-        : `${day.date}: ${day.total === 0 ? 'no practice' : `${day.answers} answers, ${day.writings} writings, ${day.roleplays} conversations`}`;
+        : `${day.date}: ${day.total === 0 ? 'no practice' : `${plural(day.answers, 'answer', 'answers')}, ${plural(day.writings, 'writing', 'writings')}, ${plural(day.roleplays, 'conversation', 'conversations')}`}`;
       const cell = el('td', { class: classes.join(' '), 'aria-label': label, title: label },
         el('span', { class: 'calendar-number' }, day.dayOfMonth));
       return cell;
@@ -202,8 +203,8 @@ export function render(container) {
       `${mistakes.active.length} still active`,
       `${mistakes.due.length} due today`,
     ]),
-    statCard('Writing and roleplay', `${totals.writings} writings`, [
-      `${totals.roleplays} ${totals.roleplays === 1 ? 'conversation' : 'conversations'} finished`,
+    statCard('Writing and roleplay', plural(totals.writings, 'writing', 'writings'), [
+      `${plural(totals.roleplays, 'conversation', 'conversations')} finished`,
       totals.lastPractice ? `Last practice: ${new Date(totals.lastPractice).toLocaleDateString()}` : 'No practice yet.',
     ]));
 
@@ -222,7 +223,7 @@ export function render(container) {
       section('Practice in the last 14 days', 'Answers, saved writings and finished conversations added together.', activityChart(data, now)),
       section('Accuracy by week', 'The share of answers that were right on the first try. Empty weeks have no bar.', accuracyChart(data.attempts, now)),
       section('Mistakes fixed per week',
-        reviewTotal === 0 ? 'No review answers yet. When you review mistakes, this chart shows your progress.' : `${reviewRight} of ${reviewTotal} review answers were right on the first try.`,
+        reviewTotal === 0 ? 'No review answers yet. When you review mistakes, this chart shows your progress.' : `Review answers right on the first try: ${reviewRight} of ${reviewTotal}.`,
         reviewChart(data.attempts, now)),
       section('Accuracy by skill', 'Lowest accuracy first. A skill with few answers can jump around.', skillList(data.attempts)),
     ];
