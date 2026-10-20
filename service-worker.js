@@ -2,7 +2,7 @@
 // The list below is every file the app needs. A test checks that no app file is missing.
 // When you add or remove a file, update CORE_ASSETS and bump CACHE_NAME.
 
-const CACHE_NAME = 'skillforge-v1';
+const CACHE_NAME = 'skillforge-v2';
 
 const CORE_ASSETS = [
   './index.html',
