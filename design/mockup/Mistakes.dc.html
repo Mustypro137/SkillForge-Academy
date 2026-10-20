@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SkillForge Mistake notebook</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{text-decoration:none}
+button,input,textarea,select{font-family:inherit}
+</style>
+</helmet>
+<div style="{{vars}} width: 100%; min-height: 1200px; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 18px; line-height: 1.5; display: flex; align-items: stretch">
+
+<!-- SIDEBAR -->
+<div style="width: 250px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px">
+<a href="Dashboard.dc.html" style="display: flex; align-items: center; gap: 10px; color: var(--text); font-weight: 800; font-size: 21px; padding: 0 8px">
+<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" style="fill:var(--accent)"/><path d="M9 21h14M12 21v-4h8v4M16 17V9m-3 3l3-3 3 3" fill="none" style="stroke:var(--on-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+SkillForge
+</a>
+<div style="display: flex; flex-direction: column; gap: 4px; font-size: 16px">
+<a href="Dashboard.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Dashboard</a>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">Practice</div>
+<a href="Lesson.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Grammar</a>
+<a href="Writing.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Writing</a>
+<div style="color: var(--text); padding: 11px 12px">Reading</div>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">Professional</div>
+<a href="Roleplay.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Roleplay</a>
+<div style="color: var(--text); padding: 11px 12px">LinkedIn</div>
+<a href="Academy.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Freelance</a>
+<div style="color: var(--text); padding: 11px 12px">Technical English</div>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">Review</div>
+<a href="Mistakes.dc.html" style="background: var(--accent); color: var(--on-accent); font-weight: 700; padding: 11px 12px; border-radius: 10px">Mistake notebook</a>
+<a href="Reports.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Progress reports</a>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">More</div>
+<a href="Settings.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Settings and backup</a>
+</div>
+<div style="margin-top: auto; background: var(--hl); border-radius: 12px; padding: 12px 14px; font-size: 14px; color: var(--text)">Saved on this device only. No account.</div>
+</div>
+
+<!-- MAIN -->
+<div style="flex: 1; min-width: 0; padding: 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px; max-width: 960px">
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 32px; line-height: 1.2; font-weight: 800; letter-spacing: -0.01em">Mistake notebook</h1>
+<p style="margin: 0; color: var(--muted); font-size: 16px">Review a mistake after 1, 2, 4, 8 and 16 days. Get it right in the last box and it is mastered.</p>
+</div>
+
+<div role="group" aria-label="Show" style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{tabs}}" as="t" hint-placeholder-count="3">
+<button onClick="{{t.pick}}" aria-pressed="{{t.on}}" style="{{t.style}}">{{t.label}}</button>
+</sc-for>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 16px">
+<sc-for list="{{cards}}" as="c" hint-placeholder-count="3">
+<div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(20,30,50,0.06), 0 4px 14px rgba(20,30,50,0.06); display: flex; flex-direction: column; gap: 12px">
+<div style="font-size: 14px; font-weight: 700; color: var(--muted)">{{c.source}}</div>
+<div style="font-size: 20px; font-weight: 700">{{c.prompt}}</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 16px">
+<span>Your answer: <strong style="color: var(--err)">{{c.wrong}}</strong></span>
+<span>Correct: <strong style="color: var(--ok)">{{c.right}}</strong></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; gap: 6px" role="img" aria-label="{{c.boxLabel}}">
+<sc-for list="{{c.boxes}}" as="b" hint-placeholder-count="5"><div style="{{b.style}}"></div></sc-for>
+</div>
+<div style="font-size: 15px; color: var(--muted)">{{c.boxLabel}}</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
+<sc-if value="{{c.due}}" hint-placeholder-val="{{ true }}"><button style="background: var(--accent); color: var(--on-accent); border: none; font-size: 17px; font-weight: 800; min-height: 48px; padding: 0 26px; border-radius: 12px; cursor: pointer">Review now</button></sc-if>
+<details style="font-size: 16px"><summary style="cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center">Your note</summary>
+<textarea aria-label="Your note" style="width: 360px; max-width: 100%; min-height: 80px; box-sizing: border-box; padding: 10px 12px; font-size: 16px; color: var(--text); background: var(--surface); border: 1px solid var(--ctl); border-radius: 12px">{{c.note}}</textarea></details>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="color: var(--muted); font-size: 14px">Mockup note: tap the buttons above to switch the list. All items are sample data.</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#2B5FD9","options":["#2B5FD9","#4338CA","#0F766E","#BE123C"]},"$preview":{"width":1280,"height":1200}}'>
+class Component extends DCLogic {
+  state = { tab: "due" };
+
+
+  vars() {
+    const dark = false;
+    const t = {"bg": "#F7F8FA", "surface": "#FFFFFF", "text": "#1C2430", "muted": "#4A5565", "border": "#DDE2EA", "track": "#E3E8F0", "ctl": "#C5CDD9", "ok": "#1A7F37", "err": "#B42318", "warn": "#B35C00", "hl": "#EEF3FD", "okbg": "#EAF6EE", "errbg": "#FCEDEB", "warnbg": "#FFF6E5", "okt": "#14602B", "errt": "#912016", "warnt": "#7A3E00"};
+    const accent = dark ? '#7AA2FF' : (this.props.accent ?? '#2B5FD9');
+    return Object.entries(t).map(([k, v]) => '--' + k + ':' + v).join(';') + ';--accent:' + accent + ';--on-accent:' + (dark ? '#0D1117' : '#FFFFFF') + ';';
+  }
+  renderVals() {
+    const items = [
+      { tab: 'due', source: 'Grammar · Articles', prompt: 'I have ___ idea for your project.', wrong: 'a', right: 'an', box: 2, days: 'Due today', note: 'an before a vowel sound' },
+      { tab: 'due', source: 'Writing · Deadlines', prompt: 'Which sentence is polite? “Send me the file.” or “Could you send me the file?”', wrong: 'Send me the file.', right: 'Could you send me the file?', box: 1, days: 'Due today', note: '' },
+      { tab: 'due', source: 'Grammar · Present simple', prompt: 'He ___ to the office by bus.', wrong: 'go', right: 'goes', box: 3, days: 'Due today', note: '' },
+      { tab: 'all', source: 'Freelance · Saying no politely', prompt: 'Choose the best way to say no.', wrong: 'I cannot.', right: 'Thank you, but I am not available this month.', box: 4, days: 'Next review in 6 days', note: '' },
+      { tab: 'all', source: 'Grammar · Capital letters', prompt: 'Write the sentence with correct capitals: “we meet on monday.”', wrong: 'we meet on monday.', right: 'We meet on Monday.', box: 2, days: 'Next review in 1 day', note: '' },
+      { tab: 'done', source: 'Grammar · Articles', prompt: 'She is ___ engineer.', wrong: 'a', right: 'an', box: 5, days: 'Mastered', note: '' }
+    ];
+    const tabs = [
+      { key: 'due', label: 'Due today (3)' },
+      { key: 'all', label: 'All mistakes (5)' },
+      { key: 'done', label: 'Mastered (1)' }
+    ];
+    const cur = this.state.tab;
+    const shown = items.filter((i) => cur === 'all' ? i.tab !== 'done' : cur === 'due' ? i.tab === 'due' : i.tab === 'done');
+    return {
+      vars: this.vars(),
+      accent: 'var(--accent)',
+      tabs: tabs.map((t) => {
+        const on = cur === t.key;
+        return {
+          label: t.label,
+          on: on ? 'true' : 'false',
+          pick: () => this.setState({ tab: t.key }),
+          style: 'min-height:44px;padding:0 18px;border-radius:12px;font-size:16px;font-weight:' + (on ? '800' : '600') + ';cursor:pointer;color:var(--text);border:2px solid ' + (on ? 'var(--accent)' : 'var(--ctl)') + ';background:' + (on ? 'var(--hl)' : 'var(--surface)')
+        };
+      }),
+      cards: shown.map((i) => ({
+        source: i.source, prompt: i.prompt, wrong: i.wrong, right: i.right, note: i.note,
+        due: i.tab === 'due',
+        boxLabel: i.box === 5 ? 'Box 5 of 5 · ' + i.days : 'Box ' + i.box + ' of 5 · ' + i.days,
+        boxes: [1, 2, 3, 4, 5].map((n) => ({ style: 'flex:1;height:10px;border-radius:999px;background:' + (n <= i.box ? (i.box === 5 ? 'var(--ok)' : 'var(--accent)') : 'var(--track)') }))
+      }))
+    };
+  }
+
+}
+</script>
+</body>
+</html>

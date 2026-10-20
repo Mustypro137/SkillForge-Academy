@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SkillForge Progress Reports</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{text-decoration:none}
+</style>
+</helmet>
+<div style="{{vars}} width: 100%; min-height: 1300px; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 18px; line-height: 1.5; display: flex; align-items: stretch">
+
+<!-- SIDEBAR -->
+<div style="width: 250px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px">
+<a href="Dashboard.dc.html" style="display: flex; align-items: center; gap: 10px; color: var(--text); font-weight: 800; font-size: 21px; padding: 0 8px">
+<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" style="fill:var(--accent)"/><path d="M9 21h14M12 21v-4h8v4M16 17V9m-3 3l3-3 3 3" fill="none" style="stroke:var(--on-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+SkillForge
+</a>
+<div style="display: flex; flex-direction: column; gap: 4px; font-size: 16px">
+<a href="Dashboard.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Dashboard</a>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">Practice</div>
+<a href="Lesson.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Grammar</a>
+<a href="Writing.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Writing</a>
+<div style="color: var(--text); padding: 11px 12px">Reading</div>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">Professional</div>
+<a href="Roleplay.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Roleplay</a>
+<div style="color: var(--text); padding: 11px 12px">LinkedIn</div>
+<a href="Academy.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Freelance</a>
+<div style="color: var(--text); padding: 11px 12px">Technical English</div>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">Review</div>
+<a href="Mistakes.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Mistake notebook</a>
+<a href="Reports.dc.html" style="background: var(--accent); color: var(--on-accent); font-weight: 700; padding: 11px 12px; border-radius: 10px">Progress reports</a>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">More</div>
+<a href="Settings.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Settings and backup</a>
+</div>
+<div style="margin-top: auto; background: var(--hl); border-radius: 12px; padding: 12px 14px; font-size: 14px; color: var(--text)">Saved on this device only. No account.</div>
+</div>
+
+<!-- MAIN -->
+<div style="flex: 1; min-width: 0; padding: 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px; max-width: 960px">
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 34px; line-height: 1.2; font-weight: 800; letter-spacing: -0.01em">Progress reports</h1>
+<p style="margin: 0; color: var(--muted)">See how your practice grows, week by week.</p>
+</div>
+
+<!-- TILES -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 16px">
+<div style="background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px"><div style="font-size: 32px; font-weight: 800; color: {{accent}}">26</div><div style="color: var(--muted); font-size: 16px">Practice days</div></div>
+<div style="background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px"><div style="font-size: 32px; font-weight: 800; color: {{accent}}">142</div><div style="color: var(--muted); font-size: 16px">Exercises done</div></div>
+<div style="background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px"><div style="font-size: 32px; font-weight: 800; color: var(--ok)">78%</div><div style="color: var(--muted); font-size: 16px">Correct answers</div></div>
+</div>
+
+<!-- CHART -->
+<div style="background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 800">Exercises per week</h2>
+<svg viewBox="0 0 560 200" role="img" aria-label="Bar chart. Exercises per week: week 1 is 12, week 2 is 20, week 3 is 31, week 4 is 24, week 5 is 38, week 6 is 17." style="width: 100%; height: auto; max-height: 240px">
+<line x1="30" y1="170" x2="550" y2="170" style="stroke:var(--ctl)" stroke-width="1.5"/>
+<g style="fill:{{accent}}">
+<rect x="50" y="122" width="52" height="48" rx="6"/>
+<rect x="132" y="90" width="52" height="80" rx="6"/>
+<rect x="214" y="46" width="52" height="124" rx="6"/>
+<rect x="296" y="74" width="52" height="96" rx="6"/>
+<rect x="378" y="18" width="52" height="152" rx="6"/>
+<rect x="460" y="102" width="52" height="68" rx="6"/>
+</g>
+<g font-size="14" font-weight="700" style="fill:var(--text)" text-anchor="middle">
+<text x="76" y="115">12</text><text x="158" y="83">20</text><text x="240" y="39">31</text><text x="322" y="67">24</text><text x="404" y="11">38</text><text x="486" y="95">17</text>
+</g>
+<g font-size="13" style="fill:var(--muted)" text-anchor="middle">
+<text x="76" y="190">Wk 1</text><text x="158" y="190">Wk 2</text><text x="240" y="190">Wk 3</text><text x="322" y="190">Wk 4</text><text x="404" y="190">Wk 5</text><text x="486" y="190">Wk 6</text>
+</g>
+</svg>
+<div style="color: var(--muted); font-size: 14px">Week 5 was your best week: 38 exercises.</div>
+</div>
+
+<!-- SKILLS -->
+<div style="background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; display: flex; flex-direction: column; gap: 16px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 800">Skills</h2>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-size: 16px"><span style="font-weight: 700">Grammar</span><span style="color: var(--muted)">70%</span></div><div style="height: 12px; background: var(--track); border-radius: 999px; overflow: hidden"><div style="width: 70%; height: 12px; background: {{accent}}; border-radius: 999px"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-size: 16px"><span style="font-weight: 700">Writing</span><span style="color: var(--muted)">81%</span></div><div style="height: 12px; background: var(--track); border-radius: 999px; overflow: hidden"><div style="width: 81%; height: 12px; background: {{accent}}; border-radius: 999px"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-size: 16px"><span style="font-weight: 700">Roleplay</span><span style="color: var(--muted)">64%</span></div><div style="height: 12px; background: var(--track); border-radius: 999px; overflow: hidden"><div style="width: 64%; height: 12px; background: {{accent}}; border-radius: 999px"></div></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><div style="display: flex; justify-content: space-between; font-size: 16px"><span style="font-weight: 700">Reading</span><span style="color: var(--muted)">88%</span></div><div style="height: 12px; background: var(--track); border-radius: 999px; overflow: hidden"><div style="width: 88%; height: 12px; background: {{accent}}; border-radius: 999px"></div></div></div>
+</div>
+</div>
+
+<!-- CALENDAR -->
+<div style="background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 800">Practice calendar · last 5 weeks</h2>
+<div style="display: grid; grid-template-columns: repeat(7, 44px); gap: 8px; font-size: 13px; color: var(--muted); text-align: center">
+<div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div>
+<sc-for list="{{days}}" as="d" hint-placeholder-count="35">
+<div style="{{d.style}}">{{d.mark}}</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 16px; font-size: 14px; color: var(--muted); align-items: center">
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 16px; height: 16px; border-radius: 4px; background: var(--ok); display: inline-block"></span>Practiced</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 16px; height: 16px; border-radius: 4px; background: var(--track); display: inline-block"></span>Rest day</span>
+</div>
+</div>
+
+<div style="color: var(--muted); font-size: 14px">Mockup note: all numbers are sample data. The real charts come from your saved practice.</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#2B5FD9","options":["#2B5FD9","#4338CA","#0F766E","#BE123C"]},"$preview":{"width":1280,"height":1300}}'>
+class Component extends DCLogic {
+  vars() {
+    const dark = false;
+    const t = {"bg": "#F7F8FA", "surface": "#FFFFFF", "text": "#1C2430", "muted": "#4A5565", "border": "#DDE2EA", "track": "#E3E8F0", "ctl": "#C5CDD9", "ok": "#1A7F37", "err": "#B42318", "warn": "#B35C00", "hl": "#EEF3FD", "okbg": "#EAF6EE", "errbg": "#FCEDEB", "warnbg": "#FFF6E5", "okt": "#14602B", "errt": "#912016", "warnt": "#7A3E00"};
+    const accent = dark ? '#7AA2FF' : ('var(--accent)');
+    return Object.entries(t).map(([k, v]) => '--' + k + ':' + v).join(';') + ';--accent:' + accent + ';--on-accent:' + (dark ? '#0D1117' : '#FFFFFF') + ';';
+  }
+
+  renderVals() {
+    const done = [1,1,0,1,0,1,0, 1,0,1,1,0,0,1, 0,1,1,1,0,1,0, 1,1,0,1,1,0,1, 0,1,0,1,1,1,0];
+    const base = 'width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--on-accent);';
+    return {
+      vars: this.vars(),
+      accent: 'var(--accent)',
+      days: done.map((d) => ({
+        mark: d ? '✓' : '',
+        style: base + 'background:' + (d ? 'var(--ok)' : 'var(--track)')
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

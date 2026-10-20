@@ -1,0 +1,24 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-10-19T12:00:00Z" },
+  "title": "SkillForge Academy v2 Mockup",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Dashboard.dc.html": { "x": 0, "y": 0, "w": 1280, "h": 1300, "title": "Dashboard", "expand": "fill" },
+    "Lesson.dc.html": { "x": 1360, "y": 0, "w": 1280, "h": 1100, "title": "Grammar exercise", "expand": "fill", "is_interactive": true },
+    "Roleplay.dc.html": { "x": 2720, "y": 0, "w": 1280, "h": 1200, "title": "Roleplay", "expand": "fill", "is_interactive": true },
+    "Reports.dc.html": { "x": 4080, "y": 0, "w": 1280, "h": 1300, "title": "Progress reports", "expand": "fill" },
+    "Mistakes.dc.html": { "x": 0, "y": 1500, "w": 1280, "h": 1200, "title": "Mistake notebook", "expand": "fill", "is_interactive": true },
+    "Academy.dc.html": { "x": 1360, "y": 1500, "w": 1280, "h": 1500, "title": "Freelance academy", "expand": "fill" },
+    "Writing.dc.html": { "x": 2720, "y": 1500, "w": 1280, "h": 1300, "title": "Writing practice", "expand": "fill", "is_interactive": true },
+    "Settings.dc.html": { "x": 4080, "y": 1500, "w": 1280, "h": 1100, "title": "Settings and backup", "expand": "fill" },
+    "Dashboard-dark.dc.html": { "x": 0, "y": 3200, "w": 1280, "h": 1300, "title": "Dashboard (dark)", "expand": "fill" },
+    "Lesson-dark.dc.html": { "x": 1360, "y": 3200, "w": 1280, "h": 1100, "title": "Grammar exercise (dark)", "expand": "fill", "is_interactive": true },
+    "Roleplay-dark.dc.html": { "x": 2720, "y": 3200, "w": 1280, "h": 1200, "title": "Roleplay (dark)", "expand": "fill", "is_interactive": true },
+    "Phone.dc.html": { "x": 4080, "y": 3200, "w": 390, "h": 900, "title": "Dashboard on a phone", "expand": "fill", "is_interactive": true }
+  },
+  "order": ["Dashboard.dc.html", "Lesson.dc.html", "Roleplay.dc.html", "Reports.dc.html", "Mistakes.dc.html", "Academy.dc.html", "Writing.dc.html", "Settings.dc.html", "Dashboard-dark.dc.html", "Lesson-dark.dc.html", "Roleplay-dark.dc.html", "Phone.dc.html"],
+  "notes": {},
+  "designSystems": []
+}

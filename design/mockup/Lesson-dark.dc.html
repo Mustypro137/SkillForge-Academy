@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SkillForge Dark Grammar Exercise</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{text-decoration:none}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="{{vars}} width: 100%; min-height: 1100px; background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 18px; line-height: 1.5; display: flex; align-items: stretch">
+
+<!-- SIDEBAR -->
+<div style="width: 250px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px">
+<a href="Dashboard.dc.html" style="display: flex; align-items: center; gap: 10px; color: var(--text); font-weight: 800; font-size: 21px; padding: 0 8px">
+<svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" style="fill:var(--accent)"/><path d="M9 21h14M12 21v-4h8v4M16 17V9m-3 3l3-3 3 3" fill="none" style="stroke:var(--on-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+SkillForge
+</a>
+<div style="display: flex; flex-direction: column; gap: 4px; font-size: 16px">
+<a href="Dashboard.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Dashboard</a>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">Practice</div>
+<a href="Lesson.dc.html" style="background: var(--accent); color: var(--on-accent); font-weight: 700; padding: 11px 12px; border-radius: 10px">Grammar</a>
+<a href="Writing.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Writing</a>
+<div style="color: var(--text); padding: 11px 12px">Reading</div>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">Professional</div>
+<a href="Roleplay.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Roleplay</a>
+<div style="color: var(--text); padding: 11px 12px">LinkedIn</div>
+<a href="Academy.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Freelance</a>
+<div style="color: var(--text); padding: 11px 12px">Technical English</div>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">Review</div>
+<a href="Mistakes.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Mistake notebook</a>
+<a href="Reports.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Progress reports</a>
+<div style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 12px 4px">More</div>
+<a href="Settings.dc.html" style="color: var(--text); padding: 11px 12px; border-radius: 10px">Settings and backup</a>
+</div>
+<div style="margin-top: auto; background: var(--hl); border-radius: 12px; padding: 12px 14px; font-size: 14px; color: var(--text)">Saved on this device only. No account.</div>
+</div>
+
+<!-- MAIN -->
+<div style="flex: 1; min-width: 0; padding: 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px; max-width: 840px">
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="color: var(--muted); font-size: 15px">Grammar · Present simple</div>
+<h1 style="margin: 0; font-size: 32px; line-height: 1.2; font-weight: 800; letter-spacing: -0.01em">Present simple: I work, she works</h1>
+</div>
+
+<!-- PROGRESS -->
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; justify-content: space-between; font-size: 15px; color: var(--muted)"><span>Exercise 3 of 12</span><span>25%</span></div>
+<div style="height: 12px; background: var(--track); border-radius: 999px; overflow: hidden"><div style="width: 25%; height: 12px; background: {{accent}}; border-radius: 999px"></div></div>
+</div>
+
+<!-- QUESTION CARD -->
+<div style="background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 20px">
+<div style="font-size: 14px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: {{accent}}">Choose the best answer</div>
+<div style="font-size: 24px; font-weight: 700; line-height: 1.35">She ______ emails to clients every morning.</div>
+
+<div role="radiogroup" aria-label="Answers" style="display: flex; flex-direction: column; gap: 12px">
+<sc-for list="{{options}}" as="o" hint-placeholder-count="4">
+<button onClick="{{o.pick}}" style="{{o.style}}">
+<span style="{{o.dotStyle}}">{{o.mark}}</span>
+<span style="flex: 1; text-align: left">{{o.label}}</span>
+</button>
+</sc-for>
+</div>
+
+<sc-if value="{{showGood}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="background: var(--okbg); border-left: 6px solid var(--ok); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 4px">
+<div style="font-weight: 800; color: var(--okt)">✓ Correct</div>
+<div style="font-size: 16px">With he, she or it, the present simple verb ends in <strong>-s</strong>: she writes.</div>
+</div>
+</sc-if>
+<sc-if value="{{showBad}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="background: var(--errbg); border-left: 6px solid var(--err); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 4px">
+<div style="font-weight: 800; color: var(--errt)">✗ Not yet</div>
+<div style="font-size: 16px">{{badText}} The correct answer is <strong>writes</strong>. We saved this in your mistake notebook.</div>
+</div>
+</sc-if>
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<sc-if value="{{canCheck}}" hint-placeholder-val="{{ true }}">
+<button onClick="{{check}}" style="background: {{accent}}; color: var(--on-accent); border: none; font-size: 17px; font-weight: 800; min-height: 48px; padding: 0 28px; border-radius: 12px; cursor: pointer">Check answer</button>
+</sc-if>
+<sc-if value="{{checked}}" hint-placeholder-val="{{ false }}">
+<button onClick="{{reset}}" style="background: var(--surface); color: var(--text); border: 2px solid var(--text); font-size: 17px; font-weight: 800; min-height: 48px; padding: 0 28px; border-radius: 12px; cursor: pointer">Try this again (demo)</button>
+</sc-if>
+</div>
+</div>
+
+<div style="color: var(--muted); font-size: 14px">Mockup note: click an answer, then “Check answer”. The real app has 12 exercises per lesson.</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#2B5FD9","options":["#2B5FD9","#4338CA","#0F766E","#BE123C"]},"$preview":{"width":1280,"height":1100}}'>
+class Component extends DCLogic {
+  vars() {
+    const dark = true;
+    const t = {"bg": "#12161C", "surface": "#1B212A", "text": "#E8ECF1", "muted": "#A2ADBB", "border": "#333C48", "track": "#2A3340", "ctl": "#8793A3", "ok": "#56D364", "err": "#FF7B72", "warn": "#FFB454", "hl": "#263A66", "okbg": "#1C3324", "errbg": "#4A1F1C", "warnbg": "#3D2E12", "okt": "#8BE59A", "errt": "#FFB3AD", "warnt": "#FFD08A"};
+    const accent = dark ? '#7AA2FF' : ('var(--accent)');
+    return Object.entries(t).map(([k, v]) => '--' + k + ':' + v).join(';') + ';--accent:' + accent + ';--on-accent:' + (dark ? '#0D1117' : '#FFFFFF') + ';';
+  }
+
+  state = { picked: -1, checked: false };
+
+  renderVals() {
+    const accent = 'var(--accent)';
+    const labels = ['write', 'writes', 'writing', 'wrote'];
+    const right = 1;
+    const { picked, checked } = this.state;
+    const hints = {
+      0: 'With “she”, the verb needs an -s.',
+      2: '“Writing” needs a helper word like “is”.',
+      3: '“Wrote” is the past form.'
+    };
+    const options = labels.map((label, i) => {
+      const on = picked === i;
+      let border = 'var(--ctl)', bg = 'var(--surface)', dot = 'var(--surface)', dotBorder = 'var(--ctl)', mark = '';
+      if (on && !checked) { border = accent; bg = 'var(--hl)'; dot = accent; dotBorder = accent; mark = '●'; }
+      if (checked && i === right) { border = 'var(--ok)'; bg = 'var(--okbg)'; dot = 'var(--ok)'; dotBorder = 'var(--ok)'; mark = '✓'; }
+      if (checked && on && i !== right) { border = 'var(--err)'; bg = 'var(--errbg)'; dot = 'var(--err)'; dotBorder = 'var(--err)'; mark = '✗'; }
+      return {
+        label,
+        mark,
+        pick: () => { if (!checked) this.setState({ picked: i }); },
+        style: 'display:flex;align-items:center;gap:14px;width:100%;min-height:56px;padding:10px 18px;box-sizing:border-box;font-size:19px;color:var(--text);border-radius:14px;cursor:pointer;border:2px solid ' + border + ';background:' + bg,
+        dotStyle: 'width:28px;height:28px;border-radius:999px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--on-accent);border:2px solid ' + dotBorder + ';background:' + dot
+      };
+    });
+    return {
+      vars: this.vars(),
+      accent,
+      options,
+      checked,
+      canCheck: !checked,
+      showGood: checked && picked === right,
+      showBad: checked && picked !== right,
+      badText: hints[picked] || '',
+      check: () => { if (picked >= 0) this.setState({ checked: true }); },
+      reset: () => this.setState({ picked: -1, checked: false })
+    };
+  }
+}
+</script>
+</body>
+</html>
