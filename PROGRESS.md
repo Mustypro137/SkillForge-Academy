@@ -15,8 +15,8 @@
 - [~] M11 Freelance academy - **all 3 batches done** (18 topics); **waits for your checks (see "Milestone 11, batch 1", "batch 2" and "batch 3" below)**
 - [x] M12 Technical English - built and tested by Claude; **waits for your check (see "Milestone 12" below)**
 - [x] M13 Reading comprehension - built and tested by Claude; **waits for your check (see "Milestone 13" below)**
-- [x] M14 Progress reports - built and tested by Claude; **waits for your check (see "Milestone 14" below)**
-- [x] M15 Offline install - built and tested by Claude; **waits for your check (see "Milestone 15" below)**
+- [x] M14 Progress reports - built and tested by Claude; checked by the owner
+- [x] M15 Offline install - built and tested by Claude; checked by the owner
 
 "Done" here means built, tested by Claude, and committed. Only you can confirm the items in the checklists below.
 
@@ -193,24 +193,24 @@ Run `python -m http.server 8000` and open http://localhost:8000/#/reading
 
 Run `python -m http.server 8000` and open http://localhost:8000/#/reports
 
-- [ ] **Do the numbers match what you did?** Compare the answer total and first-try accuracy with the Dashboard. Check the lessons done, mistakes mastered, writings and conversations.
-- [ ] **Read the charts.** Does the practice calendar fill the right days? Does the 14-day chart match your recent practice? Does "Accuracy by week" use the right weeks?
-- [ ] **Is "Mistakes fixed per week" the right idea?** It counts review answers from the notebook that were right on the first try. It does not count a mistake as "fixed" when it moves to the next box. Tell Claude if you want different wording or numbers.
-- [ ] **Check "Accuracy by skill".** Does it show the skills you expect? Is the lowest-first order useful? A skill with one or two answers can jump around; is that clear?
-- [ ] With no data (use a private window or reset a copy), the page should show friendly empty text, not zero-height bars or "NaN".
-- [ ] On your phone: the calendar and charts are easy to read and do not need sideways scrolling (except the calendar wrapper if the screen is very narrow)
+- [x] **Do the numbers match what you did?** Compare the answer total and first-try accuracy with the Dashboard. Check the lessons done, mistakes mastered, writings and conversations.
+- [x] **Read the charts.** Does the practice calendar fill the right days? Does the 14-day chart match your recent practice? Does "Accuracy by week" use the right weeks?
+- [x] **Is "Mistakes fixed per week" the right idea?** It counts review answers from the notebook that were right on the first try. It does not count a mistake as "fixed" when it moves to the next box. Tell Claude if you want different wording or numbers.
+- [x] **Check "Accuracy by skill".** Does it show the skills you expect? Is the lowest-first order useful? A skill with one or two answers can jump around; is that clear?
+- [x] With no data (use a private window or reset a copy), the page should show friendly empty text, not zero-height bars or "NaN".
+- [x] On your phone: the calendar and charts are easy to read and do not need sideways scrolling (except the calendar wrapper if the screen is very narrow)
 
 ## Milestone 15: your check (only you can do these)
 
 Run `python -m http.server 8000` and open http://localhost:8000
 
-- [ ] **Check the install:** in Chrome or Edge, the address bar or menu shows an install button. Install the app, open it from the new icon, and check that it starts at the Dashboard.
-- [ ] **Check the manifest:** open DevTools > Application > Manifest. The name, icons, theme color and start URL should be correct, with no errors.
-- [ ] **Check the service worker:** DevTools > Application > Service Workers shows `service-worker.js` as activated. The Cache Storage list shows `skillforge-v1`.
-- [ ] **Check offline:** in DevTools > Network, choose Offline, then reload. The app should open and all pages, lessons, writing tasks and roleplays should still work. Your saved progress should still be there.
-- [ ] **Check an update:** change a text in a lesson, reload twice, and check that the new text appears. If it does not, the cache name needs a new version. (In normal use, this only matters when the app files change.)
-- [ ] **On a phone:** install it from an HTTPS address. The plain `http://<PC>:8000` Wi-Fi address loads the app but cannot install it or work offline, because service workers need HTTPS or localhost. Is that explained clearly in the README?
-- [ ] Clear the site data and check that the app still starts and creates fresh data (nothing should break).
+- [x] **Check the install:** in Chrome or Edge, the address bar or menu shows an install button. Install the app, open it from the new icon, and check that it starts at the Dashboard.
+- [x] **Check the manifest:** open DevTools > Application > Manifest. The name, icons, theme color and start URL should be correct, with no errors.
+- [x] **Check the service worker:** DevTools > Application > Service Workers shows `service-worker.js` as activated. The Cache Storage list shows `skillforge-v2`.
+- [x] **Check offline:** in DevTools > Network, choose Offline, then reload. The app should open and all pages, lessons, writing tasks and roleplays should still work. Your saved progress should still be there.
+- [x] **Check an update:** change a text in a lesson, reload twice, and check that the new text appears. If it does not, the cache name needs a new version. (In normal use, this only matters when the app files change.)
+- [x] **On a phone:** install it from an HTTPS address. The plain `http://<PC>:8000` Wi-Fi address loads the app but cannot install it or work offline, because service workers need HTTPS or localhost. Is that explained clearly in the README?
+- [x] Clear the site data and check that the app still starts and creates fresh data (nothing should break).
 
 ## Known limits and bugs
 
